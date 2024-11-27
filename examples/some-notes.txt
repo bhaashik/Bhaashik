@@ -1,0 +1,18 @@
+- One KVProperties per user
+	- In MultiKVProperties
+- One KVProperties per role
+	- In MultiKVProperties
+- One KVProperties per organisation
+	- In MultiKVProperties
+
+- All of the above in PropertiesManager in UserManager
+
+- One KVProperties per language
+	- In MultiKVProperties
+- One KVProperties per annotation level (?)
+	- In MultiKVProperties
+
+- All of the above in PropertiesManager in ResourceManager
+
+- One BhaashikTableModel for user-role-organisation-language-annotation-level-mapping
+	- The users table in UserManager

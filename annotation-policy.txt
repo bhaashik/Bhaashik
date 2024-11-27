@@ -1,0 +1,59 @@
+User Details:
+
+1. Name
+2. Username
+3. E-mail address
+4. Phone number
+5. Organisation
+6. Language(s)
+7. Acadmic Background: CSE/Linguistics/Language/General
+
+(E-mail and Phone number will be used for verification if a user forgets password)
+
+Roles:
+
+1. Root (at IIIT-H)
+2. Organisation Admin (One for each organisation)
+3. Annotation Validator/Manager
+3. Annotator
+
+Levels of Annotation:
+
+1. Raw corpus cleaning
+2. Tokenization
+3. Morphological Annotation
+4. Part of Speech Tagging
+5. Chunking
+6. Named Entity Recognition
+7. Dependency Parsing
+8. Phrase Structure Parsing (if applicable)
+
+Automatic Processing/Annotation Tools to be Run in the Pipeline:
+
+1. Corpus cleaning (?)
+2. Tokenization
+3. Morphological Annotation
+4. Part of Speech Tagging
+5. Chunking
+6. Named Entity Recognition
+7. Dependency Parsing
+8. Phrase Structure Parsing (if applicable)
+
+Directory Structure of Data Stored at IIIT-H Server:
+
+- RFS (Folder Shared from Server)
+	- Organisation/Institution Folder
+		- Language folder
+			- User (annotator) folder
+				- Annotation Level Folder
+					- Annotation Level Sub-folders (if necessary)
+
+Basic Policy:
+
+Users will be authenticated by username and password. Based on the roles assigned to them and their organisation,
+language and annotation level, they will be given access to the appropriate folder, from which they will carry
+out the annotation. On completing a task, it can be submitted, i.e., copied to a folder outside the shared folder,
+which will mirror the folder structure given above. 
+
+As necessary, automatic processing/annotation tools can be run before/after each stage stage of annotation. 
+ 
