@@ -14,6 +14,7 @@ import bhaashik.corpus.ssf.features.FeatureStructures;
 import bhaashik.corpus.ssf.features.impl.FSProperties;
 import bhaashik.corpus.ssf.features.impl.FeatureStructuresImpl;
 import bhaashik.corpus.ssf.impl.SSFSentenceImpl;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.gui.common.BhaashikLanguages;
 import bhaashik.properties.KeyValueProperties;
 import bhaashik.table.gui.BhaashikJTable;
@@ -51,6 +52,7 @@ public class UtilityFunctions {
      * Creates a new instance of UtilityFunctions
      */
     public UtilityFunctions() {
+        java.util.LinkedHashMap map;
     }
 
     public static boolean addItemToJCoboBox(JComboBox cb, Object item) {
@@ -2420,11 +2422,11 @@ public class UtilityFunctions {
     }
 
     //
-    public static LinkedHashMap getTopNElements(LinkedHashMap allMatches, int topMatches) {
+    public static LinkedHashMap getTopNElements(ConcurrentLinkedHashMap allMatches, int topMatches) {
         Iterator itr = allMatches.keySet().iterator();
 
         int j = 0;
-        LinkedHashMap retMatches = new LinkedHashMap(topMatches);
+        LinkedHashMap retMatches = new ConcurrentLinkedHashMap(topMatches);
 
         while (j < topMatches && itr.hasNext()) {
             Object contextKey = itr.next();
@@ -2564,7 +2566,7 @@ public class UtilityFunctions {
             Logger.getLogger(UtilityFunctions.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        LinkedHashMap hash = new LinkedHashMap(vec.size());
+        LinkedHashMap hash = new ConcurrentLinkedHashMap(vec.size());
 
         int count = vec.size();
 
@@ -2600,7 +2602,7 @@ public class UtilityFunctions {
             Logger.getLogger(UtilityFunctions.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        LinkedHashMap hash1 = new LinkedHashMap(vec1.size());
+        LinkedHashMap hash1 = new ConcurrentLinkedHashMap(vec1.size());
 
         int count = vec1.size();
 
@@ -2608,7 +2610,7 @@ public class UtilityFunctions {
             hash1.put(vec1.get(i), Integer.valueOf(1));
         }
 
-        LinkedHashMap hash2 = new LinkedHashMap(vec2.size());
+        LinkedHashMap hash2 = new ConcurrentLinkedHashMap(vec2.size());
 
         count = vec2.size();
 
@@ -3059,7 +3061,7 @@ public class UtilityFunctions {
             }
         });
 
-        Map result = new LinkedHashMap();
+        Map result = new ConcurrentLinkedHashMap();
         for (Iterator it = list.iterator(); it.hasNext(); ) {
             Map.Entry entry = (Map.Entry) it.next();
             result.put(entry.getKey(), entry.getValue());
@@ -3076,7 +3078,7 @@ public class UtilityFunctions {
             }
         });
 
-        Map result = new LinkedHashMap();
+        Map result = new ConcurrentLinkedHashMap();
         for (Iterator it = list.iterator(); it.hasNext(); ) {
             Map.Entry entry = (Map.Entry) it.next();
             result.put(entry.getKey(), entry.getValue());
@@ -3088,7 +3090,7 @@ public class UtilityFunctions {
         List list = new LinkedList(map.entrySet());
         Collections.sort(list, cmp);
 
-        Map result = new LinkedHashMap();
+        Map result = new ConcurrentLinkedHashMap();
         for (Iterator it = list.iterator(); it.hasNext(); ) {
             Map.Entry entry = (Map.Entry) it.next();
             result.put(entry.getKey(), entry.getValue());

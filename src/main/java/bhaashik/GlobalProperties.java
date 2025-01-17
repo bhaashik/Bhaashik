@@ -39,7 +39,7 @@ public class GlobalProperties implements Serializable {
         {
             try
             {
-                properties.read(GlobalProperties.getHomeDirectory() + "/" + "props/bhaash-props.txt", bhaashikResourceBundle.getString("UTF-8"));
+                properties.read(GlobalProperties.getHomeDirectory() + "/" + "props/bhaashik-props.txt", bhaashikResourceBundle.getString("UTF-8"));
             } catch (FileNotFoundException ex)
             {
                 Logger.getLogger(GlobalProperties.class.getName()).log(Level.SEVERE, null, ex);
@@ -270,7 +270,7 @@ public class GlobalProperties implements Serializable {
 
         USER_HOME = System.getProperty("user.home");
 
-        File p = new File(USER_HOME, ".bhaash");
+        File p = new File(USER_HOME, ".bhaashik");
 
         if(!p.exists())
         {

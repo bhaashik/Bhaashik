@@ -4,6 +4,7 @@
  */
 package bhaashik.servers.impl;
 
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
@@ -16,8 +17,8 @@ public class AuthenticationServerCollection {
 
 //    final ExecutorService service = Executors.newCachedThreadPool();
 
-    private final static LinkedHashMap <UUID, AuthenticationSever> serverCollection = new LinkedHashMap<UUID, AuthenticationSever>();
-    private final static LinkedHashMap <UUID, Thread> serverThreadCollection = new LinkedHashMap<UUID, Thread>();
+    private final static ConcurrentLinkedHashMap <UUID, AuthenticationSever> serverCollection = new ConcurrentLinkedHashMap<>();
+    private final static LinkedHashMap <UUID, Thread> serverThreadCollection = new LinkedHashMap<>();
 //    private volatile boolean stop;
     
     public AuthenticationServerCollection() 

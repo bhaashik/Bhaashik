@@ -5,11 +5,13 @@
 
 package bhaashik.context.impl;
 
+import java.io.Serializable;
+
 /**
  *
  * @author anil
  */
-public interface SimpleContext<K, E, CE extends ContextElement<E>> extends Context<K,E, CE> {
+public interface SimpleContext<K extends Serializable, E extends Serializable, CE extends ContextElement<E>> extends Context<K,E, CE> {
 
     long countContextElementTypes();
     

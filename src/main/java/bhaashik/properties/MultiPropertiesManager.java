@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.*;
 
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.resources.aggregate.AggregateResourceImpl;
 import bhaashik.xml.dom.BhaashikDOMElement;
 import org.dom4j.dom.DOMAttribute;
@@ -26,12 +27,12 @@ import org.w3c.dom.NodeList;
  */
 public class MultiPropertiesManager extends AggregateResourceImpl implements Serializable, BhaashikProperties, BhaashikDOMElement
 {
-    protected LinkedHashMap multiprops;
+    protected ConcurrentLinkedHashMap multiprops;
     
     /** Creates a new instance of MultiKeyValueProperties */
     public MultiPropertiesManager()
     {
-	multiprops = new LinkedHashMap(0, 3);
+	multiprops = new ConcurrentLinkedHashMap(0, 3);
     }
 
     public MultiPropertiesManager(String propFile, String cs) throws FileNotFoundException, IOException
@@ -39,7 +40,7 @@ public class MultiPropertiesManager extends AggregateResourceImpl implements Ser
 	read(propFile, cs);
     }
 
-    public MultiPropertiesManager(LinkedHashMap multiprops)
+    public MultiPropertiesManager(ConcurrentLinkedHashMap multiprops)
     {
 	this.multiprops = multiprops;
     }
@@ -51,7 +52,7 @@ public class MultiPropertiesManager extends AggregateResourceImpl implements Ser
 
     public int read(String f, String charset) throws FileNotFoundException, IOException
     {
-	multiprops = PropertiesManager.readMany(f, charset);
+	multiprops = (ConcurrentLinkedHashMap) PropertiesManager.readMany(f, charset);
 
 	return multiprops.size();
     }
@@ -70,7 +71,7 @@ public class MultiPropertiesManager extends AggregateResourceImpl implements Ser
         return 0;
     }
 
-    public LinkedHashMap getMultiPropertiesMap()
+    public ConcurrentLinkedHashMap getMultiPropertiesMap()
     {
 	return multiprops;
     }

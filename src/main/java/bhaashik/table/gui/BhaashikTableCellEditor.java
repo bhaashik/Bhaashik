@@ -69,7 +69,18 @@ public class BhaashikTableCellEditor extends AbstractCellEditor implements Table
         return textField.getText();
     }
 
+    /**
+     *
+     * @param table
+     * @param value
+     * @param isSelected
+     * @param row
+     * @param column
+     * @return
+     */
+    @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        
         if(mode == MULTIPLE_ROW)
         {
             if(value == null)

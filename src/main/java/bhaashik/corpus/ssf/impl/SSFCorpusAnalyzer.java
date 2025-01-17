@@ -15,6 +15,7 @@ import bhaashik.GlobalProperties;
 import bhaashik.corpus.ssf.tree.SSFLexItem;
 import bhaashik.corpus.ssf.tree.SSFNode;
 import bhaashik.corpus.ssf.tree.SSFPhrase;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.table.BhaashikTableModel;
 import bhaashik.tree.BhaashikMutableTreeNode;
 
@@ -61,7 +62,7 @@ public class SSFCorpusAnalyzer
 	different = new boolean[nodes.length][_COMPARISON_LAST_];
 	compared = new boolean[_COMPARISON_LAST_];
 
-        cfgToMMTreeMappings = new LinkedHashMap[_COMPARISON_LAST_];
+        cfgToMMTreeMappings = new ConcurrentLinkedHashMap[_COMPARISON_LAST_];
 	
 	this.nodes = nodes;
 	this.taskNames = taskNames;
@@ -469,9 +470,9 @@ public class SSFCorpusAnalyzer
 
 	for(int i = 0; i < nodes.length; i++)
 	{
-            cfgToMMTreeMappings[i] = new LinkedHashMap(0, 10);
+            cfgToMMTreeMappings[i] = new ConcurrentLinkedHashMap(0, 10);
         
-	    mmTrees[i] = nodes[i].convertToGDepNode(cfgToMMTreeMappings[i]);
+	    mmTrees[i] = nodes[i].convertToGDepNode((ConcurrentLinkedHashMap) cfgToMMTreeMappings[i]);
 	}
 
 	if(nodes.length == 1) {

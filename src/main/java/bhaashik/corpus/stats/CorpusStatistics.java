@@ -10,13 +10,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import bhaashik.corpus.ssf.SSFStory;
 import bhaashik.properties.KeyValueProperties;
 import bhaashik.properties.MultiKeyValueProperties;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -31,26 +32,26 @@ public class CorpusStatistics {
 
     protected SSFStory ssfStory;
 
-    protected LinkedHashMap<String, Integer> wordFreq;
-    protected LinkedHashMap<String, Integer> posTagFreq;
-    protected LinkedHashMap<String, Integer> grelFreq;
-    protected LinkedHashMap<String, Integer> wordTagFreq;
-    protected LinkedHashMap<String, Integer> chunkTagFreq;
-    protected LinkedHashMap<String, Integer> unchunkedWordFreq;
-    protected LinkedHashMap<String, Integer> chunkGRelFreq;
+    protected ConcurrentLinkedHashMap<String, Integer> wordFreq;
+    protected ConcurrentLinkedHashMap<String, Integer> posTagFreq;
+    protected ConcurrentLinkedHashMap<String, Integer> grelFreq;
+    protected ConcurrentLinkedHashMap<String, Integer> wordTagFreq;
+    protected ConcurrentLinkedHashMap<String, Integer> chunkTagFreq;
+    protected ConcurrentLinkedHashMap<String, Integer> unchunkedWordFreq;
+    protected ConcurrentLinkedHashMap<String, Integer> chunkGRelFreq;
 
     protected MultiKeyValueProperties globalStatistics;
 
     /** Creates new form CorpusStatisticsJPanel */
     public CorpusStatistics(boolean global) {
 
-        wordFreq = new LinkedHashMap<String, Integer>();
-        posTagFreq = new LinkedHashMap<String, Integer>();
-        grelFreq = new LinkedHashMap<String, Integer>();
-        wordTagFreq = new LinkedHashMap<String, Integer>();
-        chunkTagFreq = new LinkedHashMap<String, Integer>();
-        chunkGRelFreq = new LinkedHashMap<String, Integer>();
-        unchunkedWordFreq = new LinkedHashMap<String, Integer>();
+        wordFreq = new ConcurrentLinkedHashMap<String, Integer>();
+        posTagFreq = new ConcurrentLinkedHashMap<String, Integer>();
+        grelFreq = new ConcurrentLinkedHashMap<String, Integer>();
+        wordTagFreq = new ConcurrentLinkedHashMap<String, Integer>();
+        chunkTagFreq = new ConcurrentLinkedHashMap<String, Integer>();
+        chunkGRelFreq = new ConcurrentLinkedHashMap<String, Integer>();
+        unchunkedWordFreq = new ConcurrentLinkedHashMap<String, Integer>();
 
         globalStatistics = new MultiKeyValueProperties();
 
@@ -132,7 +133,7 @@ public class CorpusStatistics {
         loadData(ssfStory);
     }
 
-    public void initStats(String langEnc, LinkedHashMap<File, SSFStory> selStories)
+    public void initStats(String langEnc, ConcurrentLinkedHashMap<File, SSFStory> selStories)
     {
         this.setLangEnc(langEnc);
 
@@ -147,37 +148,37 @@ public class CorpusStatistics {
 //        loadGlobalData();
 
         if(getWordFreq() == null)
-            wordFreq = localSSFStory.getWordFreq();
+            wordFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getWordFreq();
         else
             getWordFreq().putAll(localSSFStory.getWordFreq());
 
         if(getPOSTagFreq() == null)
-            posTagFreq = localSSFStory.getPOSTagFreq();
+            posTagFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getPOSTagFreq();
         else
             getPOSTagFreq().putAll(localSSFStory.getPOSTagFreq());
 
         if(getGRelFreq() == null)
-            grelFreq = localSSFStory.getGroupRelationFreq();
+            grelFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getGroupRelationFreq();
         else
             getGRelFreq().putAll(localSSFStory.getGroupRelationFreq());
 
         if(getWordTagFreq() == null)
-            wordTagFreq = localSSFStory.getWordTagPairFreq();
+            wordTagFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getWordTagPairFreq();
         else
             getWordTagFreq().putAll(localSSFStory.getWordTagPairFreq());
 
         if(getChunkTagFreq() == null)
-            chunkTagFreq = localSSFStory.getChunkTagFreq();
+            chunkTagFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getChunkTagFreq();
         else
             getChunkTagFreq().putAll(localSSFStory.getChunkTagFreq());
 
         if(getChunkGRelFreq() == null)
-            chunkGRelFreq = localSSFStory.getChunkRelationFreq();
+            chunkGRelFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getChunkRelationFreq();
         else
             getChunkGRelFreq().putAll(localSSFStory.getChunkRelationFreq());
 
         if(getUnchunkedWordFreq() == null)
-            unchunkedWordFreq = localSSFStory.getUnchunkedWordFreq();
+            unchunkedWordFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getUnchunkedWordFreq();
         else
             getUnchunkedWordFreq().putAll(localSSFStory.getUnchunkedWordFreq());
     }
@@ -220,7 +221,7 @@ public class CorpusStatistics {
             globalStatistics.addProperties("UnchunkedWordFrequency", new KeyValueProperties());
     }
 
-    public void loadData(LinkedHashMap<File, SSFStory> selStories)
+    public void loadData(ConcurrentLinkedHashMap<File, SSFStory> selStories)
     {
         if(selStories == null || selStories.size() == 0)
             return;
@@ -237,37 +238,37 @@ public class CorpusStatistics {
             setSsfStory(localSSFStory);
 
             if(getWordFreq() == null)
-                wordFreq = localSSFStory.getWordFreq();
+                wordFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getWordFreq();
             else
                 getWordFreq().putAll(localSSFStory.getWordFreq());
 
             if(getPOSTagFreq() == null)
-                posTagFreq = localSSFStory.getPOSTagFreq();
+                posTagFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getPOSTagFreq();
             else
                 getPOSTagFreq().putAll(localSSFStory.getPOSTagFreq());
 
             if(getGRelFreq() == null)
-                grelFreq = localSSFStory.getGroupRelationFreq();
+                grelFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getGroupRelationFreq();
             else
                 getGRelFreq().putAll(localSSFStory.getGroupRelationFreq());
 
             if(getWordTagFreq() == null)
-                wordTagFreq = localSSFStory.getWordTagPairFreq();
+                wordTagFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getWordTagPairFreq();
             else
                 getWordTagFreq().putAll(localSSFStory.getWordTagPairFreq());
 
             if(getChunkTagFreq() == null)
-                chunkTagFreq = localSSFStory.getChunkTagFreq();
+                chunkTagFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getChunkTagFreq();
             else
                 getChunkTagFreq().putAll(localSSFStory.getChunkTagFreq());
 
             if(getChunkGRelFreq() == null)
-                chunkGRelFreq = localSSFStory.getChunkRelationFreq();
+                chunkGRelFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getChunkRelationFreq();
             else
                 getChunkGRelFreq().putAll(localSSFStory.getChunkRelationFreq());
 
             if(getUnchunkedWordFreq() == null)
-                unchunkedWordFreq = localSSFStory.getUnchunkedWordFreq();
+                unchunkedWordFreq = (ConcurrentLinkedHashMap<String, Integer>) localSSFStory.getUnchunkedWordFreq();
             else
                 getUnchunkedWordFreq().putAll(localSSFStory.getUnchunkedWordFreq());
         }

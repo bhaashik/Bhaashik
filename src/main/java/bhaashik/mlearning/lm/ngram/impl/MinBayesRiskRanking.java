@@ -216,11 +216,11 @@ public class MinBayesRiskRanking {
 
 		for(int j = 1; j <= trainingModel.getNGramOrder(); j++)
 		{
-			Iterator<List<Integer>> testItr = testModel.getNGramKeys(j);
+			Iterator<ArrayList<Integer>> testItr = testModel.getNGramKeys(j);
 
 			while(testItr.hasNext())
 			{
-				List<Integer> testNGram = testItr.next();
+				ArrayList<Integer> testNGram = testItr.next();
 				NGram testNg = (NGram) testModel.getNGram(testNGram, j);
 				NGram trainNg = (NGram) trainingModel.getNGram(testNGram, j);
 

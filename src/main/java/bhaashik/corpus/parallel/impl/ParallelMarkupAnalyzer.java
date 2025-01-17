@@ -13,6 +13,7 @@ import java.util.*;
 import javax.swing.DefaultComboBoxModel;
 
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.properties.PropertyTokens;
 
 import bhaashik.resources.aggregate.ParallelMarkupTask;
@@ -927,11 +928,11 @@ public class ParallelMarkupAnalyzer {
 
 	for (int l = 0; l < numLanguages; l++)
 	{
-	    LinkedHashMap markerHT = new LinkedHashMap(0, 10);
+	    ConcurrentLinkedHashMap markerHT = new ConcurrentLinkedHashMap(0, 10);
 	    
 	    for(int i = 0; i < tasks.length; i++)
 	    {
-		LinkedHashMap markup = null;
+		ConcurrentLinkedHashMap markup = null;
 		DefaultComboBoxModel tamMarkers = null;
 
 		if(l == SL)
@@ -1085,11 +1086,11 @@ public class ParallelMarkupAnalyzer {
 
 	for (int l = 0; l < numLanguages; l++)
 	{
-	    LinkedHashMap markupHT = new LinkedHashMap(0, 10);
+	    ConcurrentLinkedHashMap markupHT = new ConcurrentLinkedHashMap(0, 10);
 
 	    for(int i = 0; i < tasks.length; i++)
 	    {
-		LinkedHashMap markup = null;
+		ConcurrentLinkedHashMap markup = null;
 		DefaultComboBoxModel tamMarkers = null;
 		PropertyTokens senPT = null;
 
@@ -1174,14 +1175,14 @@ public class ParallelMarkupAnalyzer {
 	    markupMappingList.setColumnIdentifier(2 * l + 1, GlobalProperties.getIntlString("Marker_(") + tasks[0].getLanguages()[l] + ")");
 	}
 
-	LinkedHashMap markerMappingHT = new LinkedHashMap(0, 10);
+	ConcurrentLinkedHashMap markerMappingHT = new ConcurrentLinkedHashMap(0, 10);
 
 	for(int i = 0; i < tasks.length; i++)
 	{
-	    LinkedHashMap markerMapping = tasks[i].getMarkerMappingTables();
+	    ConcurrentLinkedHashMap markerMapping = tasks[i].getMarkerMappingTables();
 
-	    LinkedHashMap srcMarkup = tasks[i].getSrcSenMarkups();
-	    LinkedHashMap tgtMarkup = tasks[i].getTgtSenMarkups();
+	    ConcurrentLinkedHashMap srcMarkup = tasks[i].getSrcSenMarkups();
+	    ConcurrentLinkedHashMap tgtMarkup = tasks[i].getTgtSenMarkups();
 	    
 	    DefaultComboBoxModel srcTamMarkers = tasks[i].getSrcTamMarkers();
 	    DefaultComboBoxModel tgtTamMarkers = tasks[i].getTgtTamMarkers();
@@ -1305,14 +1306,14 @@ public class ParallelMarkupAnalyzer {
 	for (int l = 0; l < numLanguages; l++)
 	    markerMappingList.removeColumn(l + 1);
 
-	LinkedHashMap markerMappingHT = new LinkedHashMap(0, 10);
+	ConcurrentLinkedHashMap markerMappingHT = new ConcurrentLinkedHashMap(0, 10);
 
 	for(int i = 0; i < tasks.length; i++)
 	{
-	    LinkedHashMap markerMapping = tasks[i].getMarkerMappingTables();
+	    ConcurrentLinkedHashMap markerMapping = tasks[i].getMarkerMappingTables();
 
-	    LinkedHashMap srcMarkup = tasks[i].getSrcSenMarkups();
-	    LinkedHashMap tgtMarkup = tasks[i].getTgtSenMarkups();
+	    ConcurrentLinkedHashMap srcMarkup = tasks[i].getSrcSenMarkups();
+	    ConcurrentLinkedHashMap tgtMarkup = tasks[i].getTgtSenMarkups();
 	    
 	    DefaultComboBoxModel srcTamMarkers = tasks[i].getSrcTamMarkers();
 	    DefaultComboBoxModel tgtTamMarkers = tasks[i].getTgtTamMarkers();
@@ -1543,10 +1544,10 @@ public class ParallelMarkupAnalyzer {
 	
 	for(int i = 0; i < tasks.length; i++)
 	{
-	    LinkedHashMap markerMapping = tasks[i].getMarkerMappingTables();
+	    ConcurrentLinkedHashMap markerMapping = tasks[i].getMarkerMappingTables();
 
-	    LinkedHashMap srcMarkup = tasks[i].getSrcSenMarkups();
-	    LinkedHashMap tgtMarkup = tasks[i].getTgtSenMarkups();
+	    ConcurrentLinkedHashMap srcMarkup = tasks[i].getSrcSenMarkups();
+	    ConcurrentLinkedHashMap tgtMarkup = tasks[i].getTgtSenMarkups();
 	    
 	    DefaultComboBoxModel srcTamMarkers = tasks[i].getSrcTamMarkers();
 	    DefaultComboBoxModel tgtTamMarkers = tasks[i].getTgtTamMarkers();

@@ -18,16 +18,19 @@ import java.io.PrintStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
  *
  * @author Anil Kumar Singh
  */
-public class FunctionalContextImpl<K, E, CE extends FunctionalContextElement<E>> implements FunctionalContext<K, E, CE> {
+public class FunctionalContextImpl<K extends Serializable, E extends Serializable, CE extends FunctionalContextElement<E>> implements FunctionalContext<K, E, CE> {
+
+    private static final long serialVersionUID = 1L;
     
-    protected LinkedHashMap<K, LinkedHashMap<Integer, CE>> contextElements;
+    protected ConcurrentLinkedHashMap<K, ConcurrentLinkedHashMap<Integer, CE>> contextElements;
     protected long contextElementTypeCount;
     protected long contextElementTokenCount;
     
@@ -35,7 +38,7 @@ public class FunctionalContextImpl<K, E, CE extends FunctionalContextElement<E>>
     
     /** Creates a new instance of FunctionalContextImpl */
     public FunctionalContextImpl() {
-        contextElements = new LinkedHashMap<K, LinkedHashMap<Integer, CE>>(0, 5);
+        contextElements = new ConcurrentLinkedHashMap<K, ConcurrentLinkedHashMap<Integer, CE>>(0, 5);
     }
 
     public long countContextElementTypes(boolean recount)
@@ -52,7 +55,7 @@ public class FunctionalContextImpl<K, E, CE extends FunctionalContextElement<E>>
             while(itr.hasNext())
             {
                 K key = itr.next();
-                LinkedHashMap<Integer, FunctionalContextElement<E>> elements = (LinkedHashMap<Integer, FunctionalContextElement<E>>) contextElements.get(key);
+                ConcurrentLinkedHashMap<Integer, FunctionalContextElement<E>> elements = (ConcurrentLinkedHashMap<Integer, FunctionalContextElement<E>>) contextElements.get(key);
                 
                 contextElementTypeCount += elements.size();
             }
@@ -94,7 +97,7 @@ public class FunctionalContextImpl<K, E, CE extends FunctionalContextElement<E>>
     
     public long countContextElementTypes(K key)
     {
-        LinkedHashMap<Integer, CE> elements = contextElements.get(key);
+        ConcurrentLinkedHashMap<Integer, CE> elements = contextElements.get(key);
         
         if(elements == null)
             return 0;
@@ -104,7 +107,7 @@ public class FunctionalContextImpl<K, E, CE extends FunctionalContextElement<E>>
 
     public long countContextElementTokens(K key)
     {
-        LinkedHashMap<Integer, CE> elements = contextElements.get(key);
+        ConcurrentLinkedHashMap<Integer, CE> elements = contextElements.get(key);
         
         if(elements == null)
             return 0;
@@ -132,7 +135,7 @@ public class FunctionalContextImpl<K, E, CE extends FunctionalContextElement<E>>
 
     public Iterator<Integer> getContextElementKeys(K key)
     {
-        LinkedHashMap<Integer, CE> elements = contextElements.get(key);
+        ConcurrentLinkedHashMap<Integer, CE> elements = contextElements.get(key);
         
         if(elements == null)
             return null;
@@ -142,7 +145,7 @@ public class FunctionalContextImpl<K, E, CE extends FunctionalContextElement<E>>
 
     public CE getContextElement(K key, int distance)
     {
-        LinkedHashMap<Integer, CE> elements = contextElements.get(key);
+        ConcurrentLinkedHashMap<Integer, CE> elements = contextElements.get(key);
         
         if(elements == null)
             return null;
@@ -152,11 +155,11 @@ public class FunctionalContextImpl<K, E, CE extends FunctionalContextElement<E>>
 
     public long addContextElement(K key, int distance, CE ce)
     {
-        LinkedHashMap<Integer, CE> elements = contextElements.get(key);
+        ConcurrentLinkedHashMap<Integer, CE> elements = contextElements.get(key);
         
         if(elements == null)
         {
-            elements = new LinkedHashMap(1, 5);
+            elements = new ConcurrentLinkedHashMap(1, 5);
             contextElements.put(key, elements);            
         }
         
@@ -169,7 +172,7 @@ public class FunctionalContextImpl<K, E, CE extends FunctionalContextElement<E>>
 
     public CE removeContextElement(K key, int distance)
     {
-        LinkedHashMap<Integer, CE> elements = contextElements.get(key);
+        ConcurrentLinkedHashMap<Integer, CE> elements = contextElements.get(key);
         
         if(elements == null)
             return null;

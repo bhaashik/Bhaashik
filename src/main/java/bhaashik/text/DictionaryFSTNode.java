@@ -797,9 +797,9 @@ public class DictionaryFSTNode implements Serializable
         parent = prnt;
     }
 
-//    public LinkedHashMap getNearestWords(String str, int nearest)
+//    public ConcurrentLinkedHashMap getNearestWords(String str, int nearest)
 //    {
-//        LinkedHashMap nearestMatches = new LinkedHashMap(nearest, nearest);
+//        ConcurrentLinkedHashMap nearestMatches = new ConcurrentLinkedHashMap(nearest, nearest);
 //
 //        SimilarityTraversalData similarityTraversalData = new SimilarityTraversalData(str, (short) nearest, nearestMatches, (short) 0, 0.0f);
 //

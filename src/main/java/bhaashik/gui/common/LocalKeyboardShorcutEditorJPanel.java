@@ -12,7 +12,7 @@
 package bhaashik.gui.common;
 
 import java.awt.BorderLayout;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -38,7 +38,7 @@ public class LocalKeyboardShorcutEditorJPanel extends javax.swing.JPanel impleme
     protected ActionMap customActionMap;
     protected Action[] actions;
 
-    protected LinkedHashMap<String,KeyStroke> actionsKeyMap;
+    protected ConcurrentLinkedHashMap<String,KeyStroke> actionsKeyMap;
 
     protected BhaashikTableModel shortcutTableModel;
     protected BhaashikTableJPanel shortcutTableJPanel;
@@ -52,7 +52,7 @@ public class LocalKeyboardShorcutEditorJPanel extends javax.swing.JPanel impleme
         customInputMap = new InputMap();
         customActionMap = new ActionMap();
 
-        actionsKeyMap = new LinkedHashMap<String,KeyStroke>();
+        actionsKeyMap = new ConcurrentLinkedHashMap<String,KeyStroke>();
 
         this.shortcutTableModel = shortcutTableModel;
 
@@ -179,12 +179,12 @@ public class LocalKeyboardShorcutEditorJPanel extends javax.swing.JPanel impleme
         this.dialog = dialog;
     }
 
-    public LinkedHashMap<String,KeyStroke> getActionKeyMap()
+    public ConcurrentLinkedHashMap<String,KeyStroke> getActionKeyMap()
     {
         return actionsKeyMap;
     }
 
-    public void setActionKeyMap(LinkedHashMap<String,KeyStroke> am)
+    public void setActionKeyMap(ConcurrentLinkedHashMap<String,KeyStroke> am)
     {
         actionsKeyMap = am;
     }

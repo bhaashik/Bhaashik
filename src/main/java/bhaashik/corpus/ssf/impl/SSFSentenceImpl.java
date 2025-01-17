@@ -42,6 +42,7 @@ import org.w3c.dom.Node;
 
 import bhaashik.corpus.parallel.AlignmentUnit;
 import bhaashik.corpus.xml.XMLProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.properties.KeyValueProperties;
 import bhaashik.util.UtilityFunctions;
 
@@ -1252,13 +1253,13 @@ public class SSFSentenceImpl extends Sentence
     {
         SSFPhrase rNode = getRoot();
 
-        LinkedHashMap<QueryValue, String> matches = new LinkedHashMap<QueryValue, String>();
+        LinkedHashMap<QueryValue, String> matches = new ConcurrentLinkedHashMap<QueryValue, String>();
 
         if(ssfQuery.getRootMatchNode().getOperator().equals(SSFQueryOperatorType.ON_DS))
         {
-            LinkedHashMap cfgToMMTreeMapping = new LinkedHashMap(0, 10);
+            LinkedHashMap cfgToMMTreeMapping = new ConcurrentLinkedHashMap(0, 10);
 
-            SSFPhrase mmNode = ((SSFPhrase) rNode).convertToGDepNode(cfgToMMTreeMapping, false);
+            SSFPhrase mmNode = ((SSFPhrase) rNode).convertToGDepNode((ConcurrentLinkedHashMap) cfgToMMTreeMapping, false);
 
             if(mmNode == null) {
                 return matches;
@@ -1656,7 +1657,7 @@ public class SSFSentenceImpl extends Sentence
     @Override
     public LinkedHashMap<String, Integer> getUntaggedWordFreq()
     {
-        LinkedHashMap<String, Integer> allWords = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allWords = new ConcurrentLinkedHashMap();
 //
 //        int scount = countSentences();
 //
@@ -1839,7 +1840,8 @@ public class SSFSentenceImpl extends Sentence
 
 //	    System.out.println("/////////////////////////////////////");
 //
-//	    SSFSentenceImpl stcCopy = new SSFSentenceImpl();
+	    SSFSentenceImpl stcCopy = new SSFSentenceImpl();
+            stcCopy.loadAlignments(stc, 0);
 //	    stcCopy.readString(stc.makeString());
 //            stcCopy.print(System.out);
 

@@ -12,7 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -41,7 +41,7 @@ public class ScriptStats {
     Hashtable wordLengthsOttuTileMap;
     Hashtable wordLengthsCellMap;
 
-    LinkedHashMap<String, Integer> wordList;
+    ConcurrentLinkedHashMap<String, Integer> wordList;
 
     public ScriptStats(String f, String langEnc, String cs)
     {
@@ -54,7 +54,7 @@ public class ScriptStats {
         wordLengthsOttuTileMap = new Hashtable();
         wordLengthsCellMap = new Hashtable();
 
-        wordList = new LinkedHashMap<String, Integer>();
+        wordList = new ConcurrentLinkedHashMap<String, Integer>();
 
         filePT = new PropertyTokens();
 

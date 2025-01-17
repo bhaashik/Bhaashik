@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 
 import bhaashik.GlobalProperties;
@@ -85,9 +85,9 @@ public class QueryNEdit {
         }
     }
 
-    public LinkedHashMap<String, List> findMatches(String queryFile, boolean exactMatch) throws IOException, Exception
+    public ConcurrentLinkedHashMap<String, ArrayList> findMatches(String queryFile, boolean exactMatch) throws IOException, Exception
     {
-        LinkedHashMap<String, List> matches = new LinkedHashMap<String, List>();
+        ConcurrentLinkedHashMap<String, ArrayList> matches = new ConcurrentLinkedHashMap<>();
 
         File qfile = new File(queryFile);
 
@@ -107,7 +107,7 @@ public class QueryNEdit {
 //                System.out.println(contextOptions.thisNodeOptions.getDisWin());
 
                 File ifile = new File(inDir);
-                List nodes = new ArrayList();
+                ArrayList nodes = new ArrayList();
                 processDir(ifile, nodes, exactMatch);
 
                 if(matches != null)
@@ -183,7 +183,7 @@ public class QueryNEdit {
         }
     }
 
-    public void printMatches(LinkedHashMap<String, List> matches, PrintStream ps)
+    public void printMatches(ConcurrentLinkedHashMap<String, ArrayList> matches, PrintStream ps)
     {
         Iterator<String> itr = matches.keySet().iterator();
 
@@ -258,7 +258,7 @@ public class QueryNEdit {
 
 //            qne.analyseQuery(rules, false);
 //            qne.printFiles(new File(output));
-            LinkedHashMap<String, List> matches = qne.findMatches(rules, false);
+            ConcurrentLinkedHashMap<String, ArrayList> matches = qne.findMatches(rules, false);
             qne.printMatches(matches, System.out);
 
         } catch (FileNotFoundException e) {

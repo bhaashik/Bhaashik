@@ -10,7 +10,7 @@ import com.sun.speech.freetts.lexicon.LetterToSound;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,6 +22,7 @@ import bhaashik.text.DictionaryFST;
 import bhaashik.text.DictionaryFSTNode;
 import bhaashik.text.TextNormalizer;
 import bhaashik.text.spell.DictionaryFSTExt;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -357,7 +358,7 @@ public class TransliterationCandidateGenerator {
         {
             String candidate = (String) itr.next();
 
-            LinkedHashMap<DictionaryFSTNode,Double> nearestMatches = getTargetDictionary().getNearestWords(candidate, nearest, false);
+            LinkedHashMap<DictionaryFSTNode,Double> nearestMatches = (ConcurrentLinkedHashMap<DictionaryFSTNode,Double>) getTargetDictionary().getNearestWords(candidate, nearest, false);
 
             Iterator fmItr = nearestMatches.keySet().iterator();
 

@@ -5,13 +5,15 @@
 
 package bhaashik.corpus.ssf.query;
 
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
 import bhaashik.common.types.SSFQueryOperatorType;
 import bhaashik.common.types.SSFQueryTokenType;
 import bhaashik.corpus.ssf.tree.SSFNode;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -118,7 +120,7 @@ public class SSFQueryActionNode extends SSFQueryNode {
 
     protected LinkedHashMap execute(SSFNode node) throws Exception
     {
-        LinkedHashMap returnMap = new LinkedHashMap();
+        LinkedHashMap returnMap = new ConcurrentLinkedHashMap();
         
         if(getOperator().equals(SSFQueryOperatorType.AND))
         {
@@ -185,7 +187,7 @@ public class SSFQueryActionNode extends SSFQueryNode {
             else
             {
                 SSFQueryActionNode.setValue(this, valNode, node);
-                LinkedHashMap rMap = new LinkedHashMap();
+                ConcurrentLinkedHashMap rMap = new ConcurrentLinkedHashMap();
                 rMap.put(node, ssfQuery.getQueryString());
                 return rMap;
             }
@@ -214,7 +216,7 @@ public class SSFQueryActionNode extends SSFQueryNode {
 
     protected static LinkedHashMap returnValueString(String varString, SSFNode node, SSFQueryNode queryNode) throws Exception
     {
-        LinkedHashMap returnMap = new LinkedHashMap();
+        LinkedHashMap returnMap = new ConcurrentLinkedHashMap();
 
         returnMap.put(new StringQueryValue(SSFQueryMatchNode.getValue(varString, node, queryNode), node), varString);
 
@@ -223,9 +225,9 @@ public class SSFQueryActionNode extends SSFQueryNode {
 
     protected static LinkedHashMap returnValueNode(String varString, SSFNode node, SSFQueryNode queryNode) throws Exception
     {
-        LinkedHashMap returnMap = new LinkedHashMap();
+        LinkedHashMap returnMap = new ConcurrentLinkedHashMap();
 
-        Vector varSSFNodes = new Vector();
+        ArrayList varSSFNodes = new ArrayList();
         NodeWildcardInfo nodeWildcardInfo = SSFQueryMatchNode.getSSFNodes(varString, node, varSSFNodes, queryNode);
 
 //        varString = SSFQueryMatchNode.stripMatchAlias(varString);
@@ -252,7 +254,7 @@ public class SSFQueryActionNode extends SSFQueryNode {
 
             returnMap.put(varSSFNode, varString);
 
-//            LinkedHashMap rMap = returnValueHelper(varString, node, varSSFNode, queryNode);
+//            ConcurrentLinkedHashMap rMap = returnValueHelper(varString, node, varSSFNode, queryNode);
 //
 //            if(rMap != null)
 //                returnMap.putAll(rMap);
@@ -260,8 +262,8 @@ public class SSFQueryActionNode extends SSFQueryNode {
 
         if(Character.isLowerCase(varString.charAt(varString.length() - 1)))
         {
-            Vector<QueryValue> varValues = new Vector<QueryValue>();
-            LinkedHashMap stringReturnMap = new LinkedHashMap();
+            ArrayList<QueryValue> varValues = new ArrayList<>();
+            LinkedHashMap stringReturnMap = new ConcurrentLinkedHashMap();
 
             int count = varSSFNodes.size();
 
@@ -346,10 +348,10 @@ public class SSFQueryActionNode extends SSFQueryNode {
         }
     }
 
-//    protected static LinkedHashMap returnValueHelper(String varString, SSFNode node, SSFNode varSSFNode,
+//    protected static ConcurrentLinkedHashMap returnValueHelper(String varString, SSFNode node, SSFNode varSSFNode,
 //            SSFQueryNode queryNode) throws Exception
 //    {
-//        LinkedHashMap returnMap = new LinkedHashMap();
+//        ConcurrentLinkedHashMap returnMap = new ConcurrentLinkedHashMap();
 //
 //        return returnMap;
 //    }

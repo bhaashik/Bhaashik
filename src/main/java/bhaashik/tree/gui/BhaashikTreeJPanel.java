@@ -50,6 +50,7 @@ import bhaashik.tree.BhaashikTreeModel;
 import bhaashik.util.PrintUtilities;
 import bhaashik.util.UtilityFunctions;
 import bhaashik.corpus.ssf.features.impl.*;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.gui.common.*;
 
 /**
@@ -2513,7 +2514,7 @@ public class BhaashikTreeJPanel extends javax.swing.JPanel implements BhaashikCl
             {
             } else if (mode == SSF_MODE)
             {
-                LinkedHashMap cfgToMMTreeMapping = new LinkedHashMap(0, 10);
+                ConcurrentLinkedHashMap cfgToMMTreeMapping = new ConcurrentLinkedHashMap(0, 10);
                 SSFPhrase mmt = ((SSFPhrase) rnode).convertToGDepNode(cfgToMMTreeMapping);
 
                 BhaashikTreeViewerJPanel realTreeJPanel = null;
@@ -2584,7 +2585,7 @@ public class BhaashikTreeJPanel extends javax.swing.JPanel implements BhaashikCl
             {
             } else if (mode == SSF_MODE)
             {
-                LinkedHashMap cfgToMMTreeMapping = new LinkedHashMap(0, 10);
+                ConcurrentLinkedHashMap cfgToMMTreeMapping = new ConcurrentLinkedHashMap(0, 10);
                 SSFPhrase mmt = ((SSFPhrase) rnode).convertToLDepNode(cfgToMMTreeMapping);
 
 //                if(mmt.hasLexicalDependencies("drel") == false)
@@ -2659,7 +2660,7 @@ public class BhaashikTreeJPanel extends javax.swing.JPanel implements BhaashikCl
             {
             } else if (mode == SSF_MODE)
             {
-                LinkedHashMap cfgToPSTreeMapping = new LinkedHashMap(0, 10);
+                ConcurrentLinkedHashMap cfgToPSTreeMapping = new ConcurrentLinkedHashMap(0, 10);
                 SSFPhrase pst = ((SSFPhrase) rnode).convertToPSNode(cfgToPSTreeMapping);
 
                 BhaashikTreeViewerJPanel realTreeJPanel = null;

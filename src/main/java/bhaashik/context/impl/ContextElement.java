@@ -7,12 +7,13 @@ package bhaashik.context.impl;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
 
 /**
  *
  * @author anil
  */
-public interface ContextElement<E> {
+public interface ContextElement<E extends Serializable> extends Serializable {
 
     E getContextElement();
 

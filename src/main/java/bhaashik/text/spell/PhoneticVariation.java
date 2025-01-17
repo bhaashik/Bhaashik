@@ -8,7 +8,7 @@ package bhaashik.text.spell;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import java.util.Vector;
 
@@ -32,9 +32,9 @@ public class PhoneticVariation {
 
     protected KeyValueProperties wordListKVP;
 
-    protected LinkedHashMap<String, Integer> fs_cl_cr;
+    protected ConcurrentLinkedHashMap<String, Integer> fs_cl_cr;
 
-    protected LinkedHashMap<String, TranslationListFreqProb> ft_Given_fs_cl_cr;
+    protected ConcurrentLinkedHashMap<String, TranslationListFreqProb> ft_Given_fs_cl_cr;
     
     protected PhoneticModelOfScripts phoneticModelOfScripts;
 
@@ -42,9 +42,9 @@ public class PhoneticVariation {
     {
         wordListKVP = new KeyValueProperties();
 
-        fs_cl_cr = new LinkedHashMap<String, Integer>();
+        fs_cl_cr = new ConcurrentLinkedHashMap<>();
 
-        ft_Given_fs_cl_cr = new LinkedHashMap<String, TranslationListFreqProb>();
+        ft_Given_fs_cl_cr = new ConcurrentLinkedHashMap<>();
 
         init();
     }

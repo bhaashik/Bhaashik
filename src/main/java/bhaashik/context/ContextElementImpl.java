@@ -9,12 +9,14 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import bhaashik.context.impl.ContextElement;
+import java.io.Serializable;
 
 /**
  *
  * @author anil
+ * @param <E>
  */
-public class ContextElementImpl<E> implements ContextElement<E>, Comparable {
+public class ContextElementImpl<E extends Serializable> implements ContextElement<E>, Comparable {
 
     protected E contextElement;
     protected long freq;

@@ -22,11 +22,13 @@ import javax.swing.JOptionPane;
 import javax.swing.table.*;
 
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.resources.Resource;
 import bhaashik.table.gui.Cell;
 import bhaashik.xml.dom.BhaashikDOMElement;
 import bhaashik.db.DBConnection;
 import bhaashik.db.DatabaseTableColumnSpec;
+import javax.swing.KeyStroke;
 import org.dom4j.dom.DOMAttribute;
 import org.dom4j.dom.DOMElement;
 import org.w3c.dom.Element;
@@ -61,6 +63,8 @@ public class BhaashikTableModel extends DefaultTableModel implements Resource, B
     
     protected int editableRows[];
     protected int editableCols[];
+//    protected boolean editableCells[][];
+    
 
     /**
      * Database mode
@@ -585,9 +589,15 @@ public class BhaashikTableModel extends DefaultTableModel implements Resource, B
         return editableRows;
     }
     
+//    public void setEditableRows(int[] r, int c)
     public void setEditableRows(int[] r)
     {
         editableRows = r;
+        
+//        for(int i = 0; i < r.length; i++)
+//        {
+//            editableCells[i][c] = true;
+//        }
     }
     
     public int[] getEditableColumns()
@@ -599,6 +609,16 @@ public class BhaashikTableModel extends DefaultTableModel implements Resource, B
     {
         editableCols = c;
     }
+    
+//    public boolean isEditableCell(int row, int col)
+//    {
+//        return editableCells[row][col];
+//    }
+//    
+//    public void setEditableCell(int row, int col, boolean editable)
+//    {
+//        editableCells[row][col] = editable;
+//    }
     
     public boolean isCellEditable(int row, int column)
     {
@@ -673,33 +693,42 @@ public class BhaashikTableModel extends DefaultTableModel implements Resource, B
         {
             Class cls = getColumnClass(i);
             Object object = null;
-                    
-            try {
-//                object = cls.newInstance();
-                if(cls.getCanonicalName().equals(Boolean.class.getCanonicalName()))
-                    object = Boolean.FALSE;
-                else if(cls.getCanonicalName().equals(Byte.class.getCanonicalName()))
-                    object = Byte.valueOf("0");
-                else if(cls.getCanonicalName().equals(Short.class.getCanonicalName()))
-                    object = Short.valueOf("0");
-                else if(cls.getCanonicalName().equals(Integer.class.getCanonicalName()))
-                    object = Integer.valueOf(0);
-                else if(cls.getCanonicalName().equals(Long.class.getCanonicalName()))
-                    object = Long.valueOf(0L);
-                else if(cls.getCanonicalName().equals(Float.class.getCanonicalName()))
-                    object = Float.valueOf(0.0F);
-                else if(cls.getCanonicalName().equals(Double.class.getCanonicalName()))
-                    object = Double.valueOf(0.0);
-                else if(cls.getCanonicalName().equals(String.class.getCanonicalName()))
-                    object = "";
-                else
-//                    object = cls.getConstructor().newInstance();
-                    object = Class.forName(object.getClass().getName()).newInstance();
-            } catch (SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException  ex) {
-                Logger.getLogger(BhaashikTableModel.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+            
+            if(cls == null)
+            {
+                cls = String.class;
             }
+                    
+//            object = cls.newInstance();
+            if(cls.getCanonicalName().equals(Boolean.class.getCanonicalName()))
+                object = Boolean.FALSE;
+            else if(cls.getCanonicalName().equals(Byte.class.getCanonicalName()))
+                object = Byte.valueOf("0");
+            else if(cls.getCanonicalName().equals(Short.class.getCanonicalName()))
+                object = Short.valueOf("0");
+            else if(cls.getCanonicalName().equals(Integer.class.getCanonicalName()))
+                object = Integer.valueOf(0);
+            else if(cls.getCanonicalName().equals(Long.class.getCanonicalName()))
+                object = Long.valueOf(0L);
+            else if(cls.getCanonicalName().equals(Float.class.getCanonicalName()))
+                object = Float.valueOf(0.0F);
+            else if(cls.getCanonicalName().equals(Double.class.getCanonicalName()))
+                object = Double.valueOf(0.0);
+            else if(cls.getCanonicalName().equals(KeyStroke.class.getCanonicalName()))
+                object = Integer.valueOf(0);
+            else if(cls.getCanonicalName().equals(String.class.getCanonicalName()))
+                object = "";
+            else
+                    
+//                    try {
+//                        //                    object = cls.getConstructor().newInstance();
+//                        object = Class.forName(object.getClass().getName()).getDeclaredConstructor(columnClasses).newInstance();
+//                } catch (NoSuchMethodException ex) {
+//                    Logger.getLogger(BhaashikTableModel.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            } catch (Exception ex) {
+//                Logger.getLogger(BhaashikTableModel.class.getName()).log(Level.SEVERE, null, ex);
+//            }
 
             rowData.add(object);
 //            rowData.add(new String(""));
@@ -1540,7 +1569,7 @@ public class BhaashikTableModel extends DefaultTableModel implements Resource, B
     
     public static LinkedHashMap readMany(String f, String charset) throws FileNotFoundException, IOException
     {
-        LinkedHashMap ht = new LinkedHashMap(0, 5);
+        ConcurrentLinkedHashMap ht = new ConcurrentLinkedHashMap(0, 5);
         
         BufferedReader lnReader = null;
         
@@ -1798,7 +1827,7 @@ public class BhaashikTableModel extends DefaultTableModel implements Resource, B
         return 0;
     }
 
-    public static void saveMany(LinkedHashMap tables, String f, String charset) throws FileNotFoundException, UnsupportedEncodingException
+    public static void saveMany(ConcurrentLinkedHashMap tables, String f, String charset) throws FileNotFoundException, UnsupportedEncodingException
     {
         PrintStream ps = new PrintStream(f, charset);
         printMany(tables, ps);
@@ -1888,7 +1917,7 @@ public class BhaashikTableModel extends DefaultTableModel implements Resource, B
         }
     }
 
-    public static void printMany(LinkedHashMap tables, PrintStream ps)
+    public static void printMany(ConcurrentLinkedHashMap tables, PrintStream ps)
     {
         Vector kvec = new Vector(tables.keySet());
         Collections.sort(kvec);
@@ -1906,7 +1935,7 @@ public class BhaashikTableModel extends DefaultTableModel implements Resource, B
         }
     }
 
-    public static void printManyXML(LinkedHashMap tables, PrintStream ps)
+    public static void printManyXML(ConcurrentLinkedHashMap tables, PrintStream ps)
     {
         DOMElement domElementMany = new DOMElement(GlobalProperties.getIntlString("MultiTable"));
 

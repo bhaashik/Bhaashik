@@ -8,7 +8,7 @@ package bhaashik.text.spell;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 
 import bhaashik.corpus.ssf.features.FeatureAttribute;
@@ -18,6 +18,7 @@ import bhaashik.mlearning.lm.ngram.NGramLM;
 import bhaashik.mlearning.lm.ngram.impl.NGramImpl;
 import bhaashik.properties.PropertyTokens;
 import bhaashik.table.BhaashikTableModel;
+import java.io.Serializable;
 
 /**
  *
@@ -25,11 +26,11 @@ import bhaashik.table.BhaashikTableModel;
  */
 public class ConditionalProbabilities {
 
-    LinkedHashMap<Object,LinkedHashMap> conditionalProbabilities;
+    ConcurrentLinkedHashMap<Serializable,ConcurrentLinkedHashMap> conditionalProbabilities;
 
     public ConditionalProbabilities()
     {
-        conditionalProbabilities = new LinkedHashMap(0, 100);
+        conditionalProbabilities = new ConcurrentLinkedHashMap(0, 100);
     }
 
     public int countSucceedingFeatures()
@@ -45,7 +46,7 @@ public class ConditionalProbabilities {
         if(conditionalProbabilities == null)
             return 0;
 
-        LinkedHashMap precedingProbs = (LinkedHashMap) conditionalProbabilities.get(succeedingFeature);
+        ConcurrentLinkedHashMap precedingProbs = (ConcurrentLinkedHashMap) conditionalProbabilities.get(succeedingFeature);
 
         if(precedingProbs == null)
             return 0;
@@ -84,7 +85,7 @@ public class ConditionalProbabilities {
         if(conditionalProbabilities == null)
             return null;
 
-        LinkedHashMap precedingProbs = (LinkedHashMap) conditionalProbabilities.get(succeedingFeature);
+        ConcurrentLinkedHashMap precedingProbs = (ConcurrentLinkedHashMap) conditionalProbabilities.get(succeedingFeature);
 
         if(precedingProbs == null)
             return null;
@@ -94,7 +95,7 @@ public class ConditionalProbabilities {
 
     public Probability getFeatureProb(String succeedingFeature, String precedingFeature)
     {
-        LinkedHashMap precedingProbs = (LinkedHashMap) conditionalProbabilities.get(succeedingFeature);
+        ConcurrentLinkedHashMap precedingProbs = (ConcurrentLinkedHashMap) conditionalProbabilities.get(succeedingFeature);
 
         if(precedingProbs == null)
             return null;
@@ -104,11 +105,11 @@ public class ConditionalProbabilities {
 
     public void addFeatureProb(String succeedingFeature, String precedingFeature, Probability Probs)
     {
-        LinkedHashMap precedingProbs = (LinkedHashMap) conditionalProbabilities.get(succeedingFeature);
+        ConcurrentLinkedHashMap precedingProbs = (ConcurrentLinkedHashMap) conditionalProbabilities.get(succeedingFeature);
 
         if(precedingProbs == null)
         {
-            precedingProbs = new LinkedHashMap(0, 100);
+            precedingProbs = new ConcurrentLinkedHashMap(0, 100);
 
             conditionalProbabilities.put(succeedingFeature, precedingProbs);
         }
@@ -126,7 +127,7 @@ public class ConditionalProbabilities {
 
     public void removeFeatureProb(String succeedingFeature, String precedingFeature)
     {
-        LinkedHashMap precedingProbs = (LinkedHashMap) conditionalProbabilities.get(succeedingFeature);
+        ConcurrentLinkedHashMap precedingProbs = (ConcurrentLinkedHashMap) conditionalProbabilities.get(succeedingFeature);
 
         if(precedingProbs == null)
             return;

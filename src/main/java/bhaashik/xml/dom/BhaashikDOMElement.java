@@ -10,12 +10,13 @@
 package bhaashik.xml.dom;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 
 /**
  *
  * @author anil
  */
-public interface BhaashikDOMElement {
+public interface BhaashikDOMElement extends Serializable {
     org.dom4j.dom.DOMElement getDOMElement();    
     String getXML();
     void readXML(org.w3c.dom.Element domElement);    

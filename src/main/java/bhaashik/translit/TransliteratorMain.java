@@ -10,7 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 
 import java.util.logging.Level;
@@ -33,6 +33,7 @@ import bhaashik.text.DictionaryFSTNode;
 import bhaashik.text.TextNormalizer;
 
 import com.sun.speech.freetts.lexicon.LetterToSound;
+import java.util.LinkedHashMap;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -524,11 +525,11 @@ public class TransliteratorMain {
         return finalCandidates;
     }
 
-    public LinkedHashMap<String,Double> doFuzzyMatchScores(String MappedCandidatesFile,
+    public ConcurrentLinkedHashMap<String,Double> doFuzzyMatchScores(String MappedCandidatesFile,
             String FuzzyMapFilePathPrefix, String MappedFileForRanking,
             String rankedOutputFile) throws FileNotFoundException, IOException {
 
-        LinkedHashMap<String,Double> finalCandidates = new LinkedHashMap<String,Double>();
+        ConcurrentLinkedHashMap<String,Double> finalCandidates = new ConcurrentLinkedHashMap<String,Double>();
 
         // Fuzzy Search for The correct word in the Corpus
         tree.genSimilarity(MappedCandidatesFile, 750000000, pruneTopN,
@@ -561,7 +562,7 @@ public class TransliteratorMain {
     {
         PropertyTokens tmap = ((TransliterationCandidates) translationCandidates).getTransliterationCandidatesPTForDATM();
 
-        LinkedHashMap<String,Double> translitCandidates = null;
+        ConcurrentLinkedHashMap<String,Double> translitCandidates = null;
         try {
             tmap.save(ENG_OUTPUT_NAMES_MAPPED_FILEPATH, charset);
 

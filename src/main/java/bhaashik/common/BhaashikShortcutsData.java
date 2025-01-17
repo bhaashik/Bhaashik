@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -84,7 +84,7 @@ public class BhaashikShortcutsData {
         return shortcutsData;
     }
 
-    public static BhaashikTableModel getShortcutsTable(Action[] actions, InputMap inputMap, ActionMap actionMap, LinkedHashMap<String,KeyStroke> actionsKeyMap)
+    public static BhaashikTableModel getShortcutsTable(Action[] actions, InputMap inputMap, ActionMap actionMap, ConcurrentLinkedHashMap<String,KeyStroke> actionsKeyMap)
     {
         PropertiesTable shortcutTableModel = new PropertiesTable(0, 3);
 
@@ -115,7 +115,7 @@ public class BhaashikShortcutsData {
         return shortcutTableModel;
     }
 
-    public static void readShortcuts(BhaashikTableModel shortcutTableModel, Action[] actions, InputMap inputMap, ActionMap actionMap, LinkedHashMap<String,KeyStroke> actionsKeyMap)
+    public static void readShortcuts(BhaashikTableModel shortcutTableModel, Action[] actions, InputMap inputMap, ActionMap actionMap, ConcurrentLinkedHashMap<String,KeyStroke> actionsKeyMap)
     {
         for (int i = 0; i < actions.length && i < shortcutTableModel.getRowCount(); i++)
         {
@@ -136,7 +136,7 @@ public class BhaashikShortcutsData {
         }
     }
 
-    public static void registerShortcuts(JComponent component, ActionMap actionMap, LinkedHashMap<String,KeyStroke> actionsKeyMap)
+    public static void registerShortcuts(JComponent component, ActionMap actionMap, ConcurrentLinkedHashMap<String,KeyStroke> actionsKeyMap)
     {
         Iterator itr = actionsKeyMap.keySet().iterator();
 

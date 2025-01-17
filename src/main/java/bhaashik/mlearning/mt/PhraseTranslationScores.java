@@ -5,11 +5,13 @@
 
 package bhaashik.mlearning.mt;
 
+import java.io.Serializable;
+
 /**
  *
  * @author anil
  */
-public class PhraseTranslationScores {
+public class PhraseTranslationScores implements Serializable{
     protected double tranlsationScore;
     protected double revTranlsationScore;
 

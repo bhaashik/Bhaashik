@@ -52,7 +52,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.EventObject;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1997,7 +1997,7 @@ public class RichTextEditorJPanel extends javax.swing.JPanel implements WindowLi
                 encLangIdentifier.train();
             }
 
-            LinkedHashMap LEs = ((LinkedHashMap) encLangIdentifier.identify(tfile));
+            ConcurrentLinkedHashMap LEs = ((ConcurrentLinkedHashMap) encLangIdentifier.identify(tfile));
             Iterator itr = LEs.keySet().iterator();
             String langEnc = (String) itr.next();
 

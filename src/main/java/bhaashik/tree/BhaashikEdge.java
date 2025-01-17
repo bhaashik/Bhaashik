@@ -7,8 +7,11 @@ package bhaashik.tree;
 
 import java.awt.Color;
 import java.awt.Stroke;
+import java.io.Serializable;
 
-public class BhaashikEdge {
+public class BhaashikEdge implements Serializable {
+    
+    private static final long serialVersionUID =1L;
 
     public Object node1;
     public int row1;

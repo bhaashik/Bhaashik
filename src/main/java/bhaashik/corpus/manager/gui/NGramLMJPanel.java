@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -382,7 +382,7 @@ public class NGramLMJPanel extends javax.swing.JPanel implements WindowListener,
         return clientType;
     }
 
-    public void ngramQFillTable(LinkedHashMap<Integer, LinkedHashMap<List<Integer>, NGram>> fNGrams)
+    public void ngramQFillTable(ConcurrentLinkedHashMap<Integer, ConcurrentLinkedHashMap<ArrayList<Integer>, NGram>> fNGrams)
     {
         BhaashikTableModel qTableModel = new BhaashikTableModel(new String[]{GlobalProperties.getIntlString("Order"), GlobalProperties.getIntlString("ngram"), GlobalProperties.getIntlString("Frequency"), GlobalProperties.getIntlString("Probability")}, 0);
         qTableModel.setEditable(false);
@@ -392,8 +392,8 @@ public class NGramLMJPanel extends javax.swing.JPanel implements WindowListener,
         while(itr.hasNext())
         {
             Integer key = itr.next();
-            LinkedHashMap<List<Integer>, NGram> fNGram = fNGrams.get(key);
-            Iterator<List<Integer>> itr2 = fNGram.keySet().iterator();
+            ConcurrentLinkedHashMap<ArrayList<Integer>, NGram> fNGram = fNGrams.get(key);
+            Iterator<ArrayList<Integer>> itr2 = fNGram.keySet().iterator();
             System.out.println(key + "gram");
             while(itr2.hasNext())
             {
@@ -621,7 +621,7 @@ public class NGramLMJPanel extends javax.swing.JPanel implements WindowListener,
                 minFreqValue = Integer.parseInt(minFreq);
                 maxFreqValue = Integer.parseInt(maxFreq);
 
-                LinkedHashMap<Integer, LinkedHashMap<List<Integer>, NGram>> matchNgrams = new LinkedHashMap<Integer, LinkedHashMap<List<Integer>, NGram>>(0,20);
+                ConcurrentLinkedHashMap<Integer, ConcurrentLinkedHashMap<ArrayList<Integer>, NGram>> matchNgrams = new ConcurrentLinkedHashMap<Integer, ConcurrentLinkedHashMap<ArrayList<Integer>, NGram>>(0,20);
                 matchNgrams = ngramLM.findNGramFile(query, qOrderValue, minFreqValue, maxFreqValue);
                 ngramQFillTable(matchNgrams);
             }

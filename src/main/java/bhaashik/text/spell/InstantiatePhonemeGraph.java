@@ -303,11 +303,11 @@ public class InstantiatePhonemeGraph {
 //		System.out.println("createUnigramNodes");
 		phonemeNodes = new Hashtable();
 
-		Iterator<List<Integer>> itr = nglm.getNGramKeys(1);
+		Iterator<ArrayList<Integer>> itr = nglm.getNGramKeys(1);
 
 		while(itr.hasNext())
 		{
-			List<Integer> key = itr.next();
+			ArrayList<Integer> key = itr.next();
 //			System.out.println("In Enum loop key"+key);
 			NGram ng = (NGram) nglm.getNGram(key, 1);
 
@@ -558,11 +558,11 @@ public class InstantiatePhonemeGraph {
 		for(int i = 1; i <= nglm.getNGramOrder(); i++)
 //			for(int i = 1; i <= 3; i++)
 		{
-			Iterator<List<Integer>> itr = nglm.getNGramKeys(i);
+			Iterator<ArrayList<Integer>> itr = nglm.getNGramKeys(i);
 //			System.out.println("No of character ngrams of type "+i+" are "+nglm.countTypes(i));
 			while(itr.hasNext())
 			{
-				List<Integer> key = itr.next();
+				ArrayList<Integer> key = itr.next();
 //				System.out.println("In Enum loop key"+key);
 				NGram ng = (NGram) nglm.getNGram(key, i);
 

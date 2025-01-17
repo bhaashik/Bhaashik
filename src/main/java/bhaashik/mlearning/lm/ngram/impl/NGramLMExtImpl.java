@@ -7,12 +7,13 @@ package bhaashik.mlearning.lm.ngram.impl;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 
 import bhaashik.factory.Factory;
 import bhaashik.mlearning.lm.ngram.NGramExt;
 import bhaashik.mlearning.lm.ngram.NGramLMExt;
+import java.util.ArrayList;
 
 /**
  *
@@ -39,9 +40,9 @@ public class NGramLMExtImpl<NG extends NGramExt> extends NGramLMImpl<NG> impleme
 
         NGramExt oldng = null;
         int wt = 0;
-        LinkedHashMap<List<Integer>, NG> ht = nGrams.get(whichGram - 1);
+        ConcurrentLinkedHashMap<ArrayList<Integer>, NG> ht = nGrams.get(whichGram - 1);
         
-        List<Integer> wdIndices = NGramImpl.getIndices(this, wds, true);
+        ArrayList<Integer> wdIndices = NGramImpl.getIndices(this, wds, true);
 
         if(ht != null)
         {
@@ -70,9 +71,9 @@ public class NGramLMExtImpl<NG extends NGramExt> extends NGramLMImpl<NG> impleme
 
         NG oldng = null;
         int wt = 0;
-        LinkedHashMap<List<Integer>, NG> ht = nGrams.get(whichGram - 1);
+        ConcurrentLinkedHashMap<ArrayList<Integer>, NG> ht = nGrams.get(whichGram - 1);
 
-        List<Integer> wdIndices = NGramImpl.getIndices(this, wds, true);
+        ArrayList<Integer> wdIndices = NGramImpl.getIndices(this, wds, true);
 
         if(ht != null)
         {
@@ -101,9 +102,9 @@ public class NGramLMExtImpl<NG extends NGramExt> extends NGramLMImpl<NG> impleme
 
         NG oldng = null;
         int wt = 0;
-        LinkedHashMap<List<Integer>, NG> ht = nGrams.get(whichGram - 1);
+        ConcurrentLinkedHashMap<ArrayList<Integer>, NG> ht = nGrams.get(whichGram - 1);
 
-        List<Integer> wdIndices = NGramImpl.getIndices(this, wds, true);
+        ArrayList<Integer> wdIndices = NGramImpl.getIndices(this, wds, true);
 
         if(ht != null)
         {
@@ -131,11 +132,11 @@ public class NGramLMExtImpl<NG extends NGramExt> extends NGramLMImpl<NG> impleme
     {
         if(whichGram > nGramOrder || whichGram < 1) { return; }
 
-        Iterator<List<Integer>> itr = getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram);
 
         while(itr.hasNext())
         {
-            List<Integer> numer = itr.next();
+            ArrayList<Integer> numer = itr.next();
             
             String numerString = NGramImpl.getString(this, numer);
 

@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -23,12 +23,14 @@ import bhaashik.corpus.ssf.tree.SSFNode;
 import bhaashik.corpus.ssf.tree.SSFPhrase;
 import bhaashik.table.BhaashikTableModel;
 import bhaashik.util.UtilityFunctions;
+import java.io.Serializable;
+import java.util.LinkedHashMap;
 
 /**
  *
  * @author anil
  */
-public class SSFQuery {
+public class SSFQuery implements Serializable{
 
     protected boolean returnsValues;
 
@@ -38,9 +40,9 @@ public class SSFQuery {
     protected SSFQueryActionNode rootActionNode;
     protected SSFQueryDestinationNode rootDestinationNode;
 
-    protected LinkedHashMap<String, List<QueryValue>> matchedValues;
+    protected LinkedHashMap<String, ArrayList<QueryValue>> matchedValues;
 
-    protected LinkedHashMap<String, List<QueryValue>> returnValues;
+    protected LinkedHashMap<String, ArrayList<QueryValue>> returnValues;
     protected LinkedHashMap<String, Integer> returnLevels;
 
     protected LinkedHashMap<String, QuerySourceDestination> sources;
@@ -54,12 +56,12 @@ public class SSFQuery {
     {
         super();
         
-        matchedValues = new LinkedHashMap<String, List<QueryValue>>();
-        returnValues = new LinkedHashMap<String, List<QueryValue>>();
-        returnLevels = new LinkedHashMap<String, Integer>();
+        matchedValues = new ConcurrentLinkedHashMap<>();
+        returnValues = new ConcurrentLinkedHashMap<>();
+        returnLevels = new ConcurrentLinkedHashMap<>();
 
-        sources = new LinkedHashMap<String, QuerySourceDestination>();
-        destinations = new LinkedHashMap<String, QuerySourceDestination>();
+        sources = new ConcurrentLinkedHashMap<>();
+        destinations = new ConcurrentLinkedHashMap<>();
     }
 
     public SSFQuery(String queryString)
@@ -68,12 +70,12 @@ public class SSFQuery {
         
         this.queryString = queryString;
 
-        matchedValues = new LinkedHashMap<String, List<QueryValue>>();
-        returnValues = new LinkedHashMap<String, List<QueryValue>>();
-        returnLevels = new LinkedHashMap<String, Integer>();
+        matchedValues = new ConcurrentLinkedHashMap<>();
+        returnValues = new ConcurrentLinkedHashMap<>();
+        returnLevels = new ConcurrentLinkedHashMap<>();
 
-        sources = new LinkedHashMap<String, QuerySourceDestination>();
-        destinations = new LinkedHashMap<String, QuerySourceDestination>();
+        sources = new ConcurrentLinkedHashMap<>();
+        destinations = new ConcurrentLinkedHashMap<>();
     }
 
     public boolean returnsValues()
@@ -144,7 +146,7 @@ public class SSFQuery {
         return matchedValues.keySet().iterator();
     }
 
-    public List<QueryValue> getMatchedValues(String p /* Property key */)
+    public ArrayList<QueryValue> getMatchedValues(String p /* Property key */)
     {
         return matchedValues.get(p);
     }
@@ -155,7 +157,7 @@ public class SSFQuery {
             m = ""  + (matchedValues.size() + 1);
         }
 
-        List<QueryValue> nodes = matchedValues.get(m);
+        ArrayList<QueryValue> nodes = matchedValues.get(m);
 
         if(nodes == null)
         {
@@ -168,7 +170,7 @@ public class SSFQuery {
         return nodes.size();
     }
 
-    public int addMatchedValues(String m, List<QueryValue> values)
+    public int addMatchedValues(String m, ArrayList<QueryValue> values)
     {
         if(m == null) {
             m = ""  + (matchedValues.size() + 1);
@@ -223,7 +225,7 @@ public class SSFQuery {
             r = ""  + (returnValues.size() + 1);
         }
 
-        List<QueryValue> values = returnValues.get(r);
+        ArrayList<QueryValue> values = returnValues.get(r);
 
         if(values == null)
         {
@@ -236,19 +238,19 @@ public class SSFQuery {
         return values.size();
     }
 
-    public int addReturnValues(String r, List<QueryValue> values)
+    public int addReturnValues(String r, ArrayList<QueryValue> values)
     {
         if(r == null) {
             r = ""  + (returnValues.size() + 1);
         }
 
-        List<QueryValue> rvalues = returnValues.get(r);
+        ArrayList<QueryValue> rvalues = returnValues.get(r);
 
         if(rvalues != null)
         {
             rvalues.addAll(values);
 
-            rvalues = (List<QueryValue>) UtilityFunctions.getUnique(rvalues);
+            rvalues = (ArrayList<QueryValue>) UtilityFunctions.getUnique(rvalues);
             
             returnValues.put(r, rvalues);
         }
@@ -444,10 +446,10 @@ public class SSFQuery {
     {
         boolean match = match(node);
 
-        LinkedHashMap returnMap = null;
+        ConcurrentLinkedHashMap returnMap = null;
 
         if(match && rootActionNode != null && !rootActionNode.isLeaf()) {
-            returnMap = execute(node);
+            returnMap = (ConcurrentLinkedHashMap) execute(node);
         }
 
 //        if(match && rootDestinationNode != null)
@@ -462,7 +464,7 @@ public class SSFQuery {
         }
         else
         {
-            returnMap = new LinkedHashMap();
+            returnMap = new ConcurrentLinkedHashMap();
             returnMap.put(node, queryString);
 
             return returnMap;
@@ -628,7 +630,7 @@ public class SSFQuery {
 
 //                    if(ssfQuery.getRootMatchNode().getOperator().equals(SSFQueryOperatorType.ON_DS))
 //                    {
-//                        LinkedHashMap cfgToMMTreeMapping = new LinkedHashMap(0, 10);
+//                        ConcurrentLinkedHashMap cfgToMMTreeMapping = new ConcurrentLinkedHashMap(0, 10);
 //                        SSFPhrase mmNode = ((SSFPhrase) node.getRoot()).convertToMMNode(cfgToMMTreeMapping, false);
 //
 //                        SSFNode mnode = mmNode.findNodeByName(node.getAttributeValue("name"));
@@ -663,7 +665,7 @@ public class SSFQuery {
         return matchesTable;
     }
 
-    public BhaashikTableModel queryInFiles(SSFQuery ssfQuery, LinkedHashMap<File, SSFStory> selStories, String comment)
+    public BhaashikTableModel queryInFiles(SSFQuery ssfQuery, ConcurrentLinkedHashMap<File, SSFStory> selStories, String comment)
     {
         BhaashikTableModel matches = null;
 

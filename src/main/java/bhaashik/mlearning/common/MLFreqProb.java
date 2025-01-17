@@ -5,11 +5,13 @@
 
 package bhaashik.mlearning.common;
 
+import java.io.Serializable;
+
 /**
  *
  * @author anil
  */
-public interface MLFreqProb {
+public interface MLFreqProb extends Serializable {
 
     int getFrequency();
 

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +28,7 @@ import bhaashik.text.spell.InstantiatePhonemeGraph;
 import bhaashik.properties.PropertyTokens;
 import bhaashik.translit.TransliteratorMain;
 import bhaashik.util.UtilityFunctions;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -75,7 +76,7 @@ public class MLTransliterator {
     protected int method = LDATM;
 
     PropertyTokens tgtSMTWords;
-    LinkedHashMap smtCandidatesMap;
+    ConcurrentLinkedHashMap smtCandidatesMap;
 
     public static final int DATM = 0;
     public static final int EDATM = 1;
@@ -155,7 +156,7 @@ public class MLTransliterator {
                 {
                     tgtSMTWords = new PropertyTokens("/home/anil/tmp/feature_based_code/eng-10-best-neList-one-line.utf", GlobalProperties.getIntlString("UTF-8"));
 //                    tgtSMTWords = new PropertyTokens("/home/anil/tmp/feature_based_code/NEWS-smt-test-10-best.utf.txt", "UTF-8");
-                    smtCandidatesMap = new LinkedHashMap();
+                    smtCandidatesMap = new ConcurrentLinkedHashMap();
 
 //                    for(int l = 0;l < tgtSMTWords.countTokens(); l++)
 //                    {
@@ -397,7 +398,7 @@ public class MLTransliterator {
 
         WordSegmentations wordSegmentations = new WordSegmentations(srcWrd, partitions);
 
-        LinkedHashMap remove = new LinkedHashMap(100, 100);
+        ConcurrentLinkedHashMap remove = new ConcurrentLinkedHashMap(100, 100);
         
         Iterator sgmItr = wordSegmentations.getSegmentations();
 
@@ -685,8 +686,8 @@ public class MLTransliterator {
             String segmentation = (String) sgmItr.next();
             String[] segments = segmentation.split(" ");
 
-            LinkedHashMap prevCandidates = new LinkedHashMap(0, 100);
-            LinkedHashMap candidates = new LinkedHashMap(0, 100);
+            ConcurrentLinkedHashMap prevCandidates = new ConcurrentLinkedHashMap(0, 100);
+            ConcurrentLinkedHashMap candidates = new ConcurrentLinkedHashMap(0, 100);
             
             for (int i = 0; i < segments.length; i++)
             {
@@ -772,7 +773,7 @@ public class MLTransliterator {
 //                System.gc();
 
                 prevCandidates = candidates;
-                candidates = new LinkedHashMap(0, 100);
+                candidates = new ConcurrentLinkedHashMap(0, 100);
             }
         }
 

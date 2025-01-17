@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import bhaashik.GlobalProperties;
 import bhaashik.ontology.writing.Categories;
@@ -53,17 +53,17 @@ public class Blog implements BhaashikDOMDocument {
 
     // Key is for the blog post (title)
     // Value is a reference to the BlogPost object
-    LinkedHashMap blogPosts;
+    ConcurrentLinkedHashMap blogPosts;
     
     /** Creates a new instance of Blog */
     public Blog() {
-        blogPosts = new LinkedHashMap();
+        blogPosts = new ConcurrentLinkedHashMap();
     }
 
     public Blog(KeyValueProperties props)
     {
         blogProps = props;
-        blogPosts = new LinkedHashMap();
+        blogPosts = new ConcurrentLinkedHashMap();
     }
     
     public String getName()

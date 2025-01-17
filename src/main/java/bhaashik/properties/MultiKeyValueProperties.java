@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.*;
 
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.xml.dom.BhaashikDOMElement;
 import bhaashik.resources.ResourceImpl;
 import org.dom4j.dom.DOMAttribute;
@@ -27,12 +28,12 @@ import org.w3c.dom.NodeList;
  */
 public class MultiKeyValueProperties extends ResourceImpl implements Serializable, BhaashikProperties, BhaashikDOMElement
 {
-    protected LinkedHashMap multiprops;
+    protected ConcurrentLinkedHashMap multiprops;
     
     /** Creates a new instance of MultiKeyValueProperties */
     public MultiKeyValueProperties()
     {
-	multiprops = new LinkedHashMap(0, 3);
+	multiprops = new ConcurrentLinkedHashMap(0, 3);
     }
 
     public MultiKeyValueProperties(String propFile, String cs) throws FileNotFoundException, IOException
@@ -40,7 +41,7 @@ public class MultiKeyValueProperties extends ResourceImpl implements Serializabl
 	read(propFile, cs);
     }
 
-    public MultiKeyValueProperties(LinkedHashMap multiprops)
+    public MultiKeyValueProperties(ConcurrentLinkedHashMap multiprops)
     {
 	this.multiprops = multiprops;
     }

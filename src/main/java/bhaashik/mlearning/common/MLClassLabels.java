@@ -10,12 +10,13 @@
 package bhaashik.mlearning.common;
 
 import bhaashik.properties.KeyValueProperties;
+import java.io.Serializable;
 
 /**
  *
  * @author Anil Kumar Singh
  */
-public class MLClassLabels {
+public class MLClassLabels implements Serializable{
 
     protected KeyValueProperties labels;
     protected KeyValueProperties revLabels;

@@ -11,13 +11,14 @@ package bhaashik.context.impl;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  *
  * @author Anil Kumar Singh
  */
-public interface Context<K, E, CE extends ContextElement<E>> {
+public interface Context<K extends Serializable, E extends Serializable, CE extends ContextElement<E>> extends Serializable  {
     
     Iterator<K> getContextElementKeys();
 

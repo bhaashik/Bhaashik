@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import bhaashik.common.types.BlogType;
 import bhaashik.corpus.CorpusStatistics;
@@ -43,7 +43,7 @@ public class BlogCorpus implements BhaashikDOMDocument {
 
     // Key is for the blog (title)
     // Value is a reference to the Blog object
-    LinkedHashMap blogs;
+    ConcurrentLinkedHashMap blogs;
     
     public static final int SIZE_PARAGRAPHS = 1;
     public static final int SIZE_SENTENCES = 2;
@@ -53,7 +53,7 @@ public class BlogCorpus implements BhaashikDOMDocument {
     /** Creates a new instance of WebCorpus */
     public BlogCorpus() {
         blogProps = new KeyValueProperties();
-        blogs = new LinkedHashMap();
+        blogs = new ConcurrentLinkedHashMap();
     }
 
     public KeyValueProperties getBogProperties()

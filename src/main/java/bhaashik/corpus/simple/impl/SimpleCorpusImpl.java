@@ -9,6 +9,7 @@ import bhaashik.corpus.Corpus;
 import bhaashik.corpus.Sentence;
 import bhaashik.corpus.simple.SimpleCorpus;
 import bhaashik.corpus.simple.SimpleSentence;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.table.BhaashikTableModel;
 
 import bhaashik.properties.KeyValueProperties;
@@ -23,14 +24,14 @@ public class SimpleCorpusImpl extends Corpus implements SimpleCorpus
 												//of BhaashikTableModel
 	protected PropertiesManager propManager;	//will contain various properties(currently only KeyValueProperties)
 
-    protected LinkedHashMap<String, Integer> words;
+    protected ConcurrentLinkedHashMap<String, Integer> words;
 
 	public SimpleCorpusImpl(String propsfilename, String charset)
 	{
 		sentences = new Vector<Sentence>(10000, 10000);
 		wordTypeTable = null;
 
-        words = new LinkedHashMap<String, Integer>();
+        words = new ConcurrentLinkedHashMap<String, Integer>();
 		
 		try
 		{
@@ -47,7 +48,7 @@ public class SimpleCorpusImpl extends Corpus implements SimpleCorpus
 	public SimpleCorpusImpl(int initial_capacity)
 	{
 		sentences = new Vector<Sentence>(initial_capacity, initial_capacity/3);
-        words = new LinkedHashMap<String, Integer>();
+        words = new ConcurrentLinkedHashMap<String, Integer>();
 		wordTypeTable = null;
 		propManager = null;
 	}

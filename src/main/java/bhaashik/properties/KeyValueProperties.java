@@ -5,6 +5,7 @@ import java.util.*;
 //import ml.options.OptionData;
 //import ml.options.OptionSet;
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.xml.dom.BhaashikDOMElement;
 import bhaashik.resources.ResourceImpl;
 import bhaashik.table.BhaashikTableModel;
@@ -29,13 +30,13 @@ public class KeyValueProperties extends ResourceImpl implements Serializable, Bh
     
     protected String keyName;    
     protected String valueName; 
-    protected LinkedHashMap properties;
+    protected ConcurrentLinkedHashMap properties;
        
     public KeyValueProperties()
     {
         super();
         
-        properties = new LinkedHashMap(0, 5);
+        properties = new ConcurrentLinkedHashMap(0, 5);
         setKeyName(GlobalProperties.getIntlString("Property"));
         setValueName(GlobalProperties.getIntlString("Value"));
     }
@@ -44,7 +45,7 @@ public class KeyValueProperties extends ResourceImpl implements Serializable, Bh
         super();
         
         // TODO Auto-generated constructor stub        
-        properties = new LinkedHashMap(size);
+        properties = new ConcurrentLinkedHashMap(size);
 
         setKeyName(GlobalProperties.getIntlString("Property"));
         setValueName(GlobalProperties.getIntlString("Value"));
@@ -54,7 +55,7 @@ public class KeyValueProperties extends ResourceImpl implements Serializable, Bh
         super();
         
         // TODO Auto-generated constructor stub
-        properties = new LinkedHashMap(size, growSize);
+        properties = new ConcurrentLinkedHashMap(size, growSize);
                 
         setKeyName(GlobalProperties.getIntlString("Property"));
         setValueName(GlobalProperties.getIntlString("Value"));
@@ -64,7 +65,7 @@ public class KeyValueProperties extends ResourceImpl implements Serializable, Bh
     {
         super(propFile, cs);
         
-        properties = new LinkedHashMap(0, 5);
+        properties = new ConcurrentLinkedHashMap(0, 5);
         setKeyName(GlobalProperties.getIntlString("Property"));
         setValueName(GlobalProperties.getIntlString("Value"));
 
@@ -254,9 +255,9 @@ public class KeyValueProperties extends ResourceImpl implements Serializable, Bh
         return 0;
     }
 
-    public static LinkedHashMap readMany(String f, String charset) throws FileNotFoundException, IOException
+    public static ConcurrentLinkedHashMap readMany(String f, String charset) throws FileNotFoundException, IOException
     {        
-        LinkedHashMap ht = new LinkedHashMap(0, 5);
+        ConcurrentLinkedHashMap ht = new ConcurrentLinkedHashMap(0, 5);
 
         BufferedReader lnReader = null;
 
@@ -334,7 +335,7 @@ public class KeyValueProperties extends ResourceImpl implements Serializable, Bh
         return 0;   
     }
 
-    public static void saveMany(LinkedHashMap kvprops, String f, String charset) throws FileNotFoundException, UnsupportedEncodingException
+    public static void saveMany(ConcurrentLinkedHashMap kvprops, String f, String charset) throws FileNotFoundException, UnsupportedEncodingException
     {        
         PrintStream ps = new PrintStream(f, charset);
         
@@ -356,7 +357,7 @@ public class KeyValueProperties extends ResourceImpl implements Serializable, Bh
         }
     }
 
-    public static void printMany(LinkedHashMap kvprops, PrintStream ps)
+    public static void printMany(ConcurrentLinkedHashMap kvprops, PrintStream ps)
     {
         Vector kvec = new Vector(kvprops.keySet());
         
@@ -377,7 +378,7 @@ public class KeyValueProperties extends ResourceImpl implements Serializable, Bh
         }
     }
 
-    public static void printManyXML(LinkedHashMap kvprops, PrintStream ps)
+    public static void printManyXML(ConcurrentLinkedHashMap kvprops, PrintStream ps)
     {
         Vector kvec = new Vector(kvprops.keySet());
         DOMElement domElementMany = new DOMElement(GlobalProperties.getIntlString("MultiKeyValueProperties"));
@@ -412,7 +413,7 @@ public class KeyValueProperties extends ResourceImpl implements Serializable, Bh
         copy.keyName = keyName;
         copy.valueName = valueName;
 
-        copy.properties = new LinkedHashMap(countProperties());
+        copy.properties = new ConcurrentLinkedHashMap(countProperties());
         Iterator enm = properties.keySet().iterator();
         
         while(enm.hasNext())
@@ -429,7 +430,7 @@ public class KeyValueProperties extends ResourceImpl implements Serializable, Bh
     {
         KeyValueProperties obj = (KeyValueProperties) super.clone();
 
-        obj.properties = new LinkedHashMap(countProperties());
+        obj.properties = new ConcurrentLinkedHashMap(countProperties());
         Iterator enm = properties.keySet().iterator();
         
         while(enm.hasNext())

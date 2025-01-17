@@ -32,6 +32,7 @@ import javax.swing.undo.*;
 import bhaashik.common.BhaashikClientsStateData;
 import bhaashik.common.types.ClientType;
 import bhaashik.common.types.CorpusType;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.gui.clients.BhaashikClient;
 import bhaashik.gui.common.*;
 import bhaashik.langenc.LangEncIdentifier;
@@ -1837,7 +1838,7 @@ public class TextEditorJPanel extends javax.swing.JPanel implements WindowListen
                 encLangIdentifier.train();
             }
             
-            LinkedHashMap LEs = ((LinkedHashMap) encLangIdentifier.identify(tfile));
+            LinkedHashMap LEs = ((ConcurrentLinkedHashMap) encLangIdentifier.identify(tfile));
             Iterator itr = LEs.keySet().iterator();
             String langEnc = (String) itr.next();
             

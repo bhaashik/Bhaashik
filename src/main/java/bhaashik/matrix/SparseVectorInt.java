@@ -5,7 +5,7 @@
 
 package bhaashik.matrix;
 
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 /**
  *
@@ -13,24 +13,24 @@ import java.util.LinkedHashMap;
  */
 public class SparseVectorInt extends SparseVector {
     private final int N;             // length
-    private LinkedHashMap<Integer, Integer> vectorMap;  // the vector, represented by index-value pairs
+    private ConcurrentLinkedHashMap<Integer, Integer> vectorMap;  // the vector, represented by index-value pairs
 
     private int defaultValue = 0;
 
     // initialize the all 0s vector of length N
     public SparseVectorInt(int N, int defaultValue) {
         this.N  = N;
-        this.vectorMap = new LinkedHashMap<Integer, Integer>();
+        this.vectorMap = new ConcurrentLinkedHashMap<Integer, Integer>();
 
         this.defaultValue = defaultValue;
     }
 
-    protected LinkedHashMap getVectorMap()
+    protected ConcurrentLinkedHashMap getVectorMap()
     {
         return vectorMap;
     }
 
-    protected void setVectorMap(LinkedHashMap vectorMap)
+    protected void setVectorMap(ConcurrentLinkedHashMap vectorMap)
     {
         this.vectorMap = vectorMap;
     }

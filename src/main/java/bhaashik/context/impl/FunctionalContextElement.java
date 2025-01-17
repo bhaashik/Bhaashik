@@ -9,11 +9,13 @@
 
 package bhaashik.context.impl;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Anil Kumar Singh
  */
-public interface FunctionalContextElement<E> extends ContextElement<E> {
+public interface FunctionalContextElement<E extends Serializable> extends ContextElement<E> {
 
     short getDistance();
     

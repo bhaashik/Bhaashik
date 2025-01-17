@@ -67,9 +67,11 @@ public class BhaashikTableAction extends AbstractAction {
     public static final int DECREASE_ROW_SIZE = 30;
     
     public static final int SHOW_COMMAND_BUTTONS = 31;
+    public static final int EDIT_ROW = 32;
+    public static final int EDIT_COLUMN = 33;
     
     // Total number of actions available
-    public static final int _TOTAL_ACTIONS_ = 31;
+    public static final int _TOTAL_ACTIONS_ = 33;
    
     /** Creates a new instance of TableAction */
     public BhaashikTableAction(BhaashikTableJPanel tableJPanel, String text, ImageIcon icon,
@@ -148,6 +150,23 @@ public class BhaashikTableAction extends AbstractAction {
 		act.putValue(SHORT_DESCRIPTION, GlobalProperties.getIntlString("Toggle_edit_mode."));
 		act.putValue(MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_O));
 		return act;
+
+//            case EDIT_ROW:
+//		String lbl = "";
+//		if(jpanel.getModel().setEditableRows(r))
+//		    lbl = GlobalProperties.getIntlString("Edit_Off");
+//		else
+//		    lbl = GlobalProperties.getIntlString("Edit_On");
+//
+//		act = new BhaashikTableAction(jpanel, lbl) {
+//		    public void actionPerformed(ActionEvent e) {
+//			this.currentTableJPanel.editTable(e);
+//		    }
+//		};
+//		
+//		act.putValue(SHORT_DESCRIPTION, GlobalProperties.getIntlString("Toggle_edit_mode."));
+//		act.putValue(MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_O));
+//		return act;
 		
 	    case SAVE_TABLE:
 		act = new BhaashikTableAction(jpanel, GlobalProperties.getIntlString("Save_Table")) {

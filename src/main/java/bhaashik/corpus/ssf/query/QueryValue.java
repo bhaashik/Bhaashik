@@ -5,11 +5,13 @@
 
 package bhaashik.corpus.ssf.query;
 
+import java.io.Serializable;
+
 /**
  *
  * @author anil
  */
-public interface QueryValue {
+public interface QueryValue extends Serializable {
 
     Object getQueryReturnValue();
     void setQueryReturnValue(Object rv);

@@ -8,8 +8,7 @@ import edu.stanford.nlp.util.HashIndex;
 import edu.stanford.nlp.util.Index;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import bhaashik.mlearning.lm.ngram.NGramLite;
 import bhaashik.mlearning.lm.ngram.NGramLiteLM;
@@ -60,7 +59,7 @@ public class NGramLiteLMImpl <NG extends NGramLite> extends NGramCountsImpl<NG>
     public NGramLiteLMImpl(File f, String type, int order) {
         init(f, type, order);
         
-        this.vocabIndex = new HashIndex<String>();
+        this.vocabIndex = new HashIndex<>();
     }
     
     private void init(File f, String type, int order)
@@ -73,7 +72,7 @@ public class NGramLiteLMImpl <NG extends NGramLite> extends NGramCountsImpl<NG>
         nGrams = new ArrayList(order);
 
         for (int i = 0; i < order; i++) {
-            nGrams.add(new LinkedHashMap<List<Integer>, NG>(0, 10));
+            nGrams.add(new ConcurrentLinkedHashMap<>(0, 10));
         }
 
         tokenCount = new long[order];

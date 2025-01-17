@@ -31,7 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Hashtable;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -113,7 +113,7 @@ public class BhaashikTreeDrawingJPanel extends javax.swing.JPanel
     protected boolean rtl = false;
     protected boolean up = false;
     protected boolean collapsed = false;
-    protected LinkedHashMap cfgToMMTreeMapping;
+    protected ConcurrentLinkedHashMap cfgToMMTreeMapping;
     protected TreeDrawingNodeEditPopupListener popupListener;
     protected BhaashikTableModel fsSchema;
 

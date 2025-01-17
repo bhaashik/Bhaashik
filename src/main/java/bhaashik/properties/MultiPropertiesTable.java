@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.*;
 
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.xml.dom.BhaashikDOMElement;
 import bhaashik.resources.ResourceImpl;
 import bhaashik.table.BhaashikTableModel;
@@ -27,12 +28,12 @@ import org.w3c.dom.NodeList;
  */
 public class MultiPropertiesTable extends ResourceImpl implements Serializable, BhaashikProperties, BhaashikDOMElement
 {
-    protected LinkedHashMap multiprops;
+    protected ConcurrentLinkedHashMap multiprops;
     
     /** Creates a new instance of MultiKeyValueProperties */
     public MultiPropertiesTable()
     {
-        multiprops = new LinkedHashMap(0, 3);
+        multiprops = new ConcurrentLinkedHashMap(0, 3);
     }
 
     public MultiPropertiesTable(String propFile, String cs) throws FileNotFoundException, IOException
@@ -40,9 +41,9 @@ public class MultiPropertiesTable extends ResourceImpl implements Serializable, 
     	read(propFile, cs);
     }
 
-    public MultiPropertiesTable(LinkedHashMap multiprops)
+    public MultiPropertiesTable(ConcurrentLinkedHashMap multiprops)
     {
-        multiprops = new LinkedHashMap(0, 3);
+        multiprops = new ConcurrentLinkedHashMap(0, 3);
         this.multiprops = multiprops;
     }
 
@@ -53,7 +54,7 @@ public class MultiPropertiesTable extends ResourceImpl implements Serializable, 
 
     public int read(String f, String charset) throws FileNotFoundException, IOException
     {
-	multiprops = PropertiesTable.readMany(f, charset);
+	multiprops = (ConcurrentLinkedHashMap) PropertiesTable.readMany(f, charset);
 
 	return multiprops.size();
     }
@@ -72,7 +73,7 @@ public class MultiPropertiesTable extends ResourceImpl implements Serializable, 
         return 0;
     }
     
-    public LinkedHashMap getMultiPropertiesMap()
+    public ConcurrentLinkedHashMap getMultiPropertiesMap()
     {
 	return multiprops;
     }

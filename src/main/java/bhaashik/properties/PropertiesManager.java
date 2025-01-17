@@ -11,6 +11,7 @@ import java.util.*;
 
 import bhaashik.GlobalProperties;
 import bhaashik.common.types.PropertyType;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.resources.aggregate.AggregateResourceImpl;
 import bhaashik.xml.dom.BhaashikDOMElement;
 import org.dom4j.dom.DOMAttribute;
@@ -246,7 +247,7 @@ public class PropertiesManager extends AggregateResourceImpl implements Serializ
     
     public static LinkedHashMap readMany(String f, String charset) throws FileNotFoundException, IOException
     {
-        LinkedHashMap ht = new LinkedHashMap(0, 5);
+        ConcurrentLinkedHashMap ht = new ConcurrentLinkedHashMap(0, 5);
         
         BufferedReader lnReader = null;
         
@@ -307,7 +308,7 @@ public class PropertiesManager extends AggregateResourceImpl implements Serializ
 	return 0;
     }
 
-    public static void saveMany(LinkedHashMap propmans, String f, String charset) throws FileNotFoundException, UnsupportedEncodingException
+    public static void saveMany(ConcurrentLinkedHashMap propmans, String f, String charset) throws FileNotFoundException, UnsupportedEncodingException
     {
         PrintStream ps = new PrintStream(f, charset);
         printMany(propmans, ps);
@@ -341,7 +342,7 @@ public class PropertiesManager extends AggregateResourceImpl implements Serializ
         }
     }
 
-    public static void printMany(LinkedHashMap propmans, PrintStream ps)
+    public static void printMany(ConcurrentLinkedHashMap propmans, PrintStream ps)
     {
         Vector kvec = new Vector(propmans.keySet());
         Collections.sort(kvec);

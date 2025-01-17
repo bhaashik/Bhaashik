@@ -17,7 +17,7 @@ import java.util.List;
  * @author anil
  */
 public class NGramCountImpl implements NGramCount {
-    protected List<Integer> indices;
+    protected ArrayList<Integer> indices;
     protected long freq;
 
     public static class NGramCountFactory implements Factory<NGramCount> {
@@ -44,13 +44,13 @@ public class NGramCountImpl implements NGramCount {
     }
 
     @Override
-    public List<Integer> getIndices()
+    public ArrayList<Integer> getIndices()
     {
         return indices;
     }
 
     @Override
-    public void setIndices(List<Integer> wdIndices)
+    public void setIndices(ArrayList<Integer> wdIndices)
     {
         indices = wdIndices;
     }
@@ -93,11 +93,11 @@ public class NGramCountImpl implements NGramCount {
         }
     }
     
-    public static List<Integer> getIndices(NGramCounts ngramLM, String wds, boolean add)
+    public static ArrayList<Integer> getIndices(NGramCounts ngramLM, String wds, boolean add)
     {        
         String parts[] = wds.split("@#&");
         
-        List<Integer> indices = new ArrayList<Integer>(parts.length);
+        ArrayList<Integer> indices = new ArrayList<>(parts.length);
         
         for (int i = 0; i < parts.length; i++) {
             int wi = ngramLM.getVocabIndex().indexOf(parts[i], add);
@@ -108,11 +108,11 @@ public class NGramCountImpl implements NGramCount {
         return indices;
     }
     
-    public static List<Integer> getIndicesPlain(NGramCounts ngramLM, String wdsPlain, boolean add)
+    public static ArrayList<Integer> getIndicesPlain(NGramCounts ngramLM, String wdsPlain, boolean add)
     {
         String parts[] = wdsPlain.trim().split("[\\s+]");
         
-        List<Integer> indices = new ArrayList<Integer>(parts.length);
+        ArrayList<Integer> indices = new ArrayList<>(parts.length);
         
         for (int i = 0; i < parts.length; i++) {
             int wi = ngramLM.getVocabIndex().indexOf(parts[i], add);

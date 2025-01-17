@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.xml.dom.BhaashikDOMElement;
 import bhaashik.resources.ResourceImpl;
 import org.dom4j.dom.DOMAttribute;
@@ -237,9 +238,9 @@ public class PropertyTokens extends ResourceImpl implements Serializable, Bhaash
         return 0;
     }
     
-    public static LinkedHashMap readMany(String f, String charset) throws FileNotFoundException, IOException
+    public static ConcurrentLinkedHashMap readMany(String f, String charset) throws FileNotFoundException, IOException
     {
-        LinkedHashMap ht = new LinkedHashMap(0, 5);
+        ConcurrentLinkedHashMap ht = new ConcurrentLinkedHashMap(0, 5);
         
         BufferedReader lnReader = null;
         
@@ -304,7 +305,7 @@ public class PropertyTokens extends ResourceImpl implements Serializable, Bhaash
 	return 0;
     }
 
-    public static void saveMany(LinkedHashMap ptokens, String f, String charset) throws FileNotFoundException, UnsupportedEncodingException
+    public static void saveMany(ConcurrentLinkedHashMap ptokens, String f, String charset) throws FileNotFoundException, UnsupportedEncodingException
     {
         PrintStream ps = new PrintStream(f, charset);
         printMany(ptokens, ps);
@@ -347,7 +348,7 @@ public class PropertyTokens extends ResourceImpl implements Serializable, Bhaash
             ps.println(getToken(i));
     }
 
-    public static void printMany(LinkedHashMap ptokens, PrintStream ps)
+    public static void printMany(ConcurrentLinkedHashMap ptokens, PrintStream ps)
     {
         Vector kvec = new Vector(ptokens.keySet());
         Collections.sort(kvec);
@@ -365,7 +366,7 @@ public class PropertyTokens extends ResourceImpl implements Serializable, Bhaash
         }
     }
 
-    public static void printManyXML(LinkedHashMap ptokens, PrintStream ps)
+    public static void printManyXML(ConcurrentLinkedHashMap ptokens, PrintStream ps)
     {
         Vector kvec = new Vector(ptokens.keySet());
         Collections.sort(kvec);

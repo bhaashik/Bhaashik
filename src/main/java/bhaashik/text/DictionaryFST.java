@@ -16,6 +16,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.gui.common.BhaashikLanguages;
 import bhaashik.mlearning.common.ModelScore;
 import bhaashik.text.adhoc.PreProcessRules;
@@ -310,7 +311,7 @@ public class DictionaryFST implements Serializable {
         }
     }
 
-    public void compile(LinkedHashMap<String, Long> words, LinkedHashMap<String, String> fss)  throws FileNotFoundException, IOException {
+    public void compile(ConcurrentLinkedHashMap<String, Long> words, ConcurrentLinkedHashMap<String, String> fss)  throws FileNotFoundException, IOException {
         forwardFST = new DictionaryFSTNode(false);
         backwardFST = new DictionaryFSTNode(true);
 
@@ -338,7 +339,7 @@ public class DictionaryFST implements Serializable {
             compressStrings();
     }
 
-    public void compileAkshar(LinkedHashMap<String, Long> words, LinkedHashMap<String, String> fss)  throws FileNotFoundException, IOException {
+    public void compileAkshar(ConcurrentLinkedHashMap<String, Long> words, ConcurrentLinkedHashMap<String, String> fss)  throws FileNotFoundException, IOException {
         forwardFST = new DictionaryFSTNode(false);
         backwardFST = new DictionaryFSTNode(true);
 
@@ -395,8 +396,8 @@ public class DictionaryFST implements Serializable {
                 inReader = new BufferedReader(new InputStreamReader(new FileInputStream(inFile)));
             
             String line = "";
-            LinkedHashMap<String, Long> words = new LinkedHashMap<String, Long>();
-            LinkedHashMap<String, String> fss = new LinkedHashMap<String, String>();
+            ConcurrentLinkedHashMap<String, Long> words = new ConcurrentLinkedHashMap<String, Long>();
+            ConcurrentLinkedHashMap<String, String> fss = new ConcurrentLinkedHashMap<String, String>();
             
             while((line = inReader.readLine()) != null) {
                 // /*
@@ -953,7 +954,7 @@ public class DictionaryFST implements Serializable {
         oos.close();
     }
 
-//    public LinkedHashMap getNearestWords(String str, int nearest, boolean reverse)
+//    public ConcurrentLinkedHashMap getNearestWords(String str, int nearest, boolean reverse)
 //    {
 //        if(reverse)
 //            return backwardFST.getNearestWords(str, nearest);
@@ -963,16 +964,16 @@ public class DictionaryFST implements Serializable {
 
     public LinkedHashMap<DictionaryFSTNode,Double> getNearestWords(String str, int nearest, boolean reverse)
     {
-        LinkedHashMap<DictionaryFSTNode,Double> nearestMatches = getNearestWords(str, false);
+        ConcurrentLinkedHashMap<DictionaryFSTNode,Double> nearestMatches = (ConcurrentLinkedHashMap<DictionaryFSTNode,Double>) getNearestWords(str, false);
 
-        nearestMatches = UtilityFunctions.getTopNElements(nearestMatches, nearest);
+        nearestMatches = (ConcurrentLinkedHashMap<DictionaryFSTNode, Double>) UtilityFunctions.getTopNElements(nearestMatches, nearest);
 
         return nearestMatches;
     }
 
     public LinkedHashMap<DictionaryFSTNode,Double> getNearestWords(String str, boolean reverse)
     {
-        LinkedHashMap<DictionaryFSTNode,Double> nearestMatches = new LinkedHashMap<DictionaryFSTNode,Double>(0, 50);
+        ConcurrentLinkedHashMap<DictionaryFSTNode,Double> nearestMatches = new ConcurrentLinkedHashMap<DictionaryFSTNode,Double>(0, 50);
         
         DictionaryFSTNode rootNode = forwardFST;
 
@@ -985,21 +986,21 @@ public class DictionaryFST implements Serializable {
 
         getNearestWords(rootNode, nearestMatches, similarityTraversalData);
 
-        LinkedHashMap<DictionaryFSTNode,Double> sortedNearestMatches = ModelScore.sortElementsByScores(nearestMatches, true);
+        ConcurrentLinkedHashMap<DictionaryFSTNode,Double> sortedNearestMatches = ModelScore.sortElementsByScores(nearestMatches, true);
 
         return sortedNearestMatches;
 
 //        rootNode.compressStrings();
     }
 
-    protected void getNearestWords(DictionaryFSTNode dictNode, LinkedHashMap<DictionaryFSTNode,Double> nearestMatches,
+    protected void getNearestWords(DictionaryFSTNode dictNode, ConcurrentLinkedHashMap<DictionaryFSTNode,Double> nearestMatches,
             SimilarityTraversalData similarityTraversalData)
     {
         if(similarityTraversalData.score > getTotalScoreCutoff())
             return;
 
         if(nearestMatches == null)
-            nearestMatches = new LinkedHashMap<DictionaryFSTNode,Double>(0, 10);
+            nearestMatches = new ConcurrentLinkedHashMap<DictionaryFSTNode,Double>(0, 10);
 
         Enumeration children = dictNode.getChildren();
 
@@ -1373,12 +1374,12 @@ public class DictionaryFST implements Serializable {
     {
 
         public String str;
-        public LinkedHashMap nearestMatches;
+        public ConcurrentLinkedHashMap nearestMatches;
         public short length;
         public float score;
         public char prevChar;
 
-        public SimilarityTraversalData(String str, LinkedHashMap nearestMatches, short length, float score, char prevChar)
+        public SimilarityTraversalData(String str, ConcurrentLinkedHashMap nearestMatches, short length, float score, char prevChar)
         {
             this.str = str;
             this.nearestMatches = nearestMatches;

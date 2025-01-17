@@ -13,12 +13,16 @@ import bhaashik.context.impl.FunctionalContextElement;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
 
 /**
  *
  * @author Anil Kumar Singh
+ * @param <E>
  */
-public class FunctionalContextElementImpl<E> extends ContextElementImpl<E> implements FunctionalContextElement<E> {
+public class FunctionalContextElementImpl<E extends Serializable> extends ContextElementImpl<E> implements FunctionalContextElement<E> {
+    
+    private static final long serialVersionUID = 1L;
     
     protected short distance;
     

@@ -7,7 +7,7 @@ package bhaashik.lexicon;
 
 import java.io.PrintStream;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import bhaashik.xml.dom.BhaashikDOMElement;
 import org.dom4j.dom.DOMElement;
@@ -21,11 +21,11 @@ public class DefaultLexicalFrame implements BhaashikDOMElement, LexicalFrame {
 
     protected String stem;
 
-    protected LinkedHashMap<String, LexicalSlot> slots;
+    protected ConcurrentLinkedHashMap<String, LexicalSlot> slots;
 
     public DefaultLexicalFrame()
     {
-        slots = new LinkedHashMap<String, LexicalSlot>();
+        slots = new ConcurrentLinkedHashMap<String, LexicalSlot>();
     }
 
     /**

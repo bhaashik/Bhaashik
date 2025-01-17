@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 
 import bhaashik.corpus.parallel.Alignable;
@@ -24,6 +24,7 @@ import bhaashik.corpus.Text;
 import bhaashik.util.query.FindReplaceOptions;
 import org.xml.sax.SAXException;
 import bhaashik.properties.KeyValueProperties;
+import java.util.LinkedHashMap;
 
 /**
  *  @author Anil Kumar Singh

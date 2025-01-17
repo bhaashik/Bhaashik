@@ -8,10 +8,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import bhaashik.text.DictionaryFSTNode;
 import bhaashik.properties.PropertyTokens;
+import java.util.LinkedHashMap;
 
 /**
  *

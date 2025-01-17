@@ -10,6 +10,7 @@
 package bhaashik.gui.common;
 
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import com.ibm.icu.lang.UScript;
 import guk.im.GateIM;
 
@@ -52,10 +53,10 @@ public class BhaashikLanguages {
     protected static KeyValueProperties textDirections;
 
     // All fonts for each language-encoding pair
-    // One LinkedHashMap for each inside the outer LinkedHashMap
-    protected static LinkedHashMap allFonts;
-    protected static LinkedHashMap allFontsFlat;
-    protected static LinkedHashMap multiLingualFonts;
+    // One ConcurrentLinkedHashMap for each inside the outer ConcurrentLinkedHashMap
+    protected static ConcurrentLinkedHashMap allFonts;
+    protected static ConcurrentLinkedHashMap allFontsFlat;
+    protected static ConcurrentLinkedHashMap multiLingualFonts;
 
     public static int DEFAULT_FONT_STYLE = Font.BOLD;
     public static int DEFAULT_FONT_SIZE = 14;
@@ -64,12 +65,12 @@ public class BhaashikLanguages {
     public static float minDisplayableFraction = (float) 0.3;
     public static float maxDisplayableFraction = (float) 0.7;
 
-    protected static LinkedHashMap installedLocalesByNameKey;
+    protected static ConcurrentLinkedHashMap installedLocalesByNameKey;
     protected static String selectedLocaleName;
     protected static boolean kbMapShown;
 
-    protected static LinkedHashMap<String, String> twoLetter2ThreeLetterCodeMap;
-    protected static LinkedHashMap<String, String> threeLetter2TwoLetterCodeMap;
+    protected static ConcurrentLinkedHashMap<String, String> twoLetter2ThreeLetterCodeMap;
+    protected static ConcurrentLinkedHashMap<String, String> threeLetter2TwoLetterCodeMap; 
 
     /**
      * Creates a new instance of BhaashikLanguages
@@ -96,7 +97,7 @@ public class BhaashikLanguages {
             ex.printStackTrace();
         }
 
-        installedLocalesByNameKey = new LinkedHashMap();
+        installedLocalesByNameKey = new ConcurrentLinkedHashMap();
         selectedLocaleName = "System input method";
         previousLocaleName = selectedLocaleName;
         Locale selectedLocale = Locale.getDefault();
@@ -114,8 +115,8 @@ public class BhaashikLanguages {
     }
 
     public static void initLocaleCodes() {
-        twoLetter2ThreeLetterCodeMap = new LinkedHashMap();
-        threeLetter2TwoLetterCodeMap = new LinkedHashMap();
+        twoLetter2ThreeLetterCodeMap = new ConcurrentLinkedHashMap();
+        threeLetter2TwoLetterCodeMap = new ConcurrentLinkedHashMap();
 
         Locale loc[] = Locale.getAvailableLocales();
 
@@ -128,7 +129,7 @@ public class BhaashikLanguages {
             twoLetter2ThreeLetterCodeMap.put(twoLetterCode, threeLetterCode);
         }
 
-        threeLetter2TwoLetterCodeMap = (LinkedHashMap<String, String>) UtilityFunctions.getReverseMap(twoLetter2ThreeLetterCodeMap);
+        threeLetter2TwoLetterCodeMap = (ConcurrentLinkedHashMap<String, String>) UtilityFunctions.getReverseMap(twoLetter2ThreeLetterCodeMap);
     }
 
     private static void loadInputMethods(String imClassName, String provider) {
@@ -150,13 +151,13 @@ public class BhaashikLanguages {
         }
     }
 
-    public static LinkedHashMap getAllInputMethods() {
+    public static ConcurrentLinkedHashMap getAllInputMethods() {
         return installedLocalesByNameKey;
     }
 
     public static void loadFonts() {
-        allFonts = new LinkedHashMap(0, 3);
-        allFontsFlat = new LinkedHashMap(0, 3);
+        allFonts = new ConcurrentLinkedHashMap(0, 3);
+        allFontsFlat = new ConcurrentLinkedHashMap(0, 3);
 
         try {
             allLanguages = new KeyValueProperties(GlobalProperties.resolveRelativePath("props/languages.txt"), GlobalProperties.getIntlString("UTF-8"));
@@ -184,7 +185,7 @@ public class BhaashikLanguages {
 
         // Load all fonts
         Iterator enm = langEncFonts.getPropertyKeys();
-        LinkedHashMap fonts = null;
+        ConcurrentLinkedHashMap fonts = null;
 
         while (enm.hasNext()) {
             String key = (String) enm.next();
@@ -202,7 +203,7 @@ public class BhaashikLanguages {
                 val = GlobalProperties.getHomeDirectory() + "/" + parts[i];
                 File fontFile = new File(val);
 
-                fonts = new LinkedHashMap(3, 3);
+                fonts = new ConcurrentLinkedHashMap(3, 3);
 
                 try {
                     loadFonts(fontFile, fonts, allFontsFlat);
@@ -210,7 +211,7 @@ public class BhaashikLanguages {
                     if (allFonts.get(key) == null)
                         allFonts.put(key, fonts);
                     else
-                        ((LinkedHashMap) allFonts.get(key)).putAll(fonts);
+                        ((ConcurrentLinkedHashMap) allFonts.get(key)).putAll(fonts);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 } catch (FontFormatException ex) {
@@ -219,7 +220,7 @@ public class BhaashikLanguages {
             }
         }
 
-        multiLingualFonts = new LinkedHashMap(3, 3);
+        multiLingualFonts = new ConcurrentLinkedHashMap(3, 3);
 
         try {
             loadMultiLingualFonts(new File(GlobalProperties.getHomeDirectory() + "/" + "fonts/multi-lingual"), multiLingualFonts, allFontsFlat);
@@ -232,7 +233,7 @@ public class BhaashikLanguages {
 //	printFontList(System.out);
     }
 
-    public static void loadFonts(File f /* file or directory */, LinkedHashMap fonts, LinkedHashMap fontsFlat)
+    public static void loadFonts(File f /* file or directory */, ConcurrentLinkedHashMap fonts, ConcurrentLinkedHashMap fontsFlat)
             throws FontFormatException, IOException {
         if (f.isFile() && f.getAbsolutePath().contains(".svn") == false) {
             FileInputStream fis = new FileInputStream(f);
@@ -268,9 +269,9 @@ public class BhaashikLanguages {
     }
 
     // These will be Unicode fonts containing glyphs for more than one languages
-    // An entry will be made in every relevant language-encoding font LinkedHashMap
+    // An entry will be made in every relevant language-encoding font ConcurrentLinkedHashMap
     // Not recursive, unlike loadFonts
-    public static void loadMultiLingualFonts(File f /* file or directory */, LinkedHashMap fonts, LinkedHashMap fontsFlat)
+    public static void loadMultiLingualFonts(File f /* file or directory */, ConcurrentLinkedHashMap fonts, ConcurrentLinkedHashMap fontsFlat)
             throws FontFormatException, IOException {
         loadFonts(f, fonts, fontsFlat);
 
@@ -301,10 +302,10 @@ public class BhaashikLanguages {
                 Font fnt = (Font) fonts.get(fontFam);
 
                 if (canDisplay(fnt, startCode, endtCode, minDisplayableFraction)) {
-                    LinkedHashMap fontHT = (LinkedHashMap) allFonts.get(langEncCode);
+                    ConcurrentLinkedHashMap fontHT = (ConcurrentLinkedHashMap) allFonts.get(langEncCode);
 
                     if (fontHT == null) {
-                        fontHT = new LinkedHashMap(3, 3);
+                        fontHT = new ConcurrentLinkedHashMap(3, 3);
                         allFonts.put(langEncCode, fontHT);
                     }
 
@@ -325,7 +326,7 @@ public class BhaashikLanguages {
         while (itr.hasNext()) {
             String key = (String) itr.next();
 
-            LinkedHashMap fonts = (LinkedHashMap) allFonts.get(key);
+            ConcurrentLinkedHashMap fonts = (ConcurrentLinkedHashMap) allFonts.get(key);
 
             Iterator itrf = fonts.keySet().iterator();
 
@@ -455,12 +456,12 @@ public class BhaashikLanguages {
         return encs;
     }
 
-    // Returns a LinkedHashMap containing fonts
-    public static LinkedHashMap getLangEncFonts(String langenc) {
+    // Returns a ConcurrentLinkedHashMap containing fonts
+    public static ConcurrentLinkedHashMap getLangEncFonts(String langenc) {
         if (allFonts == null)
             BhaashikLanguages.initLanguages();
 
-        return (LinkedHashMap) allFonts.get(langenc);
+        return (ConcurrentLinkedHashMap) allFonts.get(langenc);
     }
 
     public static Font getDefaultLangEncFont(String langenc) {
@@ -558,7 +559,7 @@ public class BhaashikLanguages {
 
         Vector fontVector = null;
 
-        LinkedHashMap fonts = getLangEncFonts(langEncCode);
+        ConcurrentLinkedHashMap fonts = getLangEncFonts(langEncCode);
 
         if (langEncCode.equalsIgnoreCase(GlobalProperties.getIntlString("eng::utf8")) || allSystemFonts) {
             fontVector = new Vector(fontFamilies.length, fonts.size());
@@ -595,7 +596,7 @@ public class BhaashikLanguages {
 
     public static void printFontList(PrintStream ps) {
         Iterator enm = langEncFonts.getPropertyKeys();
-        LinkedHashMap fonts = null;
+        ConcurrentLinkedHashMap fonts = null;
 
         while (enm.hasNext()) {
             String key = (String) enm.next();
@@ -812,7 +813,7 @@ public class BhaashikLanguages {
 
         int rcount = allUnicodeBlocks.getRowCount();
 
-        LinkedHashMap<String, String> allScripts = new LinkedHashMap<String, String>();
+        ConcurrentLinkedHashMap<String, String> allScripts = new ConcurrentLinkedHashMap<String, String>();
 
         for (int i = 0; i < rcount; i++) {
             String scriptName = (String) allUnicodeBlocks.getValueAt(i, 3);

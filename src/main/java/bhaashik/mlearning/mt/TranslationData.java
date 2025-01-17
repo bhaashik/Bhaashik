@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,11 +45,11 @@ public class TranslationData implements Resource, BhaashikDOMElement {
 
     protected String dataPath = GlobalProperties.getHomeDirectory() + "/" + "data/transliteration/translit-test-data-hindi.txt";
 
-    protected LinkedHashMap translationCandidatesMap;
+    protected ConcurrentLinkedHashMap translationCandidatesMap;
 
     public TranslationData()
     {
-        translationCandidatesMap = new LinkedHashMap();
+        translationCandidatesMap = new ConcurrentLinkedHashMap();
     }
 
     @Override
@@ -179,7 +179,7 @@ public class TranslationData implements Resource, BhaashikDOMElement {
     public void addSrcToken(String srcTkn, TranslationCandidates candidates)
     {
         if(translationCandidatesMap == null)
-            translationCandidatesMap = new LinkedHashMap(0, 100);
+            translationCandidatesMap = new ConcurrentLinkedHashMap(0, 100);
 
         translationCandidatesMap.put(srcTkn, candidates);
     }

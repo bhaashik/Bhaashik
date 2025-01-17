@@ -4,23 +4,25 @@
  */
 package bhaashik.mlearning.lm.ngram;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author anil
  */
-public interface NGramCount {
+public interface NGramCount extends Serializable {
 
     long getFreq();
 
-    List<Integer> getIndices();
+    ArrayList<Integer> getIndices();
 
     String getString(NGramCounts ngramLM);
 
     void setFreq(long f);
 
-    void setIndices(List<Integer> wdIndices);
+    void setIndices(ArrayList<Integer> wdIndices);
 
     void setString(NGramCounts ngramLM, String s);    
     

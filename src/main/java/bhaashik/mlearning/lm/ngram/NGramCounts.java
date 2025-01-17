@@ -11,18 +11,20 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author anil
  */
-public interface NGramCounts<NG extends NGramCount> {
+public interface NGramCounts<NG extends NGramCount> extends Serializable{
 
     void addNGram(String wds, NG ng, int whichGram);
 
-    NG addNGram(List<Integer> wdIndices, int whichGram);
+    NG addNGram(ArrayList<Integer> wdIndices, int whichGram);
 
     NG addNGram(String wds, int whichGram);
 
@@ -54,26 +56,26 @@ public interface NGramCounts<NG extends NGramCount> {
 
     boolean fCheckNGramFile(String ngram, int order, int minFreq, int maxFreq);
 
-    LinkedHashMap<List<Integer>, NG> findNGram(String ngram, int order, int minFreq, int maxFreq);
+    ConcurrentLinkedHashMap<ArrayList<Integer>, NG> findNGram(String ngram, int order, int minFreq, int maxFreq);
 
-    LinkedHashMap<Integer, LinkedHashMap<List<Integer>, NG>> findNGramFile(String ngram, int order, int minFreq, int maxFreq);
+    ConcurrentLinkedHashMap<Integer, ConcurrentLinkedHashMap<ArrayList<Integer>, NG>> findNGramFile(String ngram, int order, int minFreq, int maxFreq);
 
-    LinkedHashMap<String, NG> getAllNgrams();
+    ConcurrentLinkedHashMap<String, NG> getAllNgrams();
 
     /**
      * @return the charset
      */
     String getCharset();
 
-    LinkedHashMap<List<Integer>, Long> getCumulativeFrequencies(int whichGram);
+    ConcurrentLinkedHashMap<ArrayList<Integer>, Long> getCumulativeFrequencies(int whichGram);
 
-    List<LinkedHashMap<List<Integer>, Long>> getCumulativeFrequenciesList();
+    ArrayList<ConcurrentLinkedHashMap<ArrayList<Integer>, Long>> getCumulativeFrequenciesList();
 
-    NG getNGram(List<Integer> wdIndices, int whichGram);
+    NG getNGram(ArrayList<Integer> wdIndices, int whichGram);
 
     NG getNGram(String wds, int whichGram);
 
-    Iterator<List<Integer>> getNGramKeys(int whichGram);
+    Iterator<ArrayList<Integer>> getNGramKeys(int whichGram);
 
     File getNGramLMFile();
 
@@ -109,7 +111,7 @@ public interface NGramCounts<NG extends NGramCount> {
     // Ad-hoc repetition of code
     void makeNGramLM(String s);
 
-    void printNGram(List<Integer> wdIndices, int whichGram, PrintStream ps, boolean printFrequency);
+    void printNGram(ArrayList<Integer> wdIndices, int whichGram, PrintStream ps, boolean printFrequency);
 
     void printNGram(String wds, int whichGram, PrintStream ps, boolean printFrequency);
 
@@ -123,7 +125,7 @@ public interface NGramCounts<NG extends NGramCount> {
 
     void readNGramLM() throws FileNotFoundException, IOException;
 
-    NG removeNGram(List<Integer> wdIndices, int whichGram);
+    NG removeNGram(ArrayList<Integer> wdIndices, int whichGram);
 
     NG removeNGram(String wds, int whichGram);
 
@@ -147,7 +149,7 @@ public interface NGramCounts<NG extends NGramCount> {
 
     void sort(int sortOrder);
 
-    List<NG> sort(int sortOrder, int whichGram);
+    ArrayList<NG> sort(int sortOrder, int whichGram);
 
     void writeNGramLM(PrintStream ps, boolean printFrequency);
 }

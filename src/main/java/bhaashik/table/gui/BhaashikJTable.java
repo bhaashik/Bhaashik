@@ -32,10 +32,12 @@ import bhaashik.corpus.parallel.gui.BhaashikAlignableDataTransfer;
 import bhaashik.corpus.ssf.SSFProperties;
 import bhaashik.corpus.ssf.features.FeatureStructures;
 import bhaashik.corpus.ssf.features.impl.FSProperties;
+import bhaashik.corpus.ssf.features.impl.FeatureStructureImpl;
 import bhaashik.corpus.ssf.features.impl.FeatureStructuresImpl;
 import bhaashik.corpus.ssf.tree.SSFLexItem;
 import bhaashik.corpus.ssf.tree.SSFNode;
 import bhaashik.corpus.ssf.tree.SSFPhrase;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.gui.common.BhaashikEvent;
 import bhaashik.tree.gui.TreeDrawingEventListener;
 import bhaashik.tree.gui.TreeViewerEvent;
@@ -46,7 +48,13 @@ import bhaashik.tree.BhaashikEdges;
 import bhaashik.tree.BhaashikMutableTreeNode;
 import bhaashik.tree.BhaashikTreeModel;
 import bhaashik.tree.TreeViewerEventListener;
+import bhaashik.util.Pair;
 import bhaashik.util.UtilityFunctions;
+import java.awt.event.MouseAdapter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import javax.swing.tree.MutableTreeNode;
 
 /**
  *
@@ -86,15 +94,63 @@ public class BhaashikJTable extends JTable implements Scrollable, MouseMotionLis
     protected BhaashikAlignableAction pasteAction;
     protected BhaashikAlignableAction labelAction;
 
-//    protected static LinkedHashMap<String,KeyStroke> actionsKeyMap;
+//    protected static ConcurrentLinkedHashMap<String,KeyStroke> actionsKeyMap;
     protected static ActionMap actionsKeyMap;
 
     protected static InputMap customInputMap;
     protected static ActionMap customActionMap;
 
-    protected LinkedHashMap cfgToDepTreeMapping;
+    protected ConcurrentLinkedHashMap cfgToDepTreeMapping;
+
+//    private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    private final PropertyChangeHelper propertyChangeHelper;
+
+    protected final Pair<Integer, Integer> savedSelectedCell = new Pair<>(0, 0);
+
+    public Pair<Integer, Integer> getSavedSelectedCell() {
+        return savedSelectedCell;
+    }
+
+    public void setSavedSelectedCell(int savedSelectedRow, int savedSelectedColumn) {
+        this.savedSelectedCell.setFirst(savedSelectedRow);
+        this.savedSelectedCell.setSecond(savedSelectedColumn);
+    }
 
     /** Creates a new instance of BhaashikJTable */
+    public BhaashikJTable(BhaashikTableModel mdl, int m)
+    {
+        super(mdl);
+        this.propertyChangeHelper = new PropertyChangeHelper(this);
+
+        // Add a mouse listener to detect clicks
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.isAltDown() && e.getClickCount() == 2) {
+                    propertyChangeHelper.firePropertyChange("NodeInsertedWI", null, e);
+                }
+            }
+        });
+
+        maxUnitIncrement = m;
+//        propertyChangeSupport = new PropertyChangeSupport(this);
+
+//        // Add a mouse listener to detect clicks
+//        this.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                // Fire a property change event on mouse click
+////                propertyChangeSupport.firePropertyChange("mouseClick", null, e);
+//
+//                if(e.isAltDown() && e.getClickCount() == 2)
+//                {
+////                    propertyChangeSupport.firePropertyChange("NodeInsertedWI", null, e);
+//                    propertyChangeHelper.firePropertyChange("NodeInsertedWI", null, e);                
+//                }
+//            }
+//        });
+    }
+    
     public BhaashikJTable(BhaashikTableModel mdl, int m, BhaashikMutableTreeNode treeRoot, boolean dndOn)
     {
         this(mdl, m);
@@ -138,19 +194,13 @@ public class BhaashikJTable extends JTable implements Scrollable, MouseMotionLis
 
     public BhaashikJTable(BhaashikTableModel mdl, int m, boolean dndOn)
     {
-        super(mdl);
+//        super(mdl);
+        this(mdl, m);
 
-        maxUnitIncrement = m;
+//        maxUnitIncrement = m;
 
         initDND(dndOn);
 //        init(true);
-    }
-
-    public BhaashikJTable(BhaashikTableModel mdl, int m)
-    {
-        super(mdl);
-
-        maxUnitIncrement = m;
     }
 
     protected void init(boolean dndOn)
@@ -168,6 +218,7 @@ public class BhaashikJTable extends JTable implements Scrollable, MouseMotionLis
 
     protected void initDND(boolean dndOn)
     {
+
         edges = new BhaashikEdges();
 
         if(dndOn)
@@ -180,7 +231,29 @@ public class BhaashikJTable extends JTable implements Scrollable, MouseMotionLis
 
 //        setDropMode(DropMode.USE_SELECTION);
     }
+//    // Method to add a PropertyChangeListener
+//    public void addPropertyChangeListener(PropertyChangeListener listener) {
+//        propertyChangeSupport.addPropertyChangeListener(listener);
+//    }
+//
+//    // Method to remove a PropertyChangeListener
+//    public void removePropertyChangeListener(PropertyChangeListener listener) {
+//        propertyChangeSupport.removePropertyChangeListener(listener);
+//    }
 
+
+//    public void addPropertyChangeListener(PropertyChangeListener listener) {
+//        propertyChangeHelper.addPropertyChangeListener(listener);
+//    }
+//
+//    public void removePropertyChangeListener(PropertyChangeListener listener) {
+//        propertyChangeHelper.removePropertyChangeListener(listener);
+//    }
+
+    public PropertyChangeHelper getPropertyChangeHelper() {
+        return propertyChangeHelper;
+    }
+    
     public void prepareCommands()
     {
         copyAction = BhaashikAlignableAction.createAction(this, BhaashikAlignableAction.TABLE_COPY);
@@ -194,7 +267,7 @@ public class BhaashikJTable extends JTable implements Scrollable, MouseMotionLis
         customInputMap = getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         customActionMap = getActionMap();
 
-//        actionsKeyMap = new LinkedHashMap<String,KeyStroke>();
+//        actionsKeyMap = new ConcurrentLinkedHashMap<String,KeyStroke>();
         actionsKeyMap = getActionMap();
 
         KeyStroke copyKS = KeyStroke.getKeyStroke("C");
@@ -982,6 +1055,50 @@ public class BhaashikJTable extends JTable implements Scrollable, MouseMotionLis
 
         if(mode == TREE_MODE)
             setNodeLabel(e);
+        else if(mode == ALIGNMENT_MODE)
+        {
+//            if( (e.isAltDown() && e.isControlDown() == false) || e.getClickCount() == 2)
+//            {
+//                AlignmentUnit alignmentUnit = (AlignmentUnit) getSelectedCellObject();
+//                SSFNode ssfNode = null;
+//                if(alignmentUnit == null)
+//                {
+//                    if(getSelectedRow() == 0 || getSelectedRow() == 2)
+//                    {
+//                        alignmentUnit = (AlignmentUnit) getValueAt(getSelectedRow(), 0);
+//                        ssfNode = (SSFNode) alignmentUnit.getAlignmentObject();
+//                        MutableTreeNode parent = (MutableTreeNode) ssfNode.getParent();
+//
+//                        if (parent != null) {
+//                            int selNodeIndex = parent.getIndex(ssfNode);
+//
+//                            FeatureStructures featureStructures = new FeatureStructuresImpl();
+//                            featureStructures = new FeatureStructuresImpl();
+//                            featureStructures.setToEmpty();
+//
+//                            featureStructures.addAltFSValue(new FeatureStructureImpl());
+//
+//                            SSFLexItem ssfLexItem = new SSFLexItem("0", "word?", "",featureStructures);
+//                            ((SSFNode) parent).add(ssfLexItem);
+//                            
+////                            ((SSFNode) parent).insert(ssfLexItem, selNodeIndex);
+//                        }
+//                    }
+//                }
+//                else
+//                {
+//                    ssfNode = (SSFNode) alignmentUnit.getAlignmentObject();
+//                }
+//
+//                if(ssfNode instanceof SSFLexItem)
+//                {
+//                    String editedword = JOptionPane.showInputDialog("Please edit/enter the word:", ssfNode.getLexData());
+//
+//                    ssfNode.setLexData(editedword);
+//                }
+        }
+//    }
+        
 //      Point p = getMousePosition();
 //      int r = this.rowAtPoint(p);
 //      int c = this.columnAtPoint(p);
@@ -1321,14 +1438,32 @@ public class BhaashikJTable extends JTable implements Scrollable, MouseMotionLis
 
             int row = getSelectedRow();
             int col = getSelectedColumn();
+            Object alignableObject = null;
 
             if(mode == TREE_MODE)
-            {
-                alignable = (Alignable) getCellObject(row, col);
+            {                
+                alignableObject = getCellObject(row, col);
+
+                if(alignableObject != null && alignableObject instanceof Alignable)
+                {
+                    alignable = (Alignable) alignableObject;
+                }
             }
             else if (mode == ALIGNMENT_MODE)
-            {
-                alignable = (Alignable) ((AlignmentUnit) stm.getValueAt(row, col)).getAlignmentObject();
+            {                                    
+                AlignmentUnit alignmentUnit = (AlignmentUnit) stm.getValueAt(row, col);
+                
+                if(alignmentUnit == null)
+                {
+                    return;
+                }                
+                
+                alignable = (Alignable) alignmentUnit.getAlignmentObject();
+                
+                if(alignable instanceof Alignable)
+                {
+//                    alignable = (Alignable) alignableObject;
+                }
             }
 
             alignable.getAlignmentUnit().setActionType(DnDConstants.ACTION_COPY);
@@ -1339,6 +1474,8 @@ public class BhaashikJTable extends JTable implements Scrollable, MouseMotionLis
             {
                 BhaashikAlignableDataTransfer.startTransfer(this, alignable, mode, alignable.getAlignmentUnit().getActionType(), this, row, col);
                 fireTreeViewerEvent(new TreeViewerEvent(this, TreeViewerEvent.TREE_CHANGED_EVENT));
+
+                tableTransfer.setClipboardContents(alignable);
             }
             else if (mode == ALIGNMENT_MODE)
             {
@@ -1409,13 +1546,33 @@ public class BhaashikJTable extends JTable implements Scrollable, MouseMotionLis
         leafDependencies = ld;
     }
 
-    public LinkedHashMap getCFG2DepTreeMap()
+    public ConcurrentLinkedHashMap getCFG2DepTreeMap()
     {
         return cfgToDepTreeMapping;
     }
 
-    public void setCFG2DepTreeMap(LinkedHashMap cfgToDepTreeMapping)
+    public void setCFG2DepTreeMap(ConcurrentLinkedHashMap cfgToDepTreeMapping)
     {
         this.cfgToDepTreeMapping = cfgToDepTreeMapping;
+    }
+
+    public class PropertyChangeHelper {
+        private final PropertyChangeSupport propertyChangeSupport;
+
+        public PropertyChangeHelper(Object source) {
+            this.propertyChangeSupport = new PropertyChangeSupport(source);
+        }
+
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+            propertyChangeSupport.addPropertyChangeListener(listener);
+        }
+
+        public void removePropertyChangeListener(PropertyChangeListener listener) {
+            propertyChangeSupport.removePropertyChangeListener(listener);
+        }
+
+        public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+            propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+        }
     }
 }

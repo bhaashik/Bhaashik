@@ -16,7 +16,7 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.io.File;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -292,7 +292,7 @@ public class CorpusStatisticsJPanel extends javax.swing.JPanel implements JPanel
         cardJComboBox.setSelectedItem("Global Stats");
     }
 
-    protected void initStats(String langEnc, LinkedHashMap<File, SSFStory> selStories)
+    protected void initStats(String langEnc, ConcurrentLinkedHashMap<File, SSFStory> selStories)
     {
         this.langEnc = langEnc;
         
@@ -360,7 +360,7 @@ public class CorpusStatisticsJPanel extends javax.swing.JPanel implements JPanel
 
         BhaashikTableModel tagsForWordsTable = new BhaashikTableModel(new String[]{"Word", "Tags"}, globalCorpusStatistics.getWordFreq().size());
 
-        LinkedHashMap<String, String> tagsForWords = new LinkedHashMap<String, String>();
+        ConcurrentLinkedHashMap<String, String> tagsForWords = new ConcurrentLinkedHashMap<String, String>();
 
         Iterator<String> itr = globalCorpusStatistics.getWordTagFreq().keySet().iterator();
 
@@ -395,7 +395,7 @@ public class CorpusStatisticsJPanel extends javax.swing.JPanel implements JPanel
 
         BhaashikTableModel wordsForTagsTable = new BhaashikTableModel(new String[]{"Tag", "Words"}, globalCorpusStatistics.getWordFreq().size());
 
-        LinkedHashMap<String, String> wordsForTags = new LinkedHashMap<String, String>();
+        ConcurrentLinkedHashMap<String, String> wordsForTags = new ConcurrentLinkedHashMap<String, String>();
 
         itr = globalCorpusStatistics.getWordTagFreq().keySet().iterator();
 
@@ -430,7 +430,7 @@ public class CorpusStatisticsJPanel extends javax.swing.JPanel implements JPanel
 
         BhaashikTableModel chunksForRelsTable = new BhaashikTableModel(new String[]{"Chunk", "Relation"}, 2);
 
-        LinkedHashMap<String, String> chunksForRels = new LinkedHashMap<String, String>();
+        ConcurrentLinkedHashMap<String, String> chunksForRels = new ConcurrentLinkedHashMap<String, String>();
 
         itr = globalCorpusStatistics.getChunkGRelFreq().keySet().iterator();
 
@@ -465,7 +465,7 @@ public class CorpusStatisticsJPanel extends javax.swing.JPanel implements JPanel
 
         BhaashikTableModel relsForChunksTable = new BhaashikTableModel(new String[]{"Relation", "Chunk"}, 2);
 
-        LinkedHashMap<String, String> relsForChunks = new LinkedHashMap<String, String>();
+        ConcurrentLinkedHashMap<String, String> relsForChunks = new ConcurrentLinkedHashMap<String, String>();
 
         itr = globalCorpusStatistics.getChunkGRelFreq().keySet().iterator();
 
@@ -552,7 +552,7 @@ public class CorpusStatisticsJPanel extends javax.swing.JPanel implements JPanel
 
         BhaashikTableModel tagsForWordsTable = new BhaashikTableModel(new String[]{"Word", "Tags"}, localCorpusStatistics.getWordFreq().size());
 
-        LinkedHashMap<String, String> tagsForWords = new LinkedHashMap<String, String>();
+        ConcurrentLinkedHashMap<String, String> tagsForWords = new ConcurrentLinkedHashMap<String, String>();
 
         Iterator<String> itr = localCorpusStatistics.getWordTagFreq().keySet().iterator();
 
@@ -587,7 +587,7 @@ public class CorpusStatisticsJPanel extends javax.swing.JPanel implements JPanel
 
         BhaashikTableModel wordsForTagsTable = new BhaashikTableModel(new String[]{"Tag", "Words"}, localCorpusStatistics.getWordFreq().size());
 
-        LinkedHashMap<String, String> wordsForTags = new LinkedHashMap<String, String>();
+        ConcurrentLinkedHashMap<String, String> wordsForTags = new ConcurrentLinkedHashMap<String, String>();
 
         itr = localCorpusStatistics.getWordTagFreq().keySet().iterator();
 
@@ -622,7 +622,7 @@ public class CorpusStatisticsJPanel extends javax.swing.JPanel implements JPanel
 
         BhaashikTableModel chunksForRelsTable = new BhaashikTableModel(new String[]{"Chunk", "Relation"}, 2);
 
-        LinkedHashMap<String, String> chunksForRels = new LinkedHashMap<String, String>();
+        ConcurrentLinkedHashMap<String, String> chunksForRels = new ConcurrentLinkedHashMap<String, String>();
 
         itr = localCorpusStatistics.getChunkGRelFreq().keySet().iterator();
 
@@ -657,7 +657,7 @@ public class CorpusStatisticsJPanel extends javax.swing.JPanel implements JPanel
 
         BhaashikTableModel relsForChunksTable = new BhaashikTableModel(new String[]{"Relation", "Chunk"}, 2);
 
-        LinkedHashMap<String, String> relsForChunks = new LinkedHashMap<String, String>();
+        ConcurrentLinkedHashMap<String, String> relsForChunks = new ConcurrentLinkedHashMap<String, String>();
 
         itr = localCorpusStatistics.getChunkGRelFreq().keySet().iterator();
 

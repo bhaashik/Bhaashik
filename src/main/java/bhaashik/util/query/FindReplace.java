@@ -33,6 +33,7 @@ import bhaashik.corpus.ssf.SSFStory;
 import bhaashik.corpus.ssf.gui.SyntacticAnnotationWorkJPanel;
 import bhaashik.corpus.ssf.impl.SSFStoryImpl;
 import bhaashik.corpus.ssf.tree.SSFNode;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.mlearning.lm.ngram.NGram;
 import bhaashik.mlearning.lm.ngram.NGramLM;
 import bhaashik.mlearning.lm.ngram.impl.NGramLMImpl;
@@ -805,7 +806,7 @@ public class FindReplace {
                 int order=-1;
                 int minFreq=2,maxFreq=-1;
                  * */
-                LinkedHashMap<Integer, LinkedHashMap<List<Integer>, NGram>> matchNgrams;
+                ConcurrentLinkedHashMap<Integer, ConcurrentLinkedHashMap<ArrayList<Integer>, NGram>> matchNgrams;
                 matchNgrams = nglm.findNGramFile(ngram, order, minFreq, maxFreq);
                 NGramLMJPanel nGramPanel = new NGramLMJPanel();
                 nGramPanel.ngramQFillTable(matchNgrams);

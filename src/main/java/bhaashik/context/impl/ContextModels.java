@@ -12,13 +12,14 @@ package bhaashik.context.impl;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  *
  * @author Anil Kumar Singh
  */
-public interface ContextModels<K, M extends Context> {
+public interface ContextModels<K extends Serializable, M extends Context> extends Serializable {
 
     int countContextModels();
     

@@ -9,7 +9,7 @@ package bhaashik.langenc.gui;
 import java.io.*;
 import java.awt.*;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import javax.swing.*;
 
 import bhaashik.BhaashikMain;
@@ -325,7 +325,7 @@ public class LanguageEncodingIdentifierJPanel extends javax.swing.JPanel impleme
             if(mode == 1 || mode == 2) {
                 try {
                     File tfile = new File(path);
-                    LinkedHashMap LEs = ((LinkedHashMap) encLangIdentifier.identify(tfile));
+                    ConcurrentLinkedHashMap LEs = ((ConcurrentLinkedHashMap) encLangIdentifier.identify(tfile));
                     Iterator itr = LEs.keySet().iterator();
                     langEnc = (String) itr.next();
                     

@@ -8,12 +8,13 @@ package bhaashik.corpus.ssf.query;
 import java.io.PrintStream;
 
 import bhaashik.corpus.ssf.SSFStory;
+import java.io.Serializable;
 
 /**
  *
  * @author anil
  */
-public class QuerySourceDestination {
+public class QuerySourceDestination implements Serializable {
 
     protected String format = "ssf";
     protected String location;

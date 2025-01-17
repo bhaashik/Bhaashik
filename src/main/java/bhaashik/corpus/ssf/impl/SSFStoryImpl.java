@@ -12,6 +12,7 @@ import bhaashik.corpus.ssf.SSFProperties;
 import bhaashik.corpus.ssf.SSFSentence;
 import bhaashik.corpus.ssf.SSFStory;
 import bhaashik.corpus.ssf.SSFText;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.tree.BhaashikMutableTreeNode;
 import bhaashik.xml.dom.BhaashikDOMElement;
 
@@ -144,7 +145,7 @@ public class SSFStoryImpl extends SSFTextImpl
 
 	boolean validated = true;
 	
-	LinkedHashMap<Integer, Boolean> sentenceHash = new LinkedHashMap<Integer, Boolean>(0, 5);
+	LinkedHashMap<Integer, Boolean> sentenceHash = new ConcurrentLinkedHashMap<Integer, Boolean>(0, 5);
 
         int lineNum = 0;
         
@@ -307,7 +308,7 @@ public class SSFStoryImpl extends SSFTextImpl
         
         int paraBeginIndex = 0;
 	
-	LinkedHashMap<Integer, Boolean> sentenceHash = new LinkedHashMap<Integer, Boolean>(0, 5);
+	ConcurrentLinkedHashMap<Integer, Boolean> sentenceHash = new ConcurrentLinkedHashMap<Integer, Boolean>(0, 5);
 
         BufferedReader lnReader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), cs));
 
@@ -623,7 +624,7 @@ public class SSFStoryImpl extends SSFTextImpl
         String paraAttribs = "";
         String paraMetaData = "";
 	
-	LinkedHashMap<Integer, Boolean> sentenceHash = new LinkedHashMap<Integer, Boolean>(0, 5);
+	ConcurrentLinkedHashMap<Integer, Boolean> sentenceHash = new ConcurrentLinkedHashMap<Integer, Boolean>(0, 5);
 
         for(int i = 0; i < lineArray.length; i++)
         {
@@ -937,9 +938,9 @@ public class SSFStoryImpl extends SSFTextImpl
         }
     }
 
-    public static LinkedHashMap<File, SSFStory> readStories(File[] selFiles, String cs)
+    public static ConcurrentLinkedHashMap<File, SSFStory> readStories(File[] selFiles, String cs)
     {
-        LinkedHashMap<File, SSFStory> selStories = new LinkedHashMap<File, SSFStory>();
+        ConcurrentLinkedHashMap<File, SSFStory> selStories = new ConcurrentLinkedHashMap<File, SSFStory>();
 
         if(selFiles != null && selFiles.length > 1)
         {
@@ -983,8 +984,8 @@ public class SSFStoryImpl extends SSFTextImpl
             SSFPhrase rnode = null;
             SSFLexItem lexItem = null;
 
-            LinkedHashMap tags = null;
-            LinkedHashMap words = null;
+            ConcurrentLinkedHashMap tags = null;
+            ConcurrentLinkedHashMap words = null;
 
             boolean start = false;
 
@@ -1026,8 +1027,8 @@ public class SSFStoryImpl extends SSFTextImpl
 
                     List<Integer> alignIndices = new ArrayList<Integer>();
 
-                    tags = new LinkedHashMap(0, 10);
-                    words = new LinkedHashMap(0, 10);
+                    tags = new ConcurrentLinkedHashMap(0, 10);
+                    words = new ConcurrentLinkedHashMap(0, 10);
 
                     for (int i = 0; i < wrds.length; i++) {
                         String str = wrds[i];

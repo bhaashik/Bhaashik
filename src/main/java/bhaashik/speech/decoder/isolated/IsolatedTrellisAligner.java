@@ -8,7 +8,7 @@ package bhaashik.speech.decoder.isolated;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -246,7 +246,7 @@ public class IsolatedTrellisAligner {
         int srcWrdTypeCount = srcWTTable.getRowCount();
         int tgtWrdTypeCount = tgtWTTable.getRowCount();
 
-        LinkedHashMap<String, Long> words = new LinkedHashMap<String, Long>();
+        ConcurrentLinkedHashMap<String, Long> words = new ConcurrentLinkedHashMap<String, Long>();
 
         for (int i = 0; i < tgtWrdTypeCount; i++)
         {
@@ -330,7 +330,7 @@ public class IsolatedTrellisAligner {
 //                        if(transliteration.length() > 2 && tgtWord.length() > 2)
 //                        {
 ////                            double distance = phoneticModelOfScripts.getSymmetricScaledSurfaceSimilarity(tgtWord, transliteration);
-//                            LinkedHashMap<DictionaryFSTNode,Double> nearestMatches = dictionaryFST.getNearestWords(transliteration, 20, false);
+//                            ConcurrentLinkedHashMap<DictionaryFSTNode,Double> nearestMatches = dictionaryFST.getNearestWords(transliteration, 20, false);
 //
 //                            if(!nearestMatches.isEmpty())
 //                            {

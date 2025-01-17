@@ -9,11 +9,13 @@
 
 package bhaashik.mlearning.common;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Anil Kumar Singh
  */
-public class ModelScoreEx<K, S extends Comparable, O extends Object> extends ModelScore<K, S> {
+public class ModelScoreEx<K extends Serializable, S extends Comparable & Serializable, O extends Serializable> extends ModelScore<K, S> {
     
     public O modelObject;
     

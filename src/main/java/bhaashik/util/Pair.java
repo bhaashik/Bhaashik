@@ -4,19 +4,21 @@
  */
 package bhaashik.util;
 
+import java.io.Serializable;
+
 /**
  *
  * @author anil
  */
-public class Pair<F extends Object, S extends Object> {
-    public F first;
-    public S second;
+public class Pair<F extends Object & Serializable, S extends Object & Serializable> implements Serializable{
+    private F first;
+    private S second;
 
-    public Pair()
-    {
-        
+    public Pair() {
+        this.first = getDefaultFirst();
+        this.second = getDefaultSecond();
     }
-    
+
     public Pair(F f, S s)
     {
         this.first = f;
@@ -28,6 +30,30 @@ public class Pair<F extends Object, S extends Object> {
     {
         return first + "=>" + second;
     }
+
+    protected F getDefaultFirst() {
+        return null; // Override for custom defaults
+    }
+
+    protected S getDefaultSecond() {
+        return null; // Override for custom defaults
+    }
+
+    public F getFirst() {
+        return first;
+    }
+
+    public S getSecond() {
+        return second;
+    }
+
+    public void setFirst(F first) {
+        this.first = first;
+    }
+
+    public void setSecond(S second) {
+        this.second = second;
+    } 
     
     public boolean equals(Pair pair)
     {

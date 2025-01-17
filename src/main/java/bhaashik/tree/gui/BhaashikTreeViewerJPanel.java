@@ -22,6 +22,7 @@ import javax.swing.tree.DefaultTreeModel;
 import bhaashik.GlobalProperties;
 import bhaashik.corpus.ssf.impl.SSFSentenceImpl;
 import bhaashik.corpus.ssf.tree.SSFPhrase;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.table.gui.BhaashikActionTableCellEditor;
 import bhaashik.table.gui.BhaashikJTable;
 import bhaashik.table.gui.TreeViewerTableCellRenderer;
@@ -61,7 +62,7 @@ public class BhaashikTreeViewerJPanel extends javax.swing.JPanel implements Item
     protected boolean rtl = false;
     protected boolean up = false;
     protected boolean collapsed = false;
-    protected LinkedHashMap cfgToDepTreeMapping;
+    protected ConcurrentLinkedHashMap cfgToDepTreeMapping;
     protected TreeViewNodeEditPopupListener popupListener;
     protected BhaashikTableModel fsSchema;
     // Command buttions
@@ -86,13 +87,13 @@ public class BhaashikTreeViewerJPanel extends javax.swing.JPanel implements Item
     public static final int RTL_VERTICAL = 3;
 
     /** Creates new form BhaashikTreeViewerJPanel */
-    public BhaashikTreeViewerJPanel(BhaashikMutableTreeNode chunkRoot, BhaashikMutableTreeNode mmRoot, LinkedHashMap cfgToDepTreeMapping, int mode, String lang, boolean rev, boolean leafDeps) {
+    public BhaashikTreeViewerJPanel(BhaashikMutableTreeNode chunkRoot, BhaashikMutableTreeNode mmRoot, ConcurrentLinkedHashMap cfgToDepTreeMapping, int mode, String lang, boolean rev, boolean leafDeps) {
         this(chunkRoot, mmRoot, cfgToDepTreeMapping, mode, lang, rev);
 
         leafDependencies = leafDeps;
     }
 
-    public BhaashikTreeViewerJPanel(BhaashikMutableTreeNode chunkRoot, BhaashikMutableTreeNode mmRoot, LinkedHashMap cfgToDepTreeMapping, int mode, String lang, boolean rev) {
+    public BhaashikTreeViewerJPanel(BhaashikMutableTreeNode chunkRoot, BhaashikMutableTreeNode mmRoot, ConcurrentLinkedHashMap cfgToDepTreeMapping, int mode, String lang, boolean rev) {
         this(mmRoot, mode, lang, rev);
         chunkRootNode = chunkRoot;
 

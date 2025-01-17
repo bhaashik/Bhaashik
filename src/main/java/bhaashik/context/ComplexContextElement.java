@@ -8,7 +8,7 @@ package bhaashik.context;
 import bhaashik.context.impl.FunctionalContextElement;
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 /**
  *
@@ -16,13 +16,13 @@ import java.util.LinkedHashMap;
  */
 public class ComplexContextElement extends FunctionalContextElementImpl implements FunctionalContextElement {
 
-    protected LinkedHashMap<Integer,String> contextFeatures;
-    protected LinkedHashMap<Integer,Long> contextFeaturesFrequencies;
+    protected ConcurrentLinkedHashMap<Integer,String> contextFeatures;
+    protected ConcurrentLinkedHashMap<Integer,Long> contextFeaturesFrequencies;
 
     public ComplexContextElement() {
 
-        contextFeatures = new LinkedHashMap<Integer,String>();
-        contextFeaturesFrequencies = new LinkedHashMap<Integer,Long>();
+        contextFeatures = new ConcurrentLinkedHashMap<Integer,String>();
+        contextFeaturesFrequencies = new ConcurrentLinkedHashMap<Integer,Long>();
     }
 
     public int countContextFeature()

@@ -6,19 +6,20 @@
 package bhaashik.text.spell;
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
+import java.io.Serializable;
 
 /**
  *
  * @author anil
  */
-public class Probabilities {
+public class Probabilities implements Serializable {
 
-    protected LinkedHashMap<Object,Probability> priorProbabilities;
+    protected ConcurrentLinkedHashMap<Serializable,Probability> priorProbabilities;
 
     public Probabilities()
     {
-        priorProbabilities = new LinkedHashMap(0, 100);
+        priorProbabilities = new ConcurrentLinkedHashMap(0, 100);
     }
 
     public int countPriors()

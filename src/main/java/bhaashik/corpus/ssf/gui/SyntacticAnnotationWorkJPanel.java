@@ -28,6 +28,7 @@ import bhaashik.corpus.ssf.SSFProperties;
 import bhaashik.corpus.ssf.SSFSentence;
 import bhaashik.corpus.ssf.SSFStory;
 import bhaashik.corpus.validation.SyntacticAnnotationValidationJPanel;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.gui.SelectTaskJPanel;
 import bhaashik.gui.WorkJPanelInterface;
 import bhaashik.gui.clients.AnnotationClient;
@@ -148,7 +149,7 @@ public class SyntacticAnnotationWorkJPanel extends javax.swing.JPanel
     protected boolean dirty;
 
     protected File selFiles[];
-    protected LinkedHashMap<File, SSFStory> selStories;
+    protected ConcurrentLinkedHashMap<File, SSFStory> selStories;
     
 //    private SSFPhraseJPanel ssfPhraseJPanel;
     protected BhaashikTreeJPanel ssfPhraseJPanel;
@@ -159,7 +160,7 @@ public class SyntacticAnnotationWorkJPanel extends javax.swing.JPanel
 
     protected SSFPhrase mmRoot;
     
-    protected LinkedHashMap cfgToMMTreeMapping;
+    protected ConcurrentLinkedHashMap cfgToMMTreeMapping;
 
     protected String ssfQueryString = "";
 
@@ -1863,7 +1864,7 @@ public class SyntacticAnnotationWorkJPanel extends javax.swing.JPanel
 
                 dndLeftJPanel.add(ssfPhraseJPanel, BorderLayout.CENTER);
                 ssfPhraseJPanel.showControlTabs(false);
-    //            cfgToMMTreeMapping = new LinkedHashMap(0, 10);
+    //            cfgToMMTreeMapping = new ConcurrentLinkedHashMap(0, 10);
                 mmRoot = sentence.getRoot().convertToGDepNode(cfgToMMTreeMapping);
 
 //            try {
@@ -1921,7 +1922,7 @@ public class SyntacticAnnotationWorkJPanel extends javax.swing.JPanel
 
                 dndLeftJPanel.add(ssfPhraseJPanel, BorderLayout.CENTER);
                 ssfPhraseJPanel.showControlTabs(false);
-    //            cfgToMMTreeMapping = new LinkedHashMap(0, 10);
+    //            cfgToMMTreeMapping = new ConcurrentLinkedHashMap(0, 10);
 //                mmRoot = sentence.getRoot().convertToMMNode(cfgToMMTreeMapping);
 //
 //            try {
@@ -2295,7 +2296,7 @@ public class SyntacticAnnotationWorkJPanel extends javax.swing.JPanel
             dndLeftJPanel.add(ssfPhraseJPanel, BorderLayout.CENTER);
             ssfPhraseJPanel.showControlTabs(false);
 
-            cfgToMMTreeMapping = new LinkedHashMap(0, 10);
+            cfgToMMTreeMapping = new ConcurrentLinkedHashMap(0, 10);
             
             mmRoot = sentence.getRoot().convertToGDepNode(cfgToMMTreeMapping);
             
@@ -2382,7 +2383,7 @@ public class SyntacticAnnotationWorkJPanel extends javax.swing.JPanel
         BhaashikTableModel matches = null;
 
         selFiles = getSelectedFiles();
-        selStories = new LinkedHashMap<File, SSFStory>();
+        selStories = new ConcurrentLinkedHashMap<File, SSFStory>();
 
         if(selFiles != null && selFiles.length > 1)
         {
@@ -3430,7 +3431,7 @@ public class SyntacticAnnotationWorkJPanel extends javax.swing.JPanel
         BhaashikTableModel matches = null;
         
         selFiles = getSelectedFiles();
-        selStories = new LinkedHashMap<File, SSFStory>();
+        selStories = new ConcurrentLinkedHashMap<File, SSFStory>();
 
         int sentences = 0;
         int chunks = 0;
@@ -3974,7 +3975,7 @@ public class SyntacticAnnotationWorkJPanel extends javax.swing.JPanel
         owner.setCursor(Cursor.WAIT_CURSOR);
         
         selFiles = getSelectedFiles();
-        selStories = new LinkedHashMap<File, SSFStory>();
+        selStories = new ConcurrentLinkedHashMap<File, SSFStory>();
         
         SSFStory joinedStory = new SSFStoryImpl();
         

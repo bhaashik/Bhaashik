@@ -12,7 +12,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.io.IOException;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import bhaashik.GlobalProperties;
@@ -171,9 +171,9 @@ public class BhaashikAlignableDataTransfer implements ClipboardOwner {
                 {
                     if(dropObject instanceof SSFLexItem)
                     {
-                        LinkedHashMap c2dTreeMap = table.getCFG2DepTreeMap();
+                        ConcurrentLinkedHashMap c2dTreeMap = table.getCFG2DepTreeMap();
 
-                        LinkedHashMap d2cTreeMap = (LinkedHashMap) UtilityFunctions.getReverseMap(c2dTreeMap);
+                        ConcurrentLinkedHashMap d2cTreeMap = (ConcurrentLinkedHashMap) UtilityFunctions.getReverseMap(c2dTreeMap);
                         
                         SSFNode cfgNode = (SSFNode) d2cTreeMap.get(dropObject);
 

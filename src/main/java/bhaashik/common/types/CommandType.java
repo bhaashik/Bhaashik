@@ -164,9 +164,6 @@ public class CommandType extends BhaashikType implements Serializable {
         return id;
     }
 
-    /*
-    All the command types used in all the clients.
-    */
     public static final CommandType NEW_TAB = new CommandType(NewTab.class, "New Tab", "Open a new tab based on the arguments given", "new", "null");
     public static final CommandType PWD = new CommandType(PresentWorkingDirectory.class, "Present Working Directory", "Print the present working directory", "pwd", "null");
     public static final CommandType LIST_FILES = new CommandType(ListFiles.class, "List Files", "List files", "ls", "null");

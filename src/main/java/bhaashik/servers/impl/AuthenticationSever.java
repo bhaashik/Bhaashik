@@ -31,7 +31,7 @@ import org.apache.shiro.subject.support.DefaultSubjectContext;
  */
 //public class AuthenticationSever extends UnicastRemoteObject implements AuthenticationSeverRI, Serializable {
 //public class AuthenticationSever implements AuthenticationSeverRI, Serializable {
-public class AuthenticationSever implements AuthenticationSeverRI, Runnable {
+public class AuthenticationSever implements AuthenticationSeverRI, Runnable, Serializable {
 
 //        Environment env = new BasicIniEnvironment("classpath:shiro.ini");
         private final Environment env = new BasicIniEnvironment("shiro.ini");

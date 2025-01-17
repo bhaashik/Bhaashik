@@ -31,6 +31,7 @@ import bhaashik.context.KWIKContextModels;
 import bhaashik.table.BhaashikTableModel;
 import bhaashik.util.UtilityFunctions;
 import bhaashik.common.types.ClientType;
+import java.io.Serializable;
 
 /**
  *
@@ -128,7 +129,8 @@ public class KwikJPanel extends javax.swing.JPanel implements WindowListener, JP
         Iterator itr = kwikContextModels.getContextModelKeys();
 
         while(itr.hasNext()) {
-            Object key = itr.next();
+//            Object key = itr.next();
+            Serializable key = (Serializable) itr.next();
 
             KWIKContext context = (KWIKContext) kwikContextModels.getContextModel(key);
             String leftContext = (String) context.getLeftContext().getContextElement();

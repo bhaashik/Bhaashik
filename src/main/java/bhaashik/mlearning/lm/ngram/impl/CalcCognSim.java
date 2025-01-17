@@ -14,23 +14,23 @@ import java.util.Arrays;
 
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import bhaashik.GlobalProperties;
 import bhaashik.properties.KeyValueProperties;
 
 public class CalcCognSim {
 
-	LinkedHashMap htKnd;
-	LinkedHashMap htTel;
-	LinkedHashMap htTam;
-	LinkedHashMap htMal;
+	ConcurrentLinkedHashMap htKnd;
+	ConcurrentLinkedHashMap htTel;
+	ConcurrentLinkedHashMap htTam;
+	ConcurrentLinkedHashMap htMal;
 
 	public int scoreType;
 	KeyValueProperties trainingDataPaths;
-	LinkedHashMap wrdLists;
-	LinkedHashMap testLists;
-	LinkedHashMap cognateCnt;
+	ConcurrentLinkedHashMap wrdLists;
+	ConcurrentLinkedHashMap testLists;
+	ConcurrentLinkedHashMap cognateCnt;
 
 	public CalcCognSim(String trainPaths,int st) throws IOException
 	{
@@ -74,7 +74,7 @@ public class CalcCognSim {
 	public void readWrdLists()
 	{
 		Iterator enm = getTrainingDataPaths().getPropertyKeys();
-		wrdLists = new LinkedHashMap(getTrainingDataPaths().countProperties());
+		wrdLists = new ConcurrentLinkedHashMap(getTrainingDataPaths().countProperties());
 		while(enm.hasNext())
 		{
 			String k = (String) enm.next();
@@ -132,7 +132,7 @@ public class CalcCognSim {
 		Iterator enm = getLangListKeys();
 		String langKey = "";
 
-		testLists = new LinkedHashMap(5,5);
+		testLists = new ConcurrentLinkedHashMap(5,5);
 		while(enm.hasNext())
 		{
 			langKey = (String)enm.next();
@@ -154,7 +154,7 @@ public class CalcCognSim {
 	public void calcCognateCount()
 	{
 		Iterator enm = testLists.keySet().iterator();
-		cognateCnt = new LinkedHashMap();
+		cognateCnt = new ConcurrentLinkedHashMap();
 		while(enm.hasNext())
 		{
 			String key = (String)enm.next();

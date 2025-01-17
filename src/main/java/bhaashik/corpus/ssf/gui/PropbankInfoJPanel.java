@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -96,7 +96,7 @@ public class PropbankInfoJPanel extends javax.swing.JPanel {
     protected String framesetAttibVals = GlobalProperties.resolveRelativePath("data/propbank/resource/frameset/attrib-vals.txt");
 
     protected static Action[] argumentActions;
-    protected static LinkedHashMap<String,KeyStroke> argumentActionsKeyMap;
+    protected static ConcurrentLinkedHashMap<String,KeyStroke> argumentActionsKeyMap;
 
     protected static InputMap customInputMap;
     protected static ActionMap customActionMap;
@@ -117,7 +117,7 @@ public class PropbankInfoJPanel extends javax.swing.JPanel {
         this.langEnc = langEnc;
         converter = new UTF82WX(langEnc);
 
-        argumentActionsKeyMap = new LinkedHashMap<String,KeyStroke>();
+        argumentActionsKeyMap = new ConcurrentLinkedHashMap<String,KeyStroke>();
 
         customInputMap = new InputMap();
         customActionMap = new ActionMap();

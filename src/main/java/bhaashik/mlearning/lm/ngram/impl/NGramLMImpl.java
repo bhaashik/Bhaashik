@@ -17,7 +17,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -41,13 +41,13 @@ NGram Language Model
 public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implements NGramLM<NG>, Cloneable, Serializable  {
 
     // Hashtables with key-NGram pairs
-    protected List<LinkedHashMap<List<Integer>, Long>> nGramTypes;
-    protected List<LinkedHashMap<List<Integer>, Long>> nGramTokens;
-    protected List<LinkedHashMap<List<Integer>, Integer>> KNDotCounts;
-    protected LinkedHashMap<Integer, NGram> nGramUNKs;
+    protected ArrayList<ConcurrentLinkedHashMap<ArrayList<Integer>, Long>> nGramTypes;
+    protected ArrayList<ConcurrentLinkedHashMap<ArrayList<Integer>, Long>> nGramTokens;
+    protected ArrayList<ConcurrentLinkedHashMap<ArrayList<Integer>, Integer>> KNDotCounts;
+    protected ConcurrentLinkedHashMap<Integer, NGram> nGramUNKs;
     protected double freqWeight;
     protected double rarityWeight;
-    protected LinkedHashMap<Pair<List<Integer>, List<Integer>>, Long> triggerPairs;
+    protected ConcurrentLinkedHashMap<Pair<ArrayList<Integer>, ArrayList<Integer>>, Long> triggerPairs;
     protected int triggerPairWindowSize = 30;
     protected long triggerPairCount;
     protected String smoothingAlgo = GlobalProperties.getIntlString("Witten-Bell");
@@ -103,8 +103,8 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
         tempNGrams = new ArrayList(order);
 
         for (int i = 0; i < order; i++) {
-            nGrams.add(new LinkedHashMap<List<Integer>, NG>(0, 10));
-            tempNGrams.add(new LinkedHashMap<Integer, String>(0, 10));
+            nGrams.add(new ConcurrentLinkedHashMap<ArrayList<Integer>, NG>(0, 10));
+            tempNGrams.add(new ConcurrentLinkedHashMap<>(0, 10));
         }
 
         tokenCount = new long[order];
@@ -113,7 +113,7 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
         charset = "ISO-8859-1";
         language = "hin::utf8";
 
-        triggerPairs = new LinkedHashMap<Pair<List<Integer>, List<Integer>>, Long>(0, 20);        
+        triggerPairs = new ConcurrentLinkedHashMap<Pair<ArrayList<Integer>, ArrayList<Integer>>, Long>(0, 20);        
     }
 
     /**
@@ -180,10 +180,10 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
             return triggerPairCount;
         }
 
-        Iterator<Pair<List<Integer>, List<Integer>>> itr = triggerPairs.keySet().iterator();
+        Iterator<Pair<ArrayList<Integer>, ArrayList<Integer>>> itr = triggerPairs.keySet().iterator();
 
         while (itr.hasNext()) {
-            Pair<List<Integer>, List<Integer>> pkey = itr.next();
+            Pair<ArrayList<Integer>, ArrayList<Integer>> pkey = itr.next();
             
             triggerPairCount += triggerPairs.get(pkey);
         }
@@ -194,13 +194,13 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
     @Override
     public void pruneTriggerPairs(long minFreq) {
 
-        LinkedHashMap<Pair<List<Integer>, List<Integer>>, Long> prunedTriggerPairs
-                = new LinkedHashMap<Pair<List<Integer>, List<Integer>>, Long>(1000, 1000);
+        ConcurrentLinkedHashMap<Pair<ArrayList<Integer>, ArrayList<Integer>>, Long> prunedTriggerPairs
+                = new ConcurrentLinkedHashMap<Pair<ArrayList<Integer>, ArrayList<Integer>>, Long>(1000, 1000);
         
-        Iterator<Pair<List<Integer>, List<Integer>>> itr = triggerPairs.keySet().iterator();
+        Iterator<Pair<ArrayList<Integer>, ArrayList<Integer>>> itr = triggerPairs.keySet().iterator();
 
         while (itr.hasNext()) {
-            Pair<List<Integer>, List<Integer>> pkey = itr.next();
+            Pair<ArrayList<Integer>, ArrayList<Integer>> pkey = itr.next();
 
             Long freq = triggerPairs.get(pkey);
 
@@ -501,10 +501,10 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
             return;
         }
 
-        Iterator<List<Integer>> itr = getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram);
 
         while (itr.hasNext()) {
-            List<Integer> k = itr.next();
+            ArrayList<Integer> k = itr.next();
             NGram ng = getNGram(k, whichGram);
 
             ng.setProb(((double) ng.getFreq()) / ((double) mergedTokenCount));
@@ -526,10 +526,10 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
 
         calcTokenCount(whichGram);
 
-        Iterator<List<Integer>> itr = getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram);
 
         while (itr.hasNext()) {
-            List<Integer> k = itr.next();
+            ArrayList<Integer> k = itr.next();
             NGram ng = getNGram(k, whichGram);
 
             ng.setProb(((double) ng.getFreq()) / ((double) countTokens(whichGram)));
@@ -549,10 +549,10 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
             return;
         }
 
-        Iterator<List<Integer>> itr = getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram);
 
         while (itr.hasNext()) {
-            List<Integer> numerIndices = itr.next();
+            ArrayList<Integer> numerIndices = itr.next();
             
             String numer = NGramImpl.getString(this, numerIndices);
 
@@ -593,10 +593,10 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
             return;
         }
 
-        Iterator<List<Integer>> itr = getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram);
 
         while (itr.hasNext()) {
-            List<Integer> k = itr.next();
+            ArrayList<Integer> k = itr.next();
             NGram ng = getNGram(k, whichGram);
 
             ng.setRelevanceProb(
@@ -633,8 +633,8 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
             nGramTokens = new ArrayList(nGramOrder);
 
             for (int i = 0; i < nGramOrder; i++) {
-                nGramTypes.add(new LinkedHashMap<List<Integer>, Long>(0, 10));
-                nGramTokens.add(new LinkedHashMap<List<Integer>, Long>(0, 10));
+                nGramTypes.add(new ConcurrentLinkedHashMap<ArrayList<Integer>, Long>(0, 10));
+                nGramTokens.add(new ConcurrentLinkedHashMap<ArrayList<Integer>, Long>(0, 10));
             }
 
             for (int i = 1; i <= nGramOrder; i++) {
@@ -655,7 +655,7 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
         
         getVocabularySize();
 
-        Iterator<List<Integer>> itr = getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram);
 
         String unkl = "UNKL";
         long totalNgrams = vocabulary;
@@ -671,7 +671,7 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
             long zeros = vocabulary - types;
 
             while (itr.hasNext()) {
-                List<Integer> lexiconIndices = itr.next();
+                ArrayList<Integer> lexiconIndices = itr.next();
                 NGram ng = getNGram(lexiconIndices, whichGram);
 
                 ng.setProb(((double) ng.getFreq()) / (tokens + types));
@@ -689,8 +689,8 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
                 ng.setProb(((double) types) / (zeros * (tokens + types)));
             }
         } else {
-            LinkedHashMap<List<Integer>, Long> ht = nGramTypes.get(whichGram - 1);
-            LinkedHashMap<List<Integer>, Long> ht2 = nGramTokens.get(whichGram - 1);
+            ConcurrentLinkedHashMap<ArrayList<Integer>, Long> ht = nGramTypes.get(whichGram - 1);
+            ConcurrentLinkedHashMap<ArrayList<Integer>, Long> ht2 = nGramTokens.get(whichGram - 1);
 
             while (itr.hasNext()) {
                 List<Integer> nGramLexIndices = itr.next();
@@ -700,7 +700,7 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
                 int index = nGramLex.lastIndexOf("@#&");
                 String n1GramLex = nGramLex.substring(0, index);
                 
-                List<Integer> n1GramLexIndices = NGramImpl.getIndices(this, n1GramLex, true);
+                ArrayList<Integer> n1GramLexIndices = NGramImpl.getIndices(this, n1GramLex, true);
                 
                 NGram ng = getNGram(n1GramLexIndices, whichGram - 1);
 
@@ -716,10 +716,10 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
                 }
             }
 
-            Iterator<List<Integer>> itr2 = getNGramKeys(whichGram);
+            Iterator<ArrayList<Integer>> itr2 = getNGramKeys(whichGram);
 
             while (itr2.hasNext()) {
-                List<Integer> nGramLexIndices = itr2.next();
+                ArrayList<Integer> nGramLexIndices = itr2.next();
                 String nGramLex = NGramImpl.getString(this, nGramLexIndices);
 
                 int index = nGramLex.lastIndexOf("@#&");
@@ -728,7 +728,7 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
                 NGram ng = getNGram(nGramLexIndices, whichGram);
                 NGram n1g = getNGram(n1GramLex, whichGram - 1);
 
-                List<Integer> n1GramLexIndices = NGramImpl.getIndices(this, n1GramLex, false);
+                ArrayList<Integer> n1GramLexIndices = NGramImpl.getIndices(this, n1GramLex, false);
 
                 ng.setProb(((double) ng.getFreq()) / (n1g.getFreq() + ht.get(n1GramLexIndices)));
 
@@ -743,7 +743,7 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
 
             ng.setProb(((double) 1) / (zeros));
 
-            Iterator<List<Integer>> itr3 = ht.keySet().iterator();
+            Iterator<ArrayList<Integer>> itr3 = ht.keySet().iterator();
 
             while (itr3.hasNext()) {
 
@@ -792,12 +792,12 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
 
         countArray[0] -= countTokens(whichGram);
 
-        Iterator<List<Integer>> itr = getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram);
 
         Index hashIndex = new HashIndex();
 
         while (itr.hasNext()) {
-            List<Integer> nGramLexIndices = itr.next();
+            ArrayList<Integer> nGramLexIndices = itr.next();
             NGram ng = getNGram(nGramLexIndices, whichGram);
 
             long freq = ng.getFreq();
@@ -817,12 +817,12 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
             countArray[i] = ((double) ((double) (i + 1) * countArray[i + 1] / countArray[i]) - (i * commonTerm)) / (1 - commonTerm);
         }
 
-        Iterator<List<Integer>> itr2 = getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr2 = getNGramKeys(whichGram);
 
         if (whichGram == 1) {
             while (itr2.hasNext()) {
 
-                List<Integer> lexiconIndices = itr2.next();
+                ArrayList<Integer> lexiconIndices = itr2.next();
 
                 NGram ng = getNGram(lexiconIndices, whichGram);
                 long freq = ng.getFreq();
@@ -887,7 +887,7 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
             return;
         }
 
-        Iterator<List<Integer>> itr1 = getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr1 = getNGramKeys(whichGram);
         
         Index remIndex = new HashIndex();
 
@@ -917,23 +917,23 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
         }
 
         for (int whichGram = nGramOrder; whichGram > 1; whichGram--) {
-            LinkedHashMap<List<Integer>, double[]> backOffHash = new LinkedHashMap<List<Integer>, double[]>(0, 10);
+            ConcurrentLinkedHashMap<ArrayList<Integer>, double[]> backOffHash = new ConcurrentLinkedHashMap<>(0, 10);
 
-            Iterator<List<Integer>> itr = getNGramKeys(whichGram - 1);
+            Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram - 1);
 
             while (itr.hasNext()) {
                 double[] value;
                 value = new double[2];
                 value[0] = 0.0;
                 value[1] = 0.0;
-                List<Integer> n1GramLex = itr.next();
+                ArrayList<Integer> n1GramLex = itr.next();
                 backOffHash.put(n1GramLex, value);
             }
 
-            Iterator<List<Integer>> itr1 = getNGramKeys(whichGram);
+            Iterator<ArrayList<Integer>> itr1 = getNGramKeys(whichGram);
 
             while (itr1.hasNext()) {
-                List<Integer> nGramLexIndices = itr1.next();
+                ArrayList<Integer> nGramLexIndices = itr1.next();
                 
                 String nGramLex = NGramImpl.getString(this, nGramLexIndices);
 
@@ -942,11 +942,11 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
                     int Findex = nGramLex.indexOf("#&");
                     String numer = nGramLex.substring(0, Lindex);
                     
-                    List<Integer> numerIndices = NGramImpl.getIndices(this, numer, false);
+                    ArrayList<Integer> numerIndices = NGramImpl.getIndices(this, numer, false);
                     
                     String denom = nGramLex.substring(Findex + 2);
 
-                    List<Integer> denomIndices = NGramImpl.getIndices(this, denom, false);
+                    ArrayList<Integer> denomIndices = NGramImpl.getIndices(this, denom, false);
                     //System.out.println(nGramLex + "::" + numer + "::" + denom);
                     NGram ng = getNGram(nGramLexIndices, whichGram);
                     NGram n1g = getNGram(denomIndices, whichGram - 1);
@@ -967,10 +967,10 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
                 }
             }
 
-            Iterator<List<Integer>> itr2 = getNGramKeys(whichGram - 1);
+            Iterator<ArrayList<Integer>> itr2 = getNGramKeys(whichGram - 1);
 
             while (itr2.hasNext()) {
-                List<Integer> n1GramLexIndices = itr2.next();
+                ArrayList<Integer> n1GramLexIndices = itr2.next();
                 
                 NGram n1g = getNGram(n1GramLexIndices, whichGram - 1);
 
@@ -987,18 +987,18 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
     private void calcDotCounts() {
 
         if (nGramOrder >= 2) {
-            Iterator<List<Integer>> itr = getNGramKeys(2);
-            LinkedHashMap<List<Integer>, Integer> ht = KNDotCounts.get(0);
+            Iterator<ArrayList<Integer>> itr = getNGramKeys(2);
+            ConcurrentLinkedHashMap<ArrayList<Integer>, Integer> ht = KNDotCounts.get(0);
 
             while (itr.hasNext()) {
-                List<Integer> nGramLexIndices = itr.next();
+                ArrayList<Integer> nGramLexIndices = itr.next();
                 
                 String nGramLex = NGramImpl.getString(this, nGramLexIndices);
                 
                 int Lindex = nGramLex.lastIndexOf("@#&");
                 String lastLex = nGramLex.substring(Lindex + 3);
                 
-                List<Integer> lastLexIndices = NGramImpl.getIndices(this, lastLex, false);
+                ArrayList<Integer> lastLexIndices = NGramImpl.getIndices(this, lastLex, false);
 
                 if (!ht.containsKey(lastLexIndices)) {
                     ht.put(lastLexIndices, 1);
@@ -1009,18 +1009,18 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
         }
 
         for (int whichGram = 2; whichGram <= nGramOrder; whichGram++) {
-            Iterator<List<Integer>> itr = getNGramKeys(whichGram);
-            LinkedHashMap<List<Integer>, Integer> ht = KNDotCounts.get(whichGram - 1);
+            Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram);
+            ConcurrentLinkedHashMap<ArrayList<Integer>, Integer> ht = KNDotCounts.get(whichGram - 1);
 
             while (itr.hasNext()) {
-                List<Integer> nGramLexIndices = itr.next();
+                ArrayList<Integer> nGramLexIndices = itr.next();
                 
                 String nGramLex = NGramImpl.getString(this, nGramLexIndices);
 
                 int Lindex = nGramLex.lastIndexOf("@#&");
                 String n1GramLex = nGramLex.substring(0, Lindex);
 
-                List<Integer> n1GramLexIndices = NGramImpl.getIndices(this, n1GramLex, false);
+                ArrayList<Integer> n1GramLexIndices = NGramImpl.getIndices(this, n1GramLex, false);
 
                 if (!ht.containsKey(n1GramLexIndices)) {
                     ht.put(n1GramLexIndices, 1);
@@ -1034,23 +1034,23 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
     @Override
     public void calcSmoothKneserNey(double delta) {
         KNdelta = delta;
-        KNDotCounts = new ArrayList<LinkedHashMap<List<Integer>, Integer>>(nGramOrder);
+        KNDotCounts = new ArrayList<>(nGramOrder);
 
         for (int i = 0; i <= nGramOrder; i++) {
-            KNDotCounts.add(new LinkedHashMap<List<Integer>, Integer>(0, 10));
+            KNDotCounts.add(new ConcurrentLinkedHashMap<>(0, 10));
         }
 
         calcDotCounts();
 
         if (nGramOrder >= 1) {
-            Iterator<List<Integer>> itr = getNGramKeys(1);
-            LinkedHashMap<List<Integer>, Integer> ht = KNDotCounts.get(0);
+            Iterator<ArrayList<Integer>> itr = getNGramKeys(1);
+            ConcurrentLinkedHashMap<ArrayList<Integer>, Integer> ht = KNDotCounts.get(0);
 
             while (itr.hasNext()) {
-                List<Integer> nGramLexIndices = itr.next();
+                ArrayList<Integer> nGramLexIndices = itr.next();
                 NGram ng = getNGram(nGramLexIndices, 1);
                 
-                Integer numer = (Integer) ht.get(nGramLexIndices);
+                Integer numer = ht.get(nGramLexIndices);
                 
                 if(numer == null) {
                     continue;
@@ -1063,8 +1063,8 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
         }
 
         for (int whichGram = 2; whichGram <= nGramOrder; whichGram++) {
-            LinkedHashMap<List<Integer>, Integer> ht = KNDotCounts.get(whichGram - 1);
-            Iterator<List<Integer>> itr = getNGramKeys(whichGram);
+            ConcurrentLinkedHashMap<ArrayList<Integer>, Integer> ht = KNDotCounts.get(whichGram - 1);
+            Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram);
             while (itr.hasNext()) {
                 List<Integer> nGramLexIndices = itr.next();
 
@@ -1110,7 +1110,7 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
                 if (hasNGram(numer, whichGram - 1)) {
                     NGram n1g = getNGram(n1GramLex, whichGram - 1);
                     NGram numg = getNGram(numer, whichGram - 1);
-                    LinkedHashMap<List<Integer>, Integer> ht = KNDotCounts.get(whichGram - 1);
+                    ConcurrentLinkedHashMap<ArrayList<Integer>, Integer> ht = KNDotCounts.get(whichGram - 1);
                     double secondTerm = (double) (KNdelta * (Integer) ht.get(n1GramLexIndices)) / (n1g.getFreq());
                     NBREAK = false;
                     return secondTerm * numg.getProb();
@@ -1139,7 +1139,7 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
 //        DecimalFormat df = new DecimalFormat("0.0000000");
         DecimalFormat df = new DecimalFormat("#.#######");
         
-        List<Integer> wdIndices = NGramImpl.getIndices(this, wds, false);
+        ArrayList<Integer> wdIndices = NGramImpl.getIndices(this, wds, false);
         
         NGram ng = getNGram(wdIndices, whichGram);
 
@@ -1188,9 +1188,9 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
         double probsum = 0.0;
         int wt = 0;
 
-        Iterator<List<Integer>> itr = getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr = getNGramKeys(whichGram);
         while (itr.hasNext()) {
-            List<Integer> key = itr.next();
+            ArrayList<Integer> key = itr.next();
             NGram ng = getNGram(key, whichGram);
             wt = ng.getWeight();
             probsum = +wt * ng.getProb();
@@ -1198,7 +1198,7 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
 
         itr = getNGramKeys(whichGram);
         while (itr.hasNext()) {
-            List<Integer> key = itr.next();
+            ArrayList<Integer> key = itr.next();
             NGram ng = getNGram(key, whichGram);
             prob = ng.getProb();
             wt = ng.getWeight();
@@ -1392,39 +1392,39 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
     {
         for (int i = 1; i <= getNGramOrder(); i++)
         {
-            LinkedHashMap<List<Integer>, NG> ngrams = nGrams.get(i - 1);
+            ConcurrentLinkedHashMap<ArrayList<Integer>, NG> ngrams = nGrams.get(i - 1);
             
             switch (sortOrder) {
                 case NGram.SORT_BY_FREQ:
-                    ngrams = (LinkedHashMap<List<Integer>, NG>) UtilityFunctions.sort(ngrams, new ByNGramFreq());
+                    ngrams = (ConcurrentLinkedHashMap<ArrayList<Integer>, NG>) UtilityFunctions.sort(ngrams, new ByNGramFreq());
                     nGrams.set(i - 1, ngrams);
                     break;
 
                 case NGram.SORT_BY_FREQ_DESC:
-                    ngrams = (LinkedHashMap<List<Integer>, NG>) UtilityFunctions.sort(ngrams, new ByNGramFreqDesc());
+                    ngrams = (ConcurrentLinkedHashMap<ArrayList<Integer>, NG>) UtilityFunctions.sort(ngrams, new ByNGramFreqDesc());
                     nGrams.set(i - 1, ngrams);
                     break;
 
                 case NGram.SORT_BY_PROB:
-                    ngrams = (LinkedHashMap<List<Integer>, NG>) UtilityFunctions.sort(ngrams, new ByNGramProb());
+                    ngrams = (ConcurrentLinkedHashMap<ArrayList<Integer>, NG>) UtilityFunctions.sort(ngrams, new ByNGramProb());
                     nGrams.set(i - 1, ngrams);
                     break;
 
                 default:
-                    ngrams = (LinkedHashMap<List<Integer>, NG>) UtilityFunctions.sort(ngrams, new ByNGramProb());
+                    ngrams = (ConcurrentLinkedHashMap<ArrayList<Integer>, NG>) UtilityFunctions.sort(ngrams, new ByNGramProb());
                     nGrams.set(i - 1, ngrams);
             }
         }        
     }
 
     @Override
-    public List<NG> sort(int sortOrder, int whichGram) {
+    public ArrayList<NG> sort(int sortOrder, int whichGram) {
         if (whichGram > nGramOrder || whichGram < 1) {
             return null;
         }
 
-        LinkedHashMap<List<Integer>, NG> ht = nGrams.get(whichGram - 1);
-        List<NG> sorted = new ArrayList<NG>(ht.values());
+        ConcurrentLinkedHashMap<ArrayList<Integer>, NG> ht = nGrams.get(whichGram - 1);
+        ArrayList<NG> sorted = new ArrayList<NG>(ht.values());
 
         switch (sortOrder) {
             case NGram.SORT_BY_FREQ:
@@ -1476,16 +1476,16 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
         obj.nGramLMFile = nGramLMFile;
 
         // Implementation is currently limited to only 4-grams
-        obj.nGrams = (List) ((ArrayList) nGrams).clone();
+        obj.nGrams = (ArrayList) ((ArrayList) nGrams).clone();
 
         for (int i = 0; i < nGramOrder; i++) {
-            LinkedHashMap<List<Integer>, NG> oldht = nGrams.get(i);
-            LinkedHashMap<List<Integer>, NG> ht = (LinkedHashMap<List<Integer>, NG>) oldht.clone();
+            ConcurrentLinkedHashMap<ArrayList<Integer>, NG> oldht = nGrams.get(i);
+            ConcurrentLinkedHashMap<ArrayList<Integer>, NG> ht = (ConcurrentLinkedHashMap<ArrayList<Integer>, NG>) oldht.clone();
 
-            Iterator<List<Integer>> enm = ht.keySet().iterator();
+            Iterator<ArrayList<Integer>> enm = ht.keySet().iterator();
 
             while (enm.hasNext()) {
-                List<Integer> key = enm.next();
+                ArrayList<Integer> key = enm.next();
                 NG ng = (NG) oldht.get(key);
                 ht.put(key, (NG) ng.clone());
             }
@@ -1512,12 +1512,12 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
         int pruned = 0;
 
         if (whichGram <= 0 || whichGram > nGramOrder) {
-            LinkedHashMap<List<Integer>, NG> oldht = nGrams.get(0);
-            List<NG> sortedNGrams = new ArrayList<NG>(oldht.size());
+            ConcurrentLinkedHashMap<ArrayList<Integer>, NG> oldht = nGrams.get(0);
+            ArrayList<NG> sortedNGrams = new ArrayList<>(oldht.size());
 
             // Prune ngrams of all orders
             for (int i = 1; i <= nGramOrder; i++) {
-                List<NG> sortedNGramsTmp = sort(NGram.SORT_BY_FREQ, i);
+                ArrayList<NG> sortedNGramsTmp = sort(NGram.SORT_BY_FREQ, i);
                 sortedNGrams.addAll(sortedNGramsTmp);
             }
 
@@ -1610,9 +1610,9 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
 
 //        cpms.getFeatureVector();
         for (int i = 1; i <= nGramOrder; i++) {
-            Iterator<List<Integer>> itr = getNGramKeys(i);
+            Iterator<ArrayList<Integer>> itr = getNGramKeys(i);
             while (itr.hasNext()) {
-                List<Integer> key = itr.next();
+                ArrayList<Integer> key = itr.next();
                 NGram ng = getNGram(key, i);
 
                 String ngStr = ng.getString(this);
@@ -1691,10 +1691,10 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
         }
 
         for (int j = 1; j <= nGramLM1.getNGramOrder(); j++) {
-            Iterator<List<Integer>> itr2 = nGramLM2.getNGramKeys(j);
+            Iterator<ArrayList<Integer>> itr2 = nGramLM2.getNGramKeys(j);
 
             while (itr2.hasNext()) {
-                List<Integer> nGram2Key = itr2.next();
+                ArrayList<Integer> nGram2Key = itr2.next();
                 NG nGram2 = nGramLM2.getNGram(nGram2Key, j);
                 NG nGram1 = nGramLM1.getNGram(nGram2Key, j);
 
@@ -1726,11 +1726,11 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
 
         for (int j = 1; j <= nGramLM1.getNGramOrder(); j++)
         {
-            Iterator<List<Integer>> itr2 = nGramLM2.getNGramKeys(j);
+            Iterator<ArrayList<Integer>> itr2 = nGramLM2.getNGramKeys(j);
 
             while (itr2.hasNext())
             {
-                List<Integer> nGram2Key = itr2.next();
+                ArrayList<Integer> nGram2Key = itr2.next();
                 NGram nGram2 = nGramLM2.getNGram(nGram2Key, j);
                 NGram nGram1 = nGramLM1.getNGram(nGram2Key, j);
 
@@ -1751,9 +1751,9 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
 
         int numNGrams = 0;
 
-        Iterator<List<Integer>> itr = nglm.getNGramKeys(whichGram);
+        Iterator<ArrayList<Integer>> itr = nglm.getNGramKeys(whichGram);
         while (itr.hasNext()) {
-            List<Integer> key = itr.next();
+            ArrayList<Integer> key = itr.next();
             NGram ng = (NGram) nglm.getNGram(key, whichGram);
             
             if(ng.getProb() >= probThreshold)
@@ -1809,14 +1809,14 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
             
             nglm.sort();
 
-            List<LinkedHashMap<List<Integer>, Long>> cumFreqsList = nglm.getCumulativeFrequenciesList();
-            List<Long> topCumFreqList = new ArrayList<Long>();
+            ArrayList<ConcurrentLinkedHashMap<ArrayList<Integer>, Long>> cumFreqsList = nglm.getCumulativeFrequenciesList();
+            ArrayList<Long> topCumFreqList = new ArrayList<Long>();
 
             for (int i = 0; i < cumFreqsList.size(); i++) {
                 topCumFreqList.add((Long) UtilityFunctions.getLastElement(cumFreqsList.get(i)));
             }        
                     
-            List<List<Double>> pcGrams = percentNGramsInQuartile(nglm1,
+            ArrayList<ArrayList<Double>> pcGrams = percentNGramsInQuartile(nglm1,
                     cumFreqsList, topCumFreqList);
             
            System.out.println("Percent 1-grams not found: " + pcGrams.get(0).get(0));

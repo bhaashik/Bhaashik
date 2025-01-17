@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -43,7 +43,7 @@ public class HierarchicalTagsJPanel extends javax.swing.JPanel implements JPanel
     protected CorpusType corpusType = CorpusType.SSF_FORMAT;
 
     protected KeyValueProperties tagLevelMap;
-    protected LinkedHashMap<String, JComboBox> tagLevelJComboBoxMap;
+    protected ConcurrentLinkedHashMap<String, JComboBox> tagLevelJComboBoxMap;
     protected PropertyTokens tags;
 
     protected DefaultComboBoxModel tagTypes;
@@ -161,7 +161,7 @@ public class HierarchicalTagsJPanel extends javax.swing.JPanel implements JPanel
     private void loadTags(boolean noUI, CorpusType corpusType, String tpath, String ttype)
     {
         tagsJPanel.removeAll();
-        tagLevelJComboBoxMap = new LinkedHashMap<String, JComboBox>();
+        tagLevelJComboBoxMap = new ConcurrentLinkedHashMap<String, JComboBox>();
 
         if(ttype == null)
             tagType = (String) tagTypeJComboBox.getSelectedItem();

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -186,10 +186,10 @@ public class LexicalFrames implements Resource, BhaashikDOMElement {
 
             try
             {
-                LinkedHashMap cfgToMMTreeMapping = new LinkedHashMap(0, 10);
+                ConcurrentLinkedHashMap cfgToMMTreeMapping = new ConcurrentLinkedHashMap(0, 10);
                 SSFPhrase mmt = ((SSFPhrase) root).convertToGDepNode(cfgToMMTreeMapping);
 
-                LinkedHashMap mmTreeToCFGMapping = (LinkedHashMap) UtilityFunctions.getReverseMap(cfgToMMTreeMapping);
+                ConcurrentLinkedHashMap mmTreeToCFGMapping = (ConcurrentLinkedHashMap) UtilityFunctions.getReverseMap(cfgToMMTreeMapping);
 
                 extractFramesFromSSFPhrase(mmt, mmTreeToCFGMapping);
             }
@@ -201,7 +201,7 @@ public class LexicalFrames implements Resource, BhaashikDOMElement {
         }
     }
 
-    public void extractFramesFromSSFPhrase(SSFPhrase ssfPhrase, LinkedHashMap cfgToMMTreeMapping)
+    public void extractFramesFromSSFPhrase(SSFPhrase ssfPhrase, ConcurrentLinkedHashMap cfgToMMTreeMapping)
     {
         Pattern p = Pattern.compile(frameTag);
 

@@ -12,7 +12,9 @@ package bhaashik.mlearning.common;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -20,7 +22,7 @@ import java.util.Vector;
  *
  * @author Anil Kumar Singh
  */
-public class ModelScore<K, S extends Comparable> implements Comparable {
+public class ModelScore<K extends Serializable, S extends Comparable & Serializable> implements Comparable, Serializable {
     
     /** Creates a new instance of ModelScore */
     public K modelKey;
@@ -32,11 +34,11 @@ public class ModelScore<K, S extends Comparable> implements Comparable {
         this.modelScore = modelScore;
     }    
 
-    public static <K extends Object, S extends Comparable>
-            LinkedHashMap<K, S> sortElementsByScores(LinkedHashMap<K,S> elements, boolean ascending)
+    public static <K extends Serializable, S extends Comparable & Serializable>
+            ConcurrentLinkedHashMap<K, S> sortElementsByScores(ConcurrentLinkedHashMap<K,S> elements, boolean ascending)
     {
-        LinkedHashMap<K, S> sortedElements = new LinkedHashMap<K, S>(elements.size());
-    	List<ModelScore> sortedScores = new Vector<ModelScore>(elements.size());
+        ConcurrentLinkedHashMap<K, S> sortedElements = new ConcurrentLinkedHashMap<>(elements.size());
+    	ArrayList<ModelScore> sortedScores = new ArrayList<ModelScore>(elements.size());
 
         Iterator<K> itr = elements.keySet().iterator();
 
@@ -71,12 +73,12 @@ public class ModelScore<K, S extends Comparable> implements Comparable {
         return sortedElements;
    }
 
-    public static <K extends Object, S extends Comparable>
-            LinkedHashMap<K, S> getTopN(LinkedHashMap<K,S> elements, int N, boolean ascending)
+    public static <K extends Serializable, S extends Comparable & Serializable>
+            ConcurrentLinkedHashMap<K, S> getTopN(ConcurrentLinkedHashMap<K,S> elements, int N, boolean ascending)
     {
-        LinkedHashMap<K, S> sortedMap = sortElementsByScores(elements, ascending);
+        ConcurrentLinkedHashMap<K, S> sortedMap = sortElementsByScores(elements, ascending);
 
-        LinkedHashMap<K, S> topN = new LinkedHashMap<K, S>(N);
+        ConcurrentLinkedHashMap<K, S> topN = new ConcurrentLinkedHashMap<>(N);
 
         Iterator<K> itr = sortedMap.keySet().iterator();
 
@@ -104,14 +106,14 @@ public class ModelScore<K, S extends Comparable> implements Comparable {
 
     public static void main(String args[])
     {
-        LinkedHashMap<String, Integer> scores =  new LinkedHashMap<String, Integer>();
+        ConcurrentLinkedHashMap<String, Integer> scores =  new ConcurrentLinkedHashMap<String, Integer>();
 
         scores.put("a", Integer.valueOf(1));
         scores.put("b", Integer.valueOf(3));
         scores.put("c", Integer.valueOf(5));
 
-        LinkedHashMap<String, Integer> sorted =  ModelScore.sortElementsByScores(scores, true);
-//        LinkedHashMap<String, Integer> sorted = ModelScore.getTopN(scores, 2, false);
+        ConcurrentLinkedHashMap<String, Integer> sorted =  ModelScore.sortElementsByScores(scores, true);
+//        ConcurrentLinkedHashMap<String, Integer> sorted = ModelScore.getTopN(scores, 2, false);
 
         Iterator<String> itr = sorted.keySet().iterator();
 

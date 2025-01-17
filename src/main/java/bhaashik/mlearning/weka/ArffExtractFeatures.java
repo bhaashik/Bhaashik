@@ -5,7 +5,7 @@
 package bhaashik.mlearning.weka;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 
 import bhaashik.corpus.ssf.impl.SSFSentenceImpl;
@@ -25,7 +25,7 @@ public class ArffExtractFeatures {
     protected SSFSentenceImpl sen;
     protected SSFPhrase root;
     protected SSFNode word;
-    protected LinkedHashMap labels;
+    protected ConcurrentLinkedHashMap labels;
     protected WindowFeaturesImpl windowFeature = new WindowFeaturesImpl();
     private int WINDOW_SIZE = 3;
     final int ATTR_TYPE_STRING = 0;
@@ -39,7 +39,7 @@ public class ArffExtractFeatures {
 
     public ArffExtractFeatures() {
         
-        labels = new LinkedHashMap();
+        labels = new ConcurrentLinkedHashMap();
         TESTING_MODE = false;        
         attributeNames = new ArrayList<String>();
     }
@@ -440,7 +440,7 @@ public class ArffExtractFeatures {
                 
     }
   
-    public LinkedHashMap getAttributes(){
+    public ConcurrentLinkedHashMap getAttributes(){
         return labels;
     }
     

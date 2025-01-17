@@ -44,7 +44,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.Hashtable;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Locale;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
@@ -603,7 +603,7 @@ private void inputMethodJComboBoxActionPerformed(java.awt.event.ActionEvent evt)
     // TODO add your handling code here:
     String localeName = (String) inputMethodJComboBox.getSelectedItem();
 
-    LinkedHashMap installedLocales = BhaashikLanguages.getAllInputMethods();
+    ConcurrentLinkedHashMap installedLocales = BhaashikLanguages.getAllInputMethods();
 
     Locale l = (Locale) installedLocales.get(localeName);
 
@@ -714,7 +714,7 @@ private void proxyJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GE
     {
         inputMethodModel = new DefaultComboBoxModel();
 
-        LinkedHashMap installedLocales = BhaashikLanguages.getAllInputMethods();
+        ConcurrentLinkedHashMap installedLocales = BhaashikLanguages.getAllInputMethods();
         
         Object installedLocaleNames[] = installedLocales.keySet().toArray();
         

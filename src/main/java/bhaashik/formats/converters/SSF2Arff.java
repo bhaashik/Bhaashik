@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 
 import bhaashik.GlobalProperties;
@@ -167,7 +167,7 @@ public class SSF2Arff extends DefaultMLCorpusConverter implements MLCorpusConver
             docIndex += scount;
         }
 
-        LinkedHashMap<String, MLClassLabels> attributes = new LinkedHashMap<String, MLClassLabels>();
+        ConcurrentLinkedHashMap<String, MLClassLabels> attributes = new ConcurrentLinkedHashMap<>();
 
         String keys[] = new String[arffExtractFeatures.getAttributeNames().length + 1];
 
@@ -349,7 +349,7 @@ public class SSF2Arff extends DefaultMLCorpusConverter implements MLCorpusConver
             docIndex += scount;
         }
 
-        LinkedHashMap attributes = new LinkedHashMap();
+        ConcurrentLinkedHashMap attributes = new ConcurrentLinkedHashMap();
 
         String keys[] = new String[arffExtractFeatures.getAttributeNames().length + 1];
         

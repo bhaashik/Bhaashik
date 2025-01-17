@@ -16,15 +16,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
+import java.io.Serializable;
 
 /**
  *
  * @author Anil Kumar Singh
+ * @param <K>
+ * @param <M>
  */
-public class DefaultContextModels<K, M extends Context> implements ContextModels<K, M> {
+public class DefaultContextModels<K extends Serializable, M extends Context> implements ContextModels<K, M> {
     
-    protected LinkedHashMap<K,M> contextModels;
+    protected ConcurrentLinkedHashMap<K,M> contextModels;
     protected int windowSize;
 
     protected long contextElementTypeCount;
@@ -32,7 +35,7 @@ public class DefaultContextModels<K, M extends Context> implements ContextModels
     
     /** Creates a new instance of DefaultContextModels */
     public DefaultContextModels() {
-        contextModels = new LinkedHashMap<K,M>(0, 5);
+        contextModels = new ConcurrentLinkedHashMap<K,M>(0, 5);
     }
 
     public int getWindowSize() {

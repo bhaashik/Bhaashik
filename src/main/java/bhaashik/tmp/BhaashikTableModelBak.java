@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javax.swing.table.*;
 
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.resources.Resource;
 import bhaashik.table.gui.Cell;
 import bhaashik.xml.dom.BhaashikDOMElement;
@@ -1466,7 +1467,7 @@ public class BhaashikTableModelBak extends DefaultTableModel implements Resource
     
     public static LinkedHashMap readMany(String f, String charset) throws FileNotFoundException, IOException
     {
-        LinkedHashMap ht = new LinkedHashMap(0, 5);
+        LinkedHashMap ht = new ConcurrentLinkedHashMap(0, 5);
         
         BufferedReader lnReader = null;
         
@@ -1574,7 +1575,7 @@ public class BhaashikTableModelBak extends DefaultTableModel implements Resource
         return 0;
     }
 
-    public static void saveMany(LinkedHashMap tables, String f, String charset) throws FileNotFoundException, UnsupportedEncodingException
+    public static void saveMany(ConcurrentLinkedHashMap tables, String f, String charset) throws FileNotFoundException, UnsupportedEncodingException
     {
         PrintStream ps = new PrintStream(f, charset);
         printMany(tables, ps);
@@ -1664,7 +1665,7 @@ public class BhaashikTableModelBak extends DefaultTableModel implements Resource
         }
     }
 
-    public static void printMany(LinkedHashMap tables, PrintStream ps)
+    public static void printMany(ConcurrentLinkedHashMap tables, PrintStream ps)
     {
         Vector kvec = new Vector(tables.keySet());
         Collections.sort(kvec);
@@ -1682,7 +1683,7 @@ public class BhaashikTableModelBak extends DefaultTableModel implements Resource
         }
     }
 
-    public static void printManyXML(LinkedHashMap tables, PrintStream ps)
+    public static void printManyXML(ConcurrentLinkedHashMap tables, PrintStream ps)
     {
         DOMElement domElementMany = new DOMElement(GlobalProperties.getIntlString("MultiTable"));
 

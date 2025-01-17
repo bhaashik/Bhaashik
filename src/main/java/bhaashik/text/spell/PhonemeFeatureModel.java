@@ -18,12 +18,13 @@ import bhaashik.mlearning.lm.ngram.NGram;
 import bhaashik.mlearning.lm.ngram.NGramLM;
 import bhaashik.mlearning.lm.ngram.impl.NGramLMImpl;
 import bhaashik.properties.PropertyTokens;
+import java.io.Serializable;
 
 /**
  *
  * @author anil
  */
-public class PhonemeFeatureModel {
+public class PhonemeFeatureModel implements Serializable {
     protected String langEnc = GlobalProperties.getIntlString("hin::utf8");
     protected String charset = GlobalProperties.getIntlString("UTF-8");
 

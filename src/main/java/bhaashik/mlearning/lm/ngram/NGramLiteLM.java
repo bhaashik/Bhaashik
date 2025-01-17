@@ -4,7 +4,8 @@
  */
 package bhaashik.mlearning.lm.ngram;
 
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,9 +15,9 @@ import java.util.List;
 public interface NGramLiteLM <NG extends NGramLite> extends NGramCounts<NG> {
 
     @Override
-    LinkedHashMap<List<Integer>, Long> getCumulativeFrequencies(int whichGram);
+    ConcurrentLinkedHashMap<ArrayList<Integer>, Long> getCumulativeFrequencies(int whichGram);
 
     @Override
-    List<LinkedHashMap<List<Integer>, Long>> getCumulativeFrequenciesList();
+    ArrayList<ConcurrentLinkedHashMap<ArrayList<Integer>, Long>> getCumulativeFrequenciesList();
     
 }

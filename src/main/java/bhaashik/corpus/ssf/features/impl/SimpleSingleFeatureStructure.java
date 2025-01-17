@@ -106,8 +106,8 @@ public class SimpleSingleFeatureStructure
         {
             Pair<Integer, Integer> fv = featureValues.get(i);
 
-            fvStr += SimpleFeatureAttribute.getFeatureString(fv.first)
-                    + "='" + SimpleFeatureAttribute.getValueString(fv.second) + "'";
+            fvStr += SimpleFeatureAttribute.getFeatureString(fv.getFirst())
+                    + "='" + SimpleFeatureAttribute.getValueString(fv.getSecond()) + "'";
 
             if(i < fcount - 1) {
                 fvStr += " ";
@@ -743,7 +743,7 @@ public class SimpleSingleFeatureStructure
     @Override
     public FeatureAttribute getAttribute(int index) {
         Pair<Integer, Integer> attrib = featureValues.get(index);
-        SimpleFeatureAttribute f = new SimpleFeatureAttribute(attrib.first, attrib.second);
+        SimpleFeatureAttribute f = new SimpleFeatureAttribute(attrib.getFirst(), attrib.getSecond());
         
         return f;
     }

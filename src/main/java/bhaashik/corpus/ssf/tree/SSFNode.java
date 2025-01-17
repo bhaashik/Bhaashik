@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,6 +50,7 @@ import bhaashik.corpus.xml.XMLProperties;
 import bhaashik.gui.common.BhaashikLanguages;
 import bhaashik.properties.KeyValueProperties;
 import bhaashik.util.UtilityFunctions;
+import java.util.LinkedHashMap;
 
 public class SSFNode extends BhaashikMutableTreeNode
         implements MutableTreeNode, Alignable, Serializable, QueryValue,
@@ -213,6 +214,9 @@ public class SSFNode extends BhaashikMutableTreeNode
 
     public void setLexData(String ld) 
     {
+        if(ld == null)
+            return;
+        
         lexIndices = getIndices(ld, vocabIndex, WORD_SEPARATOR, true);
     }
 
@@ -1661,13 +1665,13 @@ public class SSFNode extends BhaashikMutableTreeNode
 
     public LinkedHashMap<QueryValue, String> getMatchingValues(SSFQuery ssfQuery)
     {
-        LinkedHashMap<QueryValue, String> matches = new LinkedHashMap<QueryValue, String>();
+        LinkedHashMap<QueryValue, String> matches = new ConcurrentLinkedHashMap<>();
 
         try
         {
             LinkedHashMap<SSFNode, String> qmatches = ssfQuery.executeQuery(this);
 
-            if(qmatches != null && qmatches.size() > 0)
+            if(qmatches != null && !qmatches.isEmpty())
             {
                 matches.putAll(qmatches);
             }
@@ -1677,9 +1681,8 @@ public class SSFNode extends BhaashikMutableTreeNode
 //            Logger.getLogger(SSFNode.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if(this instanceof SSFPhrase)
+        if(this instanceof SSFPhrase phrase)
         {
-            SSFPhrase phrase = (SSFPhrase) this;
 
             List<SSFNode> allChildren = phrase.getAllChildren();
 

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -23,6 +23,7 @@ import bhaashik.corpus.ssf.tree.SSFLexItem;
 import bhaashik.table.BhaashikTableModel;
 import bhaashik.util.UtilityFunctions;
 import bhaashik.tree.BhaashikMutableTreeNode;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -115,7 +116,7 @@ public class TextStats {
     {
         double entropy = 0.0;
         
-        LinkedHashMap<String, Integer> wordFreq = text.getWordFreq();
+        ConcurrentLinkedHashMap<String, Integer> wordFreq = (ConcurrentLinkedHashMap<String, Integer>) text.getWordFreq();
 
         int wcount = UtilityFunctions.getTotalValue(wordFreq);
         
@@ -173,7 +174,7 @@ public class TextStats {
     {
         double entropy = 0.0;
         
-        LinkedHashMap<String, Integer> posTagFreq = text.getPOSTagFreq();
+        ConcurrentLinkedHashMap<String, Integer> posTagFreq = (ConcurrentLinkedHashMap<String, Integer>) text.getPOSTagFreq();
         
         int pcount = UtilityFunctions.getTotalValue(posTagFreq);
         

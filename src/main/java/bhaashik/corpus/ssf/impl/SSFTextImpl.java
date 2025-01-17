@@ -36,6 +36,7 @@ import org.xml.sax.SAXException;
 import bhaashik.corpus.parallel.Alignable;
 import bhaashik.corpus.parallel.AlignmentUnit;
 import bhaashik.corpus.xml.XMLProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.properties.KeyValueProperties;
 import bhaashik.util.UtilityFunctions;
 
@@ -1166,7 +1167,7 @@ public class SSFTextImpl extends Text
     @Override
     public LinkedHashMap<String, Integer> getWordFreq()
     {
-        LinkedHashMap<String, Integer> allWords = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allWords = new ConcurrentLinkedHashMap();
 
         int scount = countSentences();
 
@@ -1174,7 +1175,7 @@ public class SSFTextImpl extends Text
         {
             SSFSentence sentence = getSentence(i);
 
-            LinkedHashMap<String, Integer> tags = sentence.getRoot().getWordFreq();
+            ConcurrentLinkedHashMap<String, Integer> tags = sentence.getRoot().getWordFreq();
 
             UtilityFunctions.mergeMap(allWords, tags);
         }
@@ -1185,7 +1186,7 @@ public class SSFTextImpl extends Text
     @Override
     public LinkedHashMap<String, Integer> getPOSTagFreq()
     {
-        LinkedHashMap<String, Integer> allTags = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> allTags = new ConcurrentLinkedHashMap();
 
         int scount = countSentences();
 
@@ -1193,7 +1194,7 @@ public class SSFTextImpl extends Text
         {
             SSFSentence sentence = getSentence(i);
 
-            LinkedHashMap<String, Integer> tags = sentence.getRoot().getPOSTagFreq();
+            ConcurrentLinkedHashMap<String, Integer> tags = sentence.getRoot().getPOSTagFreq();
 
             UtilityFunctions.mergeMap(allTags, tags);
         }
@@ -1212,7 +1213,7 @@ public class SSFTextImpl extends Text
     @Override
     public LinkedHashMap<String, Integer> getWordTagPairFreq()
     {
-        LinkedHashMap<String, Integer> allWords = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allWords = new ConcurrentLinkedHashMap();
 
         int scount = countSentences();
 
@@ -1249,7 +1250,7 @@ public class SSFTextImpl extends Text
     @Override
     public LinkedHashMap<String, Integer> getChunkTagFreq()
     {
-        LinkedHashMap<String, Integer> allTags = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allTags = new ConcurrentLinkedHashMap();
 
         int scount = countSentences();
 
@@ -1276,7 +1277,7 @@ public class SSFTextImpl extends Text
     @Override
     public LinkedHashMap<String, Integer> getGroupRelationFreq()
     {
-        LinkedHashMap<String, Integer> allRels = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allRels = new ConcurrentLinkedHashMap();
 
         int scount = countSentences();
 
@@ -1302,7 +1303,7 @@ public class SSFTextImpl extends Text
     @Override
     public LinkedHashMap<String, Integer> getChunkRelationFreq()
     {
-        LinkedHashMap<String, Integer> allRels = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allRels = new ConcurrentLinkedHashMap();
 
         int scount = countSentences();
 
@@ -1328,7 +1329,7 @@ public class SSFTextImpl extends Text
     @Override
     public LinkedHashMap<String, Integer> getAttributeFreq()
     {
-        LinkedHashMap<String, Integer> allAttribs = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allAttribs = new ConcurrentLinkedHashMap();
 
         int scount = countSentences();
 
@@ -1363,7 +1364,7 @@ public class SSFTextImpl extends Text
     @Override
     public LinkedHashMap<String, Integer> getAttributeValueFreq()
     {
-        LinkedHashMap<String, Integer> allAttribs = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allAttribs = new ConcurrentLinkedHashMap();
 
         int scount = countSentences();
 
@@ -1393,7 +1394,7 @@ public class SSFTextImpl extends Text
 
     public LinkedHashMap<String, Integer> getAttributeValuePairFreq()
     {
-        LinkedHashMap<String, Integer> allAttribs = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allAttribs = new ConcurrentLinkedHashMap();
 
         int scount = countSentences();
 
@@ -1428,7 +1429,7 @@ public class SSFTextImpl extends Text
     @Override
     public LinkedHashMap<String, Integer> getUntaggedWordFreq()
     {
-        LinkedHashMap<String, Integer> allWords = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allWords = new ConcurrentLinkedHashMap();
 //
 //        int scount = countSentences();
 //
@@ -1491,7 +1492,7 @@ public class SSFTextImpl extends Text
     @Override
     public LinkedHashMap<String, Integer> getUnchunkedWordFreq()
     {
-        LinkedHashMap<String, Integer> allWords = new LinkedHashMap();
+        LinkedHashMap<String, Integer> allWords = new ConcurrentLinkedHashMap();
 
         int scount = countSentences();
 
@@ -1629,7 +1630,7 @@ public class SSFTextImpl extends Text
     {
         clearHighlights();
 
-        LinkedHashMap<QueryValue, String> matches = new LinkedHashMap<QueryValue, String>();
+        LinkedHashMap<QueryValue, String> matches = new ConcurrentLinkedHashMap<>();
 
         int scount = countSentences();
 

@@ -15,6 +15,7 @@ import javax.swing.*;
 
 import bhaashik.GlobalProperties;
 import bhaashik.corpus.parallel.impl.ParallelMarkupAnalyzer;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import bhaashik.properties.KeyValueProperties;
 import bhaashik.properties.PropertyTokens;
@@ -35,20 +36,20 @@ public class ParallelMarkupTask extends AggregateResourceImpl implements Aggrega
 
     private DefaultComboBoxModel srcTamMarkers;
     private DefaultComboBoxModel tgtTamMarkers;
-    private LinkedHashMap srcTMIndex;
-    private LinkedHashMap tgtTMIndex;
+    private ConcurrentLinkedHashMap srcTMIndex;
+    private ConcurrentLinkedHashMap tgtTMIndex;
     
     // Elements values are BhaashikTables with sentence number as the key
     // and BhaashikTable containing SL and TL marker indices
     // in each row
-    private LinkedHashMap markerMappingTables; // Indices
+    private ConcurrentLinkedHashMap markerMappingTables; // Indices
 
     // Parallel to above two PropertyTokens
     // Elements values are BhaashikTables with sentence number as the key
     // and BhaashikTable containing start position, end position and marker index
     // in each row
-    private LinkedHashMap srcSenMarkups;
-    private LinkedHashMap tgtSenMarkups;
+    private ConcurrentLinkedHashMap srcSenMarkups;
+    private ConcurrentLinkedHashMap tgtSenMarkups;
     
     private int currentPosition;
 
@@ -91,8 +92,8 @@ public class ParallelMarkupTask extends AggregateResourceImpl implements Aggrega
 	srcTamMarkers = new DefaultComboBoxModel(srcTMPT.getCopyOfTokens());
 	tgtTamMarkers = new DefaultComboBoxModel(tgtTMPT.getCopyOfTokens());
 
-	srcTMIndex = new LinkedHashMap(srcTamMarkers.getSize());
-	tgtTMIndex = new LinkedHashMap(tgtTamMarkers.getSize());
+	srcTMIndex = new ConcurrentLinkedHashMap(srcTamMarkers.getSize());
+	tgtTMIndex = new ConcurrentLinkedHashMap(tgtTamMarkers.getSize());
 
 	int count = srcTMPT.countTokens();
 	for(int i = 0; i < count; i++)
@@ -117,17 +118,17 @@ public class ParallelMarkupTask extends AggregateResourceImpl implements Aggrega
 
 	    try
 	    {
-		srcSenMarkups = BhaashikTableModel.readMany(kvTaskProps.getPropertyValue("SLCorpusFile") + ".marked", GlobalProperties.getIntlString("UTF-8"));
-		tgtSenMarkups = BhaashikTableModel.readMany(kvTaskProps.getPropertyValue("TLCorpusFile") + ".marked", GlobalProperties.getIntlString("UTF-8"));
-		markerMappingTables = BhaashikTableModel.readMany(f + ".mapping", GlobalProperties.getIntlString("UTF-8"));
+		srcSenMarkups = (ConcurrentLinkedHashMap) BhaashikTableModel.readMany(kvTaskProps.getPropertyValue("SLCorpusFile") + ".marked", GlobalProperties.getIntlString("UTF-8"));
+		tgtSenMarkups = (ConcurrentLinkedHashMap) BhaashikTableModel.readMany(kvTaskProps.getPropertyValue("TLCorpusFile") + ".marked", GlobalProperties.getIntlString("UTF-8"));
+		markerMappingTables = (ConcurrentLinkedHashMap) BhaashikTableModel.readMany(f + ".mapping", GlobalProperties.getIntlString("UTF-8"));
 
 		commentsPT = new PropertyTokens(kvTaskProps.getPropertyValue("TaskPropFile") + ".comments", GlobalProperties.getIntlString("UTF-8"));
 	    }
 	    catch(FileNotFoundException e)
 	    {
-		srcSenMarkups = new LinkedHashMap(senCount);
-		tgtSenMarkups = new LinkedHashMap(senCount);
-		markerMappingTables = new LinkedHashMap(senCount);
+		srcSenMarkups = new ConcurrentLinkedHashMap(senCount);
+		tgtSenMarkups = new ConcurrentLinkedHashMap(senCount);
+		markerMappingTables = new ConcurrentLinkedHashMap(senCount);
 
 		commentsPT = new PropertyTokens(senCount);
 
@@ -211,11 +212,11 @@ public class ParallelMarkupTask extends AggregateResourceImpl implements Aggrega
         return tgtTamMarkers;
     }
 
-    public LinkedHashMap getSrcTMIndex() {
+    public ConcurrentLinkedHashMap getSrcTMIndex() {
         return srcTMIndex;
     }
 
-    public LinkedHashMap getTgtTMIndex() {
+    public ConcurrentLinkedHashMap getTgtTMIndex() {
         return tgtTMIndex;
     }
 
@@ -227,15 +228,15 @@ public class ParallelMarkupTask extends AggregateResourceImpl implements Aggrega
         currentPosition = p;
     }
 
-    public LinkedHashMap getMarkerMappingTables() {
+    public ConcurrentLinkedHashMap getMarkerMappingTables() {
         return markerMappingTables;
     }
 
-    public LinkedHashMap getSrcSenMarkups() {
+    public ConcurrentLinkedHashMap getSrcSenMarkups() {
         return srcSenMarkups;
     }
 
-    public LinkedHashMap getTgtSenMarkups() {
+    public ConcurrentLinkedHashMap getTgtSenMarkups() {
         return tgtSenMarkups;
     }
     

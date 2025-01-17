@@ -8,20 +8,21 @@ package bhaashik.context;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import bhaashik.context.impl.ContextElement;
 import bhaashik.context.impl.SimpleContext;
 import bhaashik.mlearning.common.ModelScore;
+import java.io.Serializable;
 
 /**
  *
  * @author anil
  */
-public class SimpleContextImpl<K, E, CE extends ContextElementImpl<E>>
+public class SimpleContextImpl<K extends Serializable, E extends Serializable, CE extends ContextElementImpl<E>>
         implements SimpleContext<K, E, CE> {
 
-    protected LinkedHashMap<K, CE> contextElements;
+    protected ConcurrentLinkedHashMap<K, CE> contextElements;
 
     protected long contextElementTypeCount;
     protected long contextElementTokenCount;
@@ -30,7 +31,7 @@ public class SimpleContextImpl<K, E, CE extends ContextElementImpl<E>>
 
     /** Creates a new instance of FunctionalContextImpl */
     public SimpleContextImpl() {
-        contextElements = new LinkedHashMap<K, CE>(0, 5);
+        contextElements = new ConcurrentLinkedHashMap<K, CE>(0, 5);
     }
 
     @Override

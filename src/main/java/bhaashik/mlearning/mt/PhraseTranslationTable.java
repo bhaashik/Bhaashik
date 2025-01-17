@@ -14,7 +14,7 @@ import java.io.PrintStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,16 +35,16 @@ public class PhraseTranslationTable {
     String langEnc = GlobalProperties.getIntlString("hin::utf8");
     String charset = GlobalProperties.getIntlString("UTF-8");
 
-    LinkedHashMap phraseTranslationScores;
-    LinkedHashMap maxPhraseTranslationScores;
+    ConcurrentLinkedHashMap phraseTranslationScores;
+    ConcurrentLinkedHashMap maxPhraseTranslationScores;
 
     double minScore = 0.003;
 //    double minScore = 0.0001;
 
     public PhraseTranslationTable()
     {
-        phraseTranslationScores = new LinkedHashMap(0, 100);
-        maxPhraseTranslationScores = new LinkedHashMap(0, 100);
+        phraseTranslationScores = new ConcurrentLinkedHashMap(0, 100);
+        maxPhraseTranslationScores = new ConcurrentLinkedHashMap(0, 100);
     }
 
     public int countSrcPhrases()
@@ -60,7 +60,7 @@ public class PhraseTranslationTable {
         if(phraseTranslationScores == null)
             return 0;
 
-        LinkedHashMap tgtScores = (LinkedHashMap) phraseTranslationScores.get(srcPhrase);
+        ConcurrentLinkedHashMap tgtScores = (ConcurrentLinkedHashMap) phraseTranslationScores.get(srcPhrase);
 
         if(tgtScores == null)
             return 0;
@@ -81,7 +81,7 @@ public class PhraseTranslationTable {
         if(phraseTranslationScores == null)
             return null;
 
-        LinkedHashMap tgtScores = (LinkedHashMap) phraseTranslationScores.get(srcPhrase);
+        ConcurrentLinkedHashMap tgtScores = (ConcurrentLinkedHashMap) phraseTranslationScores.get(srcPhrase);
 
         if(tgtScores == null)
             return null;
@@ -91,7 +91,7 @@ public class PhraseTranslationTable {
 
     public PhraseTranslationScores getPhraseTranslationScores(String srcPhrase, String tgtPhrase)
     {
-        LinkedHashMap tgtScores = (LinkedHashMap) phraseTranslationScores.get(srcPhrase);
+        ConcurrentLinkedHashMap tgtScores = (ConcurrentLinkedHashMap) phraseTranslationScores.get(srcPhrase);
 
         if(tgtScores == null)
             return null;
@@ -101,7 +101,7 @@ public class PhraseTranslationTable {
     
     public double getPhraseTranslationScores(String srcPhrase)
     {
-        LinkedHashMap tgtScores = (LinkedHashMap) phraseTranslationScores.get(srcPhrase);
+        ConcurrentLinkedHashMap tgtScores = (ConcurrentLinkedHashMap) phraseTranslationScores.get(srcPhrase);
 
         if(tgtScores == null)
             return 0.0;
@@ -113,11 +113,11 @@ public class PhraseTranslationTable {
 
     public void addPhraseTranslationScores(String srcPhrase, String tgtPhrase, PhraseTranslationScores scores)
     {
-        LinkedHashMap tgtScores = (LinkedHashMap) phraseTranslationScores.get(srcPhrase);
+        ConcurrentLinkedHashMap tgtScores = (ConcurrentLinkedHashMap) phraseTranslationScores.get(srcPhrase);
 
         if(tgtScores == null)
         {
-            tgtScores = new LinkedHashMap(0, 100);
+            tgtScores = new ConcurrentLinkedHashMap(0, 100);
 
             phraseTranslationScores.put(srcPhrase, tgtScores);
         }
@@ -127,7 +127,7 @@ public class PhraseTranslationTable {
 
     public void removePhraseTranslationScores(String srcPhrase)
     {
-        LinkedHashMap tgtScores = (LinkedHashMap) phraseTranslationScores.get(srcPhrase);
+        ConcurrentLinkedHashMap tgtScores = (ConcurrentLinkedHashMap) phraseTranslationScores.get(srcPhrase);
 
         if(tgtScores == null)
             return;

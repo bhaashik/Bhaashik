@@ -5,11 +5,13 @@
 
 package bhaashik.text.spell;
 
+import java.io.Serializable;
+
 /**
  *
  * @author anil
  */
-public class Probability {
+public class Probability implements Serializable {
 
     protected long frequency;
     protected double probability;

@@ -7,6 +7,7 @@
 package bhaashik.langenc;
 
 import bhaashik.GlobalProperties;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.mlearning.lm.ngram.NGram;
 import bhaashik.mlearning.lm.ngram.NGramLM;
 import bhaashik.mlearning.lm.ngram.impl.NGramLMImpl;
@@ -88,7 +89,7 @@ public class LangEncIdentifier {
     Vector paths = new Vector(0, 5);
     
     // In case of default identification, each entry will be a String (langEnc)
-    // For multi-lingual identification, each entry will be a LinkedHashMap (enumerated langEncs and their scores/likelihoods)
+    // For multi-lingual identification, each entry will be a ConcurrentLinkedHashMap (enumerated langEncs and their scores/likelihoods)
     Vector actual_enclangs = new Vector(0, 5);
     Vector identified_enclangs = new Vector(0, 5);
     
@@ -96,13 +97,13 @@ public class LangEncIdentifier {
     // Each entry will be a Hashtable (path as key) of LinkedHashMaps (words types as keys and LinkedHashMaps of top langEncs as values)
     Vector identified_wrdtyp_enclangs = new Vector(0, 5);
     // For one document/text
-    LinkedHashMap wrdtyp_enclangs;
+    ConcurrentLinkedHashMap wrdtyp_enclangs;
 
     // Parallel vectors
     // Each entry will be a Hashtable (path as key) of LinkedHashMaps (words token indices as keys and LinkedHashMaps of top langEncs as values)
     Vector identified_wrdtok_enclangs = new Vector(0, 5);
     // For one document/text
-    LinkedHashMap wrdtok_enclangs;
+    ConcurrentLinkedHashMap wrdtok_enclangs;
     
     protected boolean storeTrainingLMs = true;
     protected boolean useStoredTrainingLMs;
@@ -697,8 +698,8 @@ public class LangEncIdentifier {
                     errorCounts.put(actual_enclangs.get(i), newCount);
                 }
 		
-		String errinf = "\tScore_with_actual_encoding_(" + actual_enclangs.get(i) + ") :"+ ((LinkedHashMap) allScores.get(paths.get(i))).get(actual_enclangs.get(i));
-		errinf += "\n\tScore_with_identified_encoding_(" + identified_enclangs.get(i) + ") :" + ((LinkedHashMap) allScores.get(paths.get(i))).get(identified_enclangs.get(i));
+		String errinf = "\tScore_with_actual_encoding_(" + actual_enclangs.get(i) + ") :"+ ((ConcurrentLinkedHashMap) allScores.get(paths.get(i))).get(actual_enclangs.get(i));
+		errinf += "\n\tScore_with_identified_encoding_(" + identified_enclangs.get(i) + ") :" + ((ConcurrentLinkedHashMap) allScores.get(paths.get(i))).get(identified_enclangs.get(i));
 
                 errorPaths.put(paths.get(i), identified_enclangs.get(i));
                 errorInfo.put(paths.get(i), errinf);
@@ -826,7 +827,7 @@ public class LangEncIdentifier {
                 for(int i = 0; i < count; i++)
                 {
                     String wrd = wrds.getToken(i);
-                    String vEval = getBestLangEnc(identify(wrd));
+                    String vEval = getBestLangEnc((ConcurrentLinkedHashMap) identify(wrd));
                     
                     output.addProperty(wrd, vEval);
                     
@@ -859,9 +860,9 @@ public class LangEncIdentifier {
 	    String ans = null;
 	    
 	    if(multi)
-		ans = getBestLangEnc(identifyMultilingual(f));
+		ans = getBestLangEnc((ConcurrentLinkedHashMap) identifyMultilingual(f));
 	    else
-		ans = getBestLangEnc(identify(f));
+		ans = getBestLangEnc((ConcurrentLinkedHashMap) identify(f));
 
         System.out.println(f.getAbsolutePath() + "\t" + ans);
 
@@ -882,7 +883,7 @@ public class LangEncIdentifier {
         }
     }
     
-    protected String getBestLangEnc(LinkedHashMap topLEs)
+    protected String getBestLangEnc(ConcurrentLinkedHashMap topLEs)
     {
 	Set keys = topLEs.keySet();
 	Iterator itr = keys.iterator();
@@ -897,7 +898,7 @@ public class LangEncIdentifier {
 
     public LinkedHashMap identify(String testString)
     {
-        LinkedHashMap bestModels = null;
+        ConcurrentLinkedHashMap bestModels = null;
         
         if(identifierType != STD_NGRAM_IDENTIFIER)
         {
@@ -916,7 +917,7 @@ public class LangEncIdentifier {
             
 	    testModel.pruneByRankAndMerge(-1, 0);
 
-	    bestModels = identify(testModel, wrdTestModel, null);
+	    bestModels = (ConcurrentLinkedHashMap) identify(testModel, wrdTestModel, null);
         }
 
 	return bestModels;
@@ -931,7 +932,7 @@ public class LangEncIdentifier {
     public LinkedHashMap identify(File f) throws FileNotFoundException, IOException
     {
 //        System.out.println("Identifying " + f.getAbsolutePath() + "...");
-        LinkedHashMap bestModels = null;
+        ConcurrentLinkedHashMap bestModels = null;
         
         if(identifierType != STD_NGRAM_IDENTIFIER)
         {
@@ -952,7 +953,7 @@ public class LangEncIdentifier {
                 
 		testModel.pruneByRankAndMerge(-1, 0);
 		
-		bestModels = identify(testModel, wrdTestModel, f);
+		bestModels = (ConcurrentLinkedHashMap) identify(testModel, wrdTestModel, f);
             }
             catch(IOException e) 
             {
@@ -964,7 +965,7 @@ public class LangEncIdentifier {
     }
 
     /**
-     * @return LinkedHashMap with top t langEncs and their scrores
+     * @return ConcurrentLinkedHashMap with top t langEncs and their scrores
      */
     public LinkedHashMap identify(NGramLM testModel, NGramLM wrdTestModel, File testFile /* Just for evaluation: allScores */)
     {
@@ -997,8 +998,8 @@ public class LangEncIdentifier {
 	    }
         }
 
-        LinkedHashMap modelScores = new LinkedHashMap(this.countNGramLMs());
-        LinkedHashMap wrdModelScores = new LinkedHashMap(this.countNGramLMs());
+        LinkedHashMap modelScores = new ConcurrentLinkedHashMap(this.countNGramLMs());
+        LinkedHashMap wrdModelScores = new ConcurrentLinkedHashMap(this.countNGramLMs());
 	
         if(allScores != null)
             allScores.put(testFile.getAbsolutePath(), modelScores);
@@ -1055,11 +1056,11 @@ public class LangEncIdentifier {
             {
                 for(int j = 1; j <= trainingModel.getNGramOrder(); j++)
                 {
-                    Iterator<List<Integer>> testItr = testModel.getNGramKeys(j);
+                    Iterator<ArrayList<Integer>> testItr = testModel.getNGramKeys(j);
 
                     while(testItr.hasNext())
                     {
-                        List<Integer> testNGram = testItr.next();
+                        ArrayList<Integer> testNGram = testItr.next();
                         NGram testNg = (NGram) testModel.getNGram(testNGram, j);
                         NGram trainNg = (NGram) trainingModel.getNGram(testNGram, j);
 
@@ -1081,11 +1082,11 @@ public class LangEncIdentifier {
 
 		if(useWordNGram)
 		{
-		    Iterator<List<Integer>> testItr = wrdTestModel.getNGramKeys(1);
+		    Iterator<ArrayList<Integer>> testItr = wrdTestModel.getNGramKeys(1);
 
 		    while(testItr.hasNext())
 		    {
-			List<Integer> testNGram = testItr.next();
+			ArrayList<Integer> testNGram = testItr.next();
 			NGram testNg = (NGram) wrdTestModel.getNGram(testNGram, 1);
 			NGram trainNg = (NGram) wrdTrainingModel.getNGram(testNGram, 1);
 
@@ -1151,7 +1152,7 @@ public class LangEncIdentifier {
 	)
 	    takeMax = false;
 
-        LinkedHashMap bestModels = new LinkedHashMap(modelScores.size());
+        LinkedHashMap bestModels = new ConcurrentLinkedHashMap(modelScores.size());
 	
 	Vector sortedScores = new Vector(modelScores.size());
 
@@ -1319,7 +1320,7 @@ public class LangEncIdentifier {
         String line;
         String splitstr[] = null;
         
-        wrdtyp_enclangs = new LinkedHashMap(0, 5);
+        wrdtyp_enclangs = new ConcurrentLinkedHashMap(0, 5);
         
         while((line = lnReader.readLine()) != null && line.equals("") == false)
         {
@@ -1346,7 +1347,7 @@ public class LangEncIdentifier {
         String line;
         String splitstr[] = null;
         
-        wrdtyp_enclangs = new LinkedHashMap(0, 5);
+        wrdtyp_enclangs = new ConcurrentLinkedHashMap(0, 5);
         
         while((line = lnReader.readLine()) != null && line.equals("") == false)
         {
@@ -1365,7 +1366,7 @@ public class LangEncIdentifier {
     }
     
     /**
-     * Returns a Vector of LinkedHashMaps, where each LinkedHashMap has langEnc as the key and score as the value. <br>
+     * Returns a Vector of LinkedHashMaps, where each ConcurrentLinkedHashMap has langEnc as the key and score as the value. <br>
      * Sorted (optionally top t) langEncs (by score) are returned.
      */
     public Vector identifyWords(String[] words, int topLangEncs)
@@ -1389,7 +1390,7 @@ public class LangEncIdentifier {
         Iterator itr = keys.iterator();
 
         int j = 0;
-        LinkedHashMap retLangEncs = new LinkedHashMap(topLangEncs);
+        LinkedHashMap retLangEncs = new ConcurrentLinkedHashMap(topLangEncs);
 
         while(j < topLangEncs && itr.hasNext())
         {
@@ -1914,7 +1915,7 @@ public class LangEncIdentifier {
 //            idfr.train();
 //            System.out.println("Trained");
 //           
-//            LinkedHashMap a = idfr.identify("#SURANA$");
+//            ConcurrentLinkedHashMap a = idfr.identify("#SURANA$");
 //            /*
 //            System.out.println(a.toString());
 //            a = idfr.identify("#KAILASH$");

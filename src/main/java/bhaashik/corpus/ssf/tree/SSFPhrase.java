@@ -4,7 +4,7 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -2364,7 +2364,7 @@ public class SSFPhrase extends SSFNode
 //            }
 //        }
 //    }
-    public void copyAttributesDep2Chunk(SSFPhrase mmRoot, LinkedHashMap cfgToMMTreeMapping)
+    public void copyAttributesDep2Chunk(SSFPhrase mmRoot, ConcurrentLinkedHashMap cfgToMMTreeMapping)
     {
 //        Iterator itr = cfgToMMTreeMapping.keySet().iterator();
 //        String depAttribs[] = FSProperties.getAnnCorraDependencyAttributes();
@@ -2432,7 +2432,7 @@ public class SSFPhrase extends SSFNode
         }
     }
 
-    public void copyDataDep2Chunk(SSFNode mmRoot, LinkedHashMap cfgToMMTreeMapping, boolean leafDependencies)
+    public void copyDataDep2Chunk(SSFNode mmRoot, ConcurrentLinkedHashMap cfgToMMTreeMapping, boolean leafDependencies)
     {
         String depAttribs[] = FSProperties.getDependencyAttributes();
 
@@ -2482,7 +2482,7 @@ public class SSFPhrase extends SSFNode
         }
     }
 
-    public void copyAttributesPS2Chunk(SSFPhrase psRoot, LinkedHashMap cfgToPSTreeMapping)
+    public void copyAttributesPS2Chunk(SSFPhrase psRoot, ConcurrentLinkedHashMap cfgToPSTreeMapping)
     {
         String psAttribs[] = FSProperties.getPSAttributes();
 
@@ -2527,12 +2527,12 @@ public class SSFPhrase extends SSFNode
     }
 
     // Recursive
-    public void reallocateNames(LinkedHashMap tags, LinkedHashMap words /* both null at the top level call */)
+    public void reallocateNames(ConcurrentLinkedHashMap tags, ConcurrentLinkedHashMap words /* both null at the top level call */)
     {
         reallocateNames(tags, words, 0);
     }
 
-    public void reallocateNames(LinkedHashMap tags, LinkedHashMap words /* both null at the top level call */, int fromChild)
+    public void reallocateNames(ConcurrentLinkedHashMap tags, ConcurrentLinkedHashMap words /* both null at the top level call */, int fromChild)
     {
         SSFProperties ssfp = getSSFProperties();
         String chunkStart = ssfp.getProperties().getPropertyValue("chunkStart");
@@ -2541,8 +2541,8 @@ public class SSFPhrase extends SSFNode
 
         if(tags == null)
         {
-            tags = new LinkedHashMap(0, 10);
-            words = new LinkedHashMap(0, 10);
+            tags = new ConcurrentLinkedHashMap(0, 10);
+            words = new ConcurrentLinkedHashMap(0, 10);
         }
 
         int count = getChildCount();
@@ -2646,7 +2646,7 @@ public class SSFPhrase extends SSFNode
         }
     }
 
-    public static void getMapping(SSFNode node1, SSFNode node2, LinkedHashMap mapping)
+    public static void getMapping(SSFNode node1, SSFNode node2, ConcurrentLinkedHashMap mapping)
     {
         if ((node1 instanceof SSFLexItem && node2 instanceof SSFLexItem) || (node1 instanceof SSFPhrase && node2 instanceof SSFPhrase))
         {
@@ -2672,9 +2672,9 @@ public class SSFPhrase extends SSFNode
         }
     }
 
-    public void expandMMTree(LinkedHashMap cfgToMMTreeMapping)
+    public void expandMMTree(ConcurrentLinkedHashMap cfgToMMTreeMapping)
     {
-        LinkedHashMap mmtToCFGMapping = (LinkedHashMap) UtilityFunctions.getReverseMap(cfgToMMTreeMapping);
+        ConcurrentLinkedHashMap mmtToCFGMapping = (ConcurrentLinkedHashMap) UtilityFunctions.getReverseMap(cfgToMMTreeMapping);
 
         int ccount = countChildren();
 
@@ -2733,12 +2733,12 @@ public class SSFPhrase extends SSFNode
         }
     }
 
-    public SSFPhrase convertToGDepNode(LinkedHashMap cfgToMMTreeMapping)
+    public SSFPhrase convertToGDepNode(ConcurrentLinkedHashMap cfgToMMTreeMapping)
     {
         return convertToGDepNode(cfgToMMTreeMapping, true);
     }
 
-    public SSFPhrase convertToGDepNode(LinkedHashMap cfgToMMTreeMapping, boolean collapse)
+    public SSFPhrase convertToGDepNode(ConcurrentLinkedHashMap cfgToMMTreeMapping, boolean collapse)
     {
         SSFProperties ssfp = getSSFProperties();
         String rootName = ssfp.getProperties().getPropertyValue("rootName");
@@ -2776,7 +2776,7 @@ public class SSFPhrase extends SSFNode
             return null;
         }
 
-        LinkedHashMap<String, SSFNode> namedNodes = new LinkedHashMap<String, SSFNode>();
+        ConcurrentLinkedHashMap<String, SSFNode> namedNodes = new ConcurrentLinkedHashMap<String, SSFNode>();
 
         int count = namedNodesVec.size();
         for (int i = 0; i < count; i++)
@@ -2867,12 +2867,12 @@ public class SSFPhrase extends SSFNode
         return mmRoot;
     }
 
-    public SSFPhrase convertToLDepNode(LinkedHashMap cfgToMMTreeMapping)
+    public SSFPhrase convertToLDepNode(ConcurrentLinkedHashMap cfgToMMTreeMapping)
     {
         return convertToLDepNode(cfgToMMTreeMapping, true);
     }
 
-    public SSFPhrase convertToLDepNode(LinkedHashMap cfgToDepTreeMapping, boolean collapse)
+    public SSFPhrase convertToLDepNode(ConcurrentLinkedHashMap cfgToDepTreeMapping, boolean collapse)
     {
         SSFProperties ssfp = getSSFProperties();
         String rootName = ssfp.getProperties().getPropertyValue("rootName");
@@ -2913,7 +2913,7 @@ public class SSFPhrase extends SSFNode
             return mmRoot;
         }
 
-        LinkedHashMap<String, SSFNode> namedNodes = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, SSFNode> namedNodes = new ConcurrentLinkedHashMap();
 
         int count = namedNodesVec.size();
         for (int i = 0; i < count; i++)
@@ -2997,7 +2997,7 @@ public class SSFPhrase extends SSFNode
 
                     mmGrandParent.insert(mmParentPhrase, mmParentIndex);
 
-                    LinkedHashMap d2cTreeMap = (LinkedHashMap) UtilityFunctions.getReverseMap(cfgToDepTreeMapping);
+                    ConcurrentLinkedHashMap d2cTreeMap = (ConcurrentLinkedHashMap) UtilityFunctions.getReverseMap(cfgToDepTreeMapping);
 
                     SSFNode cfgNode = (SSFNode) d2cTreeMap.get(mmParent);
 
@@ -3035,7 +3035,7 @@ public class SSFPhrase extends SSFNode
         return mmRoot;
     }
 
-    public SSFPhrase convertToPSNode(LinkedHashMap cfgToPSTreeMapping)
+    public SSFPhrase convertToPSNode(ConcurrentLinkedHashMap cfgToPSTreeMapping)
     {
         SSFProperties ssfp = getSSFProperties();
         String rootName = ssfp.getProperties().getPropertyValue("rootName");
@@ -3072,7 +3072,7 @@ public class SSFPhrase extends SSFNode
             return null;
         }
 
-        LinkedHashMap<String, SSFNode> namedNodes = new LinkedHashMap<String, SSFNode>();
+        ConcurrentLinkedHashMap<String, SSFNode> namedNodes = new ConcurrentLinkedHashMap<String, SSFNode>();
 
         int count = namedNodesVec.size();
         for (int i = 0; i < count; i++)
@@ -3168,9 +3168,9 @@ public class SSFPhrase extends SSFNode
             return null;
         }
 
-        LinkedHashMap<String, SSFNode> namedNodes = new LinkedHashMap<String, SSFNode>();
-        LinkedHashMap<String, SSFNode> parentNodes = new LinkedHashMap<String, SSFNode>();
-        LinkedHashMap<String, SSFNode> namedPhraseNodes = new LinkedHashMap<String, SSFNode>();
+        ConcurrentLinkedHashMap<String, SSFNode> namedNodes = new ConcurrentLinkedHashMap<String, SSFNode>();
+        ConcurrentLinkedHashMap<String, SSFNode> parentNodes = new ConcurrentLinkedHashMap<String, SSFNode>();
+        ConcurrentLinkedHashMap<String, SSFNode> namedPhraseNodes = new ConcurrentLinkedHashMap<String, SSFNode>();
 
         int count = namedNodesVec.size();
 
@@ -3790,9 +3790,9 @@ public class SSFPhrase extends SSFNode
         return "";
     }
 
-    public LinkedHashMap<String, Integer> getWordFreq()
+    public ConcurrentLinkedHashMap<String, Integer> getWordFreq()
     {
-        LinkedHashMap<String, Integer> words = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> words = new ConcurrentLinkedHashMap();
 
         List<BhaashikMutableTreeNode> leaves = getAllLeaves();
 
@@ -3818,9 +3818,9 @@ public class SSFPhrase extends SSFNode
         return words;
     }
 
-    public LinkedHashMap<String, Integer> getPOSTagFreq()
+    public ConcurrentLinkedHashMap<String, Integer> getPOSTagFreq()
     {
-        LinkedHashMap<String, Integer> tags = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> tags = new ConcurrentLinkedHashMap();
 
         List<BhaashikMutableTreeNode> leaves = getAllLeaves();
 
@@ -3846,9 +3846,9 @@ public class SSFPhrase extends SSFNode
         return tags;
     }
 
-    public LinkedHashMap<String, Integer> getWordTagPairFreq()
+    public ConcurrentLinkedHashMap<String, Integer> getWordTagPairFreq()
     {
-        LinkedHashMap<String, Integer> words = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> words = new ConcurrentLinkedHashMap();
 
         List<BhaashikMutableTreeNode> leaves = getAllLeaves();
 
@@ -3877,9 +3877,9 @@ public class SSFPhrase extends SSFNode
         return words;
     }
 
-    public LinkedHashMap<String, Integer> getChunkTagFreq()
+    public ConcurrentLinkedHashMap<String, Integer> getChunkTagFreq()
     {
-        LinkedHashMap<String, Integer> tags = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> tags = new ConcurrentLinkedHashMap();
 
         List<SSFNode> allChildren = getAllChildren();
 
@@ -3907,9 +3907,9 @@ public class SSFPhrase extends SSFNode
         return tags;
     }
 
-    public LinkedHashMap<String, Integer> getGroupRelationFreq()
+    public ConcurrentLinkedHashMap<String, Integer> getGroupRelationFreq()
     {
-        LinkedHashMap<String, Integer> rels = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> rels = new ConcurrentLinkedHashMap();
 
         List<SSFNode> allChildren = getAllChildren();
 
@@ -3951,9 +3951,9 @@ public class SSFPhrase extends SSFNode
         return rels;
     }
 
-    public LinkedHashMap<String, Integer> getChunkRelationFreq()
+    public ConcurrentLinkedHashMap<String, Integer> getChunkRelationFreq()
     {
-        LinkedHashMap<String, Integer> rels = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> rels = new ConcurrentLinkedHashMap();
 
         List<SSFNode> allChildren = getAllChildren();
 
@@ -3997,9 +3997,9 @@ public class SSFPhrase extends SSFNode
         return rels;
     }
 
-    public LinkedHashMap<String, Integer> getAttributeFreq()
+    public ConcurrentLinkedHashMap<String, Integer> getAttributeFreq()
     {
-        LinkedHashMap<String, Integer> attribs = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> attribs = new ConcurrentLinkedHashMap();
 
         List<SSFNode> allChildren = getAllChildren();
 
@@ -4038,9 +4038,9 @@ public class SSFPhrase extends SSFNode
         return attribs;
     }
 
-    public LinkedHashMap<String, Integer> getAttributeValueFreq()
+    public ConcurrentLinkedHashMap<String, Integer> getAttributeValueFreq()
     {
-        LinkedHashMap<String, Integer> attribs = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> attribs = new ConcurrentLinkedHashMap();
 
         List<SSFNode> allChildren = getAllChildren();
 
@@ -4079,9 +4079,9 @@ public class SSFPhrase extends SSFNode
         return attribs;
     }
 
-    public LinkedHashMap<String, Integer> getAttributeValuePairFreq()
+    public ConcurrentLinkedHashMap<String, Integer> getAttributeValuePairFreq()
     {
-        LinkedHashMap<String, Integer> attribs = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> attribs = new ConcurrentLinkedHashMap();
 
         List<SSFNode> allChildren = getAllChildren();
 
@@ -4120,9 +4120,9 @@ public class SSFPhrase extends SSFNode
         return attribs;
     }
 
-    public LinkedHashMap<String, Integer> getUnchunkedWordFreq()
+    public ConcurrentLinkedHashMap<String, Integer> getUnchunkedWordFreq()
     {
-        LinkedHashMap<String, Integer> tags = new LinkedHashMap();
+        ConcurrentLinkedHashMap<String, Integer> tags = new ConcurrentLinkedHashMap();
 
         List<BhaashikMutableTreeNode> leaves = getAllLeaves();
 

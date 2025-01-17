@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,14 +32,14 @@ public class WordSegmentations {
     protected String charset = GlobalProperties.getIntlString("UTF-8");
 
     protected String srcWrd;
-    protected LinkedHashMap segmentations;
+    protected ConcurrentLinkedHashMap segmentations;
 
     int pruneTopN = 10;
 
     public WordSegmentations(String srcWrd, Collection partitions)
     {
         this.srcWrd = srcWrd;
-        segmentations = new LinkedHashMap(0, 100);
+        segmentations = new ConcurrentLinkedHashMap(0, 100);
 
         if(partitions != null)
         {
@@ -96,7 +96,7 @@ public class WordSegmentations {
     public void addSegmentationScores(String segmentation, WordSegmentationScores scores)
     {
         if(segmentations == null)
-            segmentations = new LinkedHashMap(0, 100);
+            segmentations = new ConcurrentLinkedHashMap(0, 100);
 
         segmentations.put(segmentation, scores);
     }

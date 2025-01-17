@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +38,7 @@ public class LexicalFrameTypes implements Resource, BhaashikDOMElement {
 
     protected String frameTag = "^V[a-zA-Z]*";
 
-    protected LinkedHashMap<String, LexicalFrameType> frameTypes;
+    protected ConcurrentLinkedHashMap<String, LexicalFrameType> frameTypes;
 
     public LexicalFrameTypes()
     {
@@ -95,7 +95,7 @@ public class LexicalFrameTypes implements Resource, BhaashikDOMElement {
 
     public void init()
     {
-        frameTypes = new LinkedHashMap<String, LexicalFrameType>();
+        frameTypes = new ConcurrentLinkedHashMap<String, LexicalFrameType>();
     }
 
 

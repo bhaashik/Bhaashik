@@ -9,6 +9,7 @@ import bhaashik.GlobalProperties;
 import bhaashik.common.types.ClientType;
 import bhaashik.corpus.ssf.gui.SyntacticAnnotationTaskSetupJPanel;
 import bhaashik.corpus.ssf.gui.SyntacticAnnotationWorkJPanel;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.servers.clients.BhaashikSpringClientUtils;
 import bhaashik.servers.clients.BhaashikSpringRestClient;
 import bhaashik.servers.impl.AuthorizationException;
@@ -1922,10 +1923,10 @@ public class BhaashikRemoteWorkJPanel extends javax.swing.JPanel
 
             annotationManagementUpdateInfo.getAllUsers().put(userDTO.getUsername(), userDTO);
             annotationManagementUpdateInfo.getAllSlimUsers().put(userDTO.getUsername(), userSlimDTO);
-//            annotationManagementUpdateInfo.getAssignedUserRoles().put(userDTO.getUsername(), new LinkedHashMap<>());
-//            annotationManagementUpdateInfo.getAssignedUserOrganisations().put(userDTO.getUsername(), new LinkedHashMap<>());
-//            annotationManagementUpdateInfo.getAssignedUserLanguages().put(userDTO.getUsername(), new LinkedHashMap<>());
-//            annotationManagementUpdateInfo.getAssignedUserLevels().put(userDTO.getUsername(), new LinkedHashMap<>());
+//            annotationManagementUpdateInfo.getAssignedUserRoles().put(userDTO.getUsername(), new ConcurrentLinkedHashMap<>());
+//            annotationManagementUpdateInfo.getAssignedUserOrganisations().put(userDTO.getUsername(), new ConcurrentLinkedHashMap<>());
+//            annotationManagementUpdateInfo.getAssignedUserLanguages().put(userDTO.getUsername(), new ConcurrentLinkedHashMap<>());
+//            annotationManagementUpdateInfo.getAssignedUserLevels().put(userDTO.getUsername(), new ConcurrentLinkedHashMap<>());
 
             DefaultListModel listModel = (DefaultListModel) usersListJList.getModel();
 
@@ -2715,7 +2716,8 @@ public class BhaashikRemoteWorkJPanel extends javax.swing.JPanel
     {
         String errorMessage = null;
 
-        Map<String, BhaashikUserDTO> allUsers = new LinkedHashMap<>(annotationManagementUpdateInfo.getAllUsers());
+        Map<String, BhaashikUserDTO> allUsers;
+        allUsers = new ConcurrentLinkedHashMap<String, BhaashikUserDTO>(annotationManagementUpdateInfo.getAllUsers());
 
         // Check first name
         Optional<Map.Entry<String, BhaashikUserDTO>> invalidDTOEntry = allUsers.entrySet().stream().filter(

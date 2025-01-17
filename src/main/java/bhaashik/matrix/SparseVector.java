@@ -6,7 +6,7 @@
 package bhaashik.matrix;
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import bhaashik.mlearning.common.ModelScore;
 
@@ -16,12 +16,12 @@ import bhaashik.mlearning.common.ModelScore;
  */
 public class SparseVector {
 
-    protected LinkedHashMap getVectorMap()
+    protected ConcurrentLinkedHashMap getVectorMap()
     {
         return null;
     }
 
-    protected void setVectorMap(LinkedHashMap vectorMap)
+    protected void setVectorMap(ConcurrentLinkedHashMap vectorMap)
     {
     }
 
@@ -34,7 +34,7 @@ public class SparseVector {
     {
         int sortedIndices[] = new int[getVectorMap().size()];
 
-        LinkedHashMap sortedVectorMap = ModelScore.sortElementsByScores(getVectorMap(), ascending);
+        ConcurrentLinkedHashMap sortedVectorMap = ModelScore.sortElementsByScores(getVectorMap(), ascending);
 
         Iterator<Integer> itr = sortedVectorMap.keySet().iterator();
 
@@ -70,7 +70,7 @@ public class SparseVector {
     {
         Object sortedValues[] = new Object[getVectorMap().size()];
 
-        LinkedHashMap sortedVectorMap = ModelScore.sortElementsByScores(getVectorMap(), ascending);
+        ConcurrentLinkedHashMap sortedVectorMap = ModelScore.sortElementsByScores(getVectorMap(), ascending);
 
         Iterator<Integer> itr = sortedVectorMap.keySet().iterator();
 

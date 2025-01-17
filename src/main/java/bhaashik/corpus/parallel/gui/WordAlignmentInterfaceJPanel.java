@@ -28,7 +28,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,11 +67,25 @@ import bhaashik.table.gui.BhaashikJTable;
 import bhaashik.table.gui.TreeViewerTableCellRenderer;
 import bhaashik.tree.BhaashikEdges;
 import bhaashik.common.types.ClientType;
+import bhaashik.corpus.ssf.features.FeatureStructures;
+import bhaashik.corpus.ssf.features.impl.FeatureStructureImpl;
+import bhaashik.corpus.ssf.features.impl.FeatureStructuresImpl;
+import bhaashik.corpus.ssf.tree.SSFLexItem;
 import bhaashik.gui.common.BhaashikLanguages;
 import bhaashik.properties.KeyValueProperties;
 import bhaashik.properties.PropertyTokens;
 import bhaashik.table.BhaashikTableModel;
+import bhaashik.table.gui.BhaashikTableCellEditor;
+import bhaashik.util.Pair;
 import bhaashik.util.UtilityFunctions;
+import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.text.JTextComponent;
 
 /**
  *
@@ -131,9 +145,14 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
     protected int currentPositionTgt;
     protected int currentAlignmentPosition;
     protected boolean langEncFilled;
+    
+//    protected Pair<Integer, Integer> currentSelectedCell = new Pair();
+
+    protected boolean editModeOn;
 
     /** Creates new form WordAlignmentInterfaceJPanel */
     public WordAlignmentInterfaceJPanel() {
+        
         initComponents();
 
         srcLangauges = new DefaultComboBoxModel();
@@ -250,7 +269,15 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
         mainJPanel = new javax.swing.JPanel();
         bottomJPanel = new javax.swing.JPanel();
         optionsJPanel = new javax.swing.JPanel();
-        senNumJPanel = new javax.swing.JPanel();
+        editOperationsJPanel = new javax.swing.JPanel();
+        editModeJCheckBox = new javax.swing.JCheckBox();
+        deleteWordsJButton = new javax.swing.JButton();
+        insertWordsJButton = new javax.swing.JButton();
+        startAlignJButton = new javax.swing.JButton();
+        endAlignJButton = new javax.swing.JButton();
+        unalignFromJButton = new javax.swing.JButton();
+        unalignToJButton = new javax.swing.JButton();
+        fileOperationsJPanel = new javax.swing.JPanel();
         positionJLabel = new javax.swing.JLabel();
         positionJComboBox = new javax.swing.JComboBox();
         tagsJPanel = new javax.swing.JPanel();
@@ -449,20 +476,95 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
 
         optionsJPanel.setLayout(new java.awt.BorderLayout());
 
-        senNumJPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        editModeJCheckBox.setMnemonic('E');
+        editModeJCheckBox.setText("Edit Mode");
+        editModeJCheckBox.setToolTipText("Toggle word text editing mode");
+        editModeJCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editModeJCheckBoxActionPerformed(evt);
+            }
+        });
+        editOperationsJPanel.add(editModeJCheckBox);
+
+        deleteWordsJButton.setMnemonic('D');
+        deleteWordsJButton.setText("Delete");
+        deleteWordsJButton.setToolTipText("Delete word(s)");
+        deleteWordsJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteWordsJButtonActionPerformed(evt);
+            }
+        });
+        editOperationsJPanel.add(deleteWordsJButton);
+
+        insertWordsJButton.setMnemonic('I');
+        insertWordsJButton.setText("Insert");
+        insertWordsJButton.setToolTipText("Insert word(s)");
+        insertWordsJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertWordsJButtonActionPerformed(evt);
+            }
+        });
+        editOperationsJPanel.add(insertWordsJButton);
+        insertWordsJButton.getAccessibleContext().setAccessibleDescription("Insert a word");
+
+        startAlignJButton.setText("Start Align");
+        startAlignJButton.setToolTipText("Start word/group alignment");
+        startAlignJButton.setEnabled(false);
+        startAlignJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startAlignJButtonActionPerformed(evt);
+            }
+        });
+        editOperationsJPanel.add(startAlignJButton);
+
+        endAlignJButton.setText("End Align");
+        endAlignJButton.setToolTipText("End word/group alignment");
+        endAlignJButton.setEnabled(false);
+        endAlignJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                endAlignJButtonActionPerformed(evt);
+            }
+        });
+        editOperationsJPanel.add(endAlignJButton);
+
+        unalignFromJButton.setText("Unalign From");
+        unalignFromJButton.setToolTipText("Clear outgoing alignments from this word/group");
+        unalignFromJButton.setEnabled(false);
+        unalignFromJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                unalignFromJButtonActionPerformed(evt);
+            }
+        });
+        editOperationsJPanel.add(unalignFromJButton);
+        unalignFromJButton.getAccessibleContext().setAccessibleName("Clear Outgoing");
+
+        unalignToJButton.setText("Unalign To");
+        unalignToJButton.setToolTipText("Clear incoming alignments for this word/group");
+        unalignToJButton.setEnabled(false);
+        unalignToJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                unalignToJButtonActionPerformed(evt);
+            }
+        });
+        editOperationsJPanel.add(unalignToJButton);
+        unalignToJButton.getAccessibleContext().setAccessibleName("Clear Incoming");
+
+        optionsJPanel.add(editOperationsJPanel, java.awt.BorderLayout.NORTH);
+
+        fileOperationsJPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         positionJLabel.setText("Go to: "); // NOI18N
         positionJLabel.setToolTipText("Go to sentence number");
-        senNumJPanel.add(positionJLabel);
+        fileOperationsJPanel.add(positionJLabel);
 
         positionJComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 positionJComboBoxActionPerformed(evt);
             }
         });
-        senNumJPanel.add(positionJComboBox);
+        fileOperationsJPanel.add(positionJComboBox);
 
-        optionsJPanel.add(senNumJPanel, java.awt.BorderLayout.WEST);
+        optionsJPanel.add(fileOperationsJPanel, java.awt.BorderLayout.WEST);
 
         srcTagsJLabel.setText("Source Tags:");
         srcTagsJLabel.setPreferredSize(new java.awt.Dimension(100, 15));
@@ -1046,6 +1148,41 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
         saveAsGIZAFormat(evt);
     }//GEN-LAST:event_saveGIZAAsJButtonActionPerformed
 
+    private void editModeJCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editModeJCheckBoxActionPerformed
+        // TODO add your handling code here:
+        toggleEditMode();
+    }//GEN-LAST:event_editModeJCheckBoxActionPerformed
+
+    private void deleteWordsJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteWordsJButtonActionPerformed
+        // TODO add your handling code here:
+        deleteWords();
+    }//GEN-LAST:event_deleteWordsJButtonActionPerformed
+
+    private void insertWordsJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertWordsJButtonActionPerformed
+        // TODO add your handling code here:
+        insertWord();
+    }//GEN-LAST:event_insertWordsJButtonActionPerformed
+
+    private void startAlignJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startAlignJButtonActionPerformed
+        // TODO add your handling code here:
+        startLongDistanceAlignment();
+    }//GEN-LAST:event_startAlignJButtonActionPerformed
+
+    private void endAlignJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endAlignJButtonActionPerformed
+        // TODO add your handling code here:
+        endLongDistanceAlignment();
+    }//GEN-LAST:event_endAlignJButtonActionPerformed
+
+    private void unalignFromJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unalignFromJButtonActionPerformed
+        // TODO add your handling code here:
+        clearOutgoingAlignmentsFromCurrentNode();
+    }//GEN-LAST:event_unalignFromJButtonActionPerformed
+
+    private void unalignToJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unalignToJButtonActionPerformed
+        // TODO add your handling code here:
+        clearIncomingAlignmentsFromCurrentNode();
+    }//GEN-LAST:event_unalignToJButtonActionPerformed
+
     public ClientType getClientType() {
         return clientType;
     }
@@ -1105,16 +1242,89 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
             Logger.getLogger(WordAlignmentInterfaceJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    Pair<Integer, Integer> getSelectedCellIndices()
+    {
+        Pair<Integer, Integer> selectedCellIndices = new Pair();
+        
+        selectedCellIndices.setFirst(alignmentJTable.getSelectedRow());
+        selectedCellIndices.setSecond(alignmentJTable.getSelectedColumn());
+
+        if( (selectedCellIndices.getFirst() < 0 && selectedCellIndices.getFirst() >= alignmentModel.getRowCount()
+                || (selectedCellIndices.getSecond() < 0 && selectedCellIndices.getSecond() >= alignmentModel.getColumnCount())))
+        {
+            return null;
+        }
+        
+        return selectedCellIndices;
+    }
+    
+    boolean isSourceSentenceSelected()
+    {
+        int row = alignmentJTable.getSelectedRow();
+        int col = alignmentJTable.getSelectedColumn();
+        
+        System.out.println("Row: " + row + "; Col: " + col);
+
+        if (row == 1 || row == -1 || col == -1) {
+            return false;
+        }
+
+        if(row == 0)
+            return true;
+        
+        return false; 
+    }
+    boolean isTargetSentenceSelected()
+    {
+        int row = alignmentJTable.getSelectedRow();
+        int col = alignmentJTable.getSelectedColumn();
+        
+        System.out.println("Row: " + row + "; Col: " + col);
+
+        if (row == 1 || row == -1 || col == -1) {
+            return false;
+        }
+
+        if(row == 2)
+            return true;
+        
+        return false; 
+    }
 
     private SSFNode getSelectedNode() {
         int row = alignmentJTable.getSelectedRow();
         int col = alignmentJTable.getSelectedColumn();
+        
+        System.out.println("Row: " + row + "; Col: " + col);
 
-        if (row == 1) {
+        if (row == 1 || row == -1 || col == -1) {
+            return null;
+        }
+        
+        Object nodeValue = alignmentModel.getValueAt(row, col);
+                
+        if(nodeValue == null)
+        {
+            return null;
+        }
+        
+//        if(nodeValue != null && (nodeValue instanceof AlignmentUnit) == false)
+        if(nodeValue instanceof AlignmentUnit)
+        {
+//            saveData();
+//            loadData();
+        }
+        else
+        {
             return null;
         }
 
-        AlignmentUnit aunit = (AlignmentUnit) alignmentModel.getValueAt(row, col);
+        alignmentJTable.setSavedSelectedCell(row, col);
+        
+        AlignmentUnit aunit = (AlignmentUnit) nodeValue;
+        
+        System.out.println("Row: " + row + "; Col: " + col);
 
         SSFNode node = (SSFNode) aunit.getAlignmentObject();
 
@@ -1193,6 +1403,192 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
 
         displayCurrentPosition();
     }
+
+    private void toggleEditMode() {
+        
+        if(editModeJCheckBox.isSelected())
+        {
+            editModeJCheckBox.setSelected(true);
+            editModeOn = true;
+
+//            ((JTextComponent) ((BhaashikTableCellEditor) alignmentJTable.getCellEditor()).getTableCellEditorComponent(alignmentJTable, "", true, 0, 1)).setEditable(true);
+//            ((JTextComponent) ((BhaashikTableCellEditor) alignmentJTable.getCellEditor()).getTableCellEditorComponent(alignmentJTable, "", true, 2, 1)).setEditable(true);
+//            alignmentModel.setEditable(true);
+            
+        }
+        else
+        {
+            editModeJCheckBox.setSelected(false);
+            editModeOn = false;            
+
+//            ((JTextComponent) ((BhaashikTableCellEditor) alignmentJTable.getCellEditor()).getTableCellEditorComponent(alignmentJTable, "", true, 0, 1)).setEditable(false);
+//            ((JTextComponent) ((BhaashikTableCellEditor) alignmentJTable.getCellEditor()).getTableCellEditorComponent(alignmentJTable, "", true, 2, 1)).setEditable(false);
+        
+//            alignmentModel.setEditable(true);
+        }
+
+//        displayCurrentPosition();
+    }
+    
+    private void deleteWords() {
+        
+        if(editModeOn == false)
+        {
+            return;
+        }
+
+        SSFNode node = getSelectedNode();
+
+        if (node == null) {
+            return;
+        }
+
+        int cols[] = alignmentJTable.getSelectedColumns();
+        int row = alignmentJTable.getSelectedRow();
+
+        if (cols == null || cols.length == 0) {
+            return;
+        }
+
+        if (UtilityFunctions.areConsequentNumbers(cols) == false) {
+            return;
+        }
+        
+//        Pair<Integer, Integer> cell = new Pair();
+        
+//        alignmentModel.isCellEditable(0, WIDTH);
+
+        Arrays.sort(cols);
+
+        SSFPhrase parent = (SSFPhrase) node.getParent();
+        int selNodeIndexInParent = parent.getIndex(node);
+
+        try {
+            
+//            for(int i = 0; i < cols.length; i++)
+//            {
+//                alignmentJTable.setF
+                parent.removeChildren(selNodeIndexInParent, cols.length);
+                
+                alignmentJTable.setSavedSelectedCell(row, cols[0] - 1);
+//            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+//        
+//        alignmentModel.setEditable(true);
+        
+//        setEnabled(true);
+//        
+//        int[] src = {0};
+//        int[] tgt = {2};
+//        
+//        if(isSourceSentenceSelected())
+//        {
+//            alignmentModel.setEditable(dirty);EditableRows(src);
+//            
+//            System.out.println("Source word(s) deleted");
+//        }
+//        else if (isTargetSentenceSelected())
+//        {            
+//            alignmentModel.setEditableRows(tgt);            
+//
+//            System.out.println("Target word(s) deleted");
+//        }
+        
+//        alignmentModel.setEditable(true);
+        
+//        currentSelectedCell.first = row;
+//        currentSelectedCell.second = cols[0];
+        
+        saveData();
+        
+        loadData();
+
+        requestFocusInWindow();        
+        alignmentJTable.changeSelection(alignmentJTable.getSavedSelectedCell().getFirst(), alignmentJTable.getSavedSelectedCell().getSecond() - cols.length, false, false);
+
+//        storeCurrentPosition();
+//
+//        displayCurrentPosition();
+    }
+    
+    private void insertWord() {
+
+        SSFNode node = getSelectedNode();
+
+        if (node == null || editModeOn == false) {
+            return;
+        }
+        
+//        currentSelectedCell.first = alignmentJTable.getSelectedRow();
+//        currentSelectedCell.second = alignmentJTable.getSelectedColumn();
+
+        MutableTreeNode parent = (MutableTreeNode) (node.getParent());
+
+        if (parent != null) {
+            alignmentJTable.setSavedSelectedCell(alignmentJTable.getSelectedRow(), alignmentJTable.getSelectedColumn());
+
+            int selNodeIndex = parent.getIndex(node);
+
+            FeatureStructures featureStructures = new FeatureStructuresImpl();
+            featureStructures = new FeatureStructuresImpl();
+            featureStructures.setToEmpty();
+
+            featureStructures.addAltFSValue(new FeatureStructureImpl());
+
+            SSFLexItem ssfLexItem = new SSFLexItem("0", "word?", "",featureStructures);
+            ((SSFNode) parent).insert(ssfLexItem, selNodeIndex);
+        }
+        
+        if(node instanceof SSFLexItem)
+        {
+            String editedword = JOptionPane.showInputDialog("Please edit/enter the word:", node.getLexData());
+
+            node.setLexData(editedword);
+        }
+        
+        saveData();
+        
+        loadData();
+
+        requestFocusInWindow();        
+        alignmentJTable.changeSelection(alignmentJTable.getSavedSelectedCell().getFirst(), alignmentJTable.getSavedSelectedCell().getSecond(), false, false);
+        
+//        
+//        alignmentModel.setEditable(true);
+        
+//        storeCurrentPosition();
+//
+//        displayCurrentPosition();        
+        
+    }
+    
+    private void startLongDistanceAlignment() {
+        
+    }
+    
+    private void endLongDistanceAlignment() {
+        
+    }
+    
+    private void startDeleteFromAlign() {
+        
+    }
+    
+    private void endDeleteFromAlign() {
+        
+    }
+    
+    private void clearOutgoingAlignmentsFromCurrentNode() {
+        
+    }
+    
+    private void clearIncomingAlignmentsFromCurrentNode() {
+        
+    }
+    
+
 
     public void setCurrentPosition(int cp, int cap) {
         int slSize = srcSSFStory.countSentences();
@@ -1283,6 +1679,68 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
         prepareAlignment();
     }
 
+    // Method to handle mouse clicks
+    private void onMouseClick(MouseEvent e) {
+        System.out.println("Mouse clicked in WordAlignmentInterfaceJPanel!");
+        // Add your specific logic here
+//            if( (e.isAltDown() && e.isControlDown() == false) || e.getClickCount() == 2)
+            if( ((e.isAltDown() && e.isControlDown() == false) && e.getClickCount() == 2) ) 
+            {
+                Object aunit = alignmentJTable.getSelectedCellObject();
+
+                SSFNode ssfNode = null;
+                
+                if( !(aunit instanceof AlignmentUnit) )
+                {            
+                    if( (alignmentJTable.getSelectedRow() == 0 || alignmentJTable.getSelectedRow() == 2))
+                    {
+                        aunit = alignmentJTable.getValueAt(alignmentJTable.getSelectedRow(), 0);
+                        
+                        if(aunit == null)
+                        {
+                            return;
+                        }
+
+                        AlignmentUnit abUnit = (AlignmentUnit) alignmentUnit;
+                        
+                        ssfNode = (SSFNode) abUnit.getAlignmentObject();
+                        MutableTreeNode parent = (MutableTreeNode) ssfNode.getParent();
+
+                        if (parent != null) {
+                            int selNodeIndex = parent.getIndex(ssfNode);
+
+                            FeatureStructures featureStructures = new FeatureStructuresImpl();
+                            featureStructures = new FeatureStructuresImpl();
+                            featureStructures.setToEmpty();
+
+                            featureStructures.addAltFSValue(new FeatureStructureImpl());
+
+                            SSFLexItem ssfLexItem = new SSFLexItem("0", "word?", "",featureStructures);
+                            ((SSFNode) parent).add(ssfLexItem);
+                            
+                            ssfNode = ssfLexItem;
+//                            alignmentUnit = (AlignmentUnit) ssfNode.getAlignmentUnit();
+//                            ((SSFNode) parent).insert(ssfLexItem, selNodeIndex);
+                        }
+                    }
+                }
+                else
+                {
+                    ssfNode = (SSFNode) ((AlignmentUnit)aunit).getAlignmentObject();
+                }
+
+                if(ssfNode instanceof SSFLexItem)
+                {
+                    String editedword = JOptionPane.showInputDialog("Please edit/enter the word:", ssfNode.getLexData());
+
+                    ssfNode.setLexData(editedword);
+                }
+        
+                saveData();
+                loadData();
+            }
+    }
+
     protected void prepareAlignment() {
         if (srcSentence == null) {
             srcSentence = new SSFSentenceImpl();
@@ -1291,12 +1749,37 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
             tgtSentence = new SSFSentenceImpl();
         }
 
+        alignmentBlock = new AlignmentBlock(AlignmentBlock.PHRASE_ALIGNMENT_MODE);
+
         alignmentBlock.prepareAlignment(AlignmentBlock.PHRASE_ALIGNMENT_MODE, srcSentence, tgtSentence);
         alignmentModel = alignmentBlock.getAlignmentTable();
+        
+        if(alignmentModel == null)
+        {
+            alignmentModel = new BhaashikTableModel(3, 5);
+        }
 
         mainJPanel.removeAll();
 
         alignmentJTable = new BhaashikJTable(alignmentModel, BhaashikJTable.ALIGNMENT_MODE, alignmentBlock, true);
+
+        alignmentJTable.getPropertyChangeHelper().addPropertyChangeListener(evt -> {
+            if ("NodeInsertedWI".equals(evt.getPropertyName())) {
+                MouseEvent mouseEvent = (MouseEvent) evt.getNewValue();
+                onMouseClick(mouseEvent);
+                System.out.println("NodeInsertedWI event triggered!");
+            }
+        });
+        
+//        // Add a PropertyChangeListener to listen for mouseClick events
+//        alignmentJTable.addPropertyChangeListener((PropertyChangeEvent evt) -> {
+//            if ("NodeInsertedWI".equals(evt.getPropertyName())) {
+//                MouseEvent mouseEvent = (MouseEvent) evt.getNewValue();
+//                onMouseClick(mouseEvent);
+//                System.out.println("NodeInsertedWI event triggered!");
+//            }
+//        });
+        
         alignmentJTable.addEventListener(this);
         alignmentJTable.setEditor(this);
         alignmentJTable.prepareCommands();
@@ -1324,11 +1807,13 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
         alignmentJTable.setColumnSelectionAllowed(true);
         alignmentJTable.firePropertyChange("columnSelectionAllowed", false, true);
 
-        alignmentJTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        alignmentJTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         if (alignmentModel.getRowCount() > 1) {
-//            srcCellEditor = new BhaashikTableCellEditor(srcLangEnc);
-//            tgtCellEditor = new BhaashikTableCellEditor(tgtLangEnc);
+            srcCellEditor = new BhaashikTableCellEditor(srcLangEnc, BhaashikTableCellEditor.SINGLE_ROW);
+            tgtCellEditor = new BhaashikTableCellEditor(tgtLangEnc, BhaashikTableCellEditor.SINGLE_ROW);
+            
+            alignmentJTable.setCellEditor(srcCellEditor);
 
             srcCellRenderer = new TreeViewerTableCellRenderer();
             srcCellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1364,8 +1849,72 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
 
         setVisible(false);
         setVisible(true);
+        
+            // Auto-resize table columns to fit content
+        autoResizeTableColumns(alignmentJTable);
+        
+        // Assuming table is your JTable instance
+        SwingUtilities.invokeLater(() -> {
+            // Get the currently selected row and column
+            int selectedColumn = alignmentJTable.getSelectedColumn();
+            int selectedRow = alignmentJTable.getSelectedRow();
+//            int selectedColumn = currentSelectedCell.second;
+//            currentSelectedCell.first = selectedRow;
+//            currentSelectedCell.second = selectedColumn;
+            
+            // Check if a cell is already selected
+            if (selectedRow != -1 && selectedColumn != -1) {
+                // Calculate the new cell (e.g., same row, next column)
+                int targetRow = selectedRow;
+//                int targetColumn = selectedColumn + 1;
+                int targetColumn = selectedColumn;
+                
+                // Wrap around if the column exceeds the table bounds
+                if (targetColumn >= alignmentJTable.getColumnCount()) {
+                    targetColumn = 0; // Move to the first column
+                }
+                
+                // Select the calculated cell
+                alignmentJTable.setSavedSelectedCell(targetRow, targetColumn);
+                alignmentJTable.changeSelection(targetRow, targetColumn, false, false);
+                
+                // Ensure the cell is visible
+                alignmentJTable.scrollRectToVisible(alignmentJTable.getCellRect(targetRow, targetColumn, true));
+                
+                // Request focus to the table
+                alignmentJTable.requestFocusInWindow();
+            } else {
+                // Optionally handle the case when no cell is initially selected
+                System.out.println("No cell is currently selected.");
+            }
+        });
     }
+ 
+    // Method to auto-resize table columns based on content
+    private static void autoResizeTableColumns(JTable table) {
+        for (int col = 0; col < table.getColumnCount(); col++) {
+            int maxWidth = 50; // Minimum width
+            for (int row = 0; row < table.getRowCount(); row++) {
+                Object cellValue = table.getValueAt(row, col);
+                if (cellValue != null) {
+                    TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
+                    Component c = table.prepareRenderer(cellRenderer, row, col);
+                    maxWidth = Math.max(c.getPreferredSize().width + 10, maxWidth); // Add padding
+                }
+            }
 
+            // Include header width
+            TableColumn column = table.getColumnModel().getColumn(col);
+            TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
+            Component headerComp = headerRenderer.getTableCellRendererComponent(
+                    table, column.getHeaderValue(), false, false, -1, col);
+            maxWidth = Math.max(headerComp.getPreferredSize().width + 10, maxWidth);
+
+            // Set the column width
+            column.setPreferredWidth(maxWidth);
+        }
+    }
+    
     public void refreshAlignments(boolean recreate) {
         alignmentJTable.updateUI();
         alignmentJTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -1562,7 +2111,7 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
             String nullString = "NULL ({ ";
             String tgtString = "";
 
-            LinkedHashMap<Integer, Integer> nonNullMap = new LinkedHashMap<Integer, Integer>();
+            ConcurrentLinkedHashMap<Integer, Integer> nonNullMap = new ConcurrentLinkedHashMap<Integer, Integer>();
 
             for (int j = 0; j < tgtAUCount; j++) {
                 SSFNode node = tgtSen.getRoot().getChild(j);
@@ -1615,9 +2164,15 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bottomJPanel;
     private javax.swing.JButton clearJButton;
+    private javax.swing.JButton deleteWordsJButton;
+    private javax.swing.JCheckBox editModeJCheckBox;
+    private javax.swing.JPanel editOperationsJPanel;
+    private javax.swing.JButton endAlignJButton;
+    private javax.swing.JPanel fileOperationsJPanel;
     private javax.swing.JPanel filesJPanel;
     private javax.swing.JButton firstJButton;
     private javax.swing.JButton groupJButton;
+    private javax.swing.JButton insertWordsJButton;
     private javax.swing.JButton lastJButton;
     private javax.swing.JButton loadGIZAJButton;
     private javax.swing.JButton loadJButton;
@@ -1633,7 +2188,6 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
     private javax.swing.JButton saveGIZAAsJButton;
     private javax.swing.JButton saveGIZAJButton;
     private javax.swing.JButton saveJButton;
-    private javax.swing.JPanel senNumJPanel;
     private javax.swing.JComboBox srcEncodingJComboBox;
     private javax.swing.JLabel srcEncodingJLabel;
     private javax.swing.JPanel srcEncodingJPanel;
@@ -1651,6 +2205,7 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
     private javax.swing.JTextField srcTagFileJTextField;
     private javax.swing.JComboBox srcTagsJComboBox;
     private javax.swing.JLabel srcTagsJLabel;
+    private javax.swing.JButton startAlignJButton;
     private javax.swing.JPanel tagFilesJPanel;
     private javax.swing.JPanel tagsJPanel;
     private javax.swing.JComboBox tgtEncodingJComboBox;
@@ -1671,6 +2226,8 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
     private javax.swing.JComboBox tgtTagsJComboBox;
     private javax.swing.JLabel tgtTagsJLabel;
     private javax.swing.JPanel topJPanel;
+    private javax.swing.JButton unalignFromJButton;
+    private javax.swing.JButton unalignToJButton;
     private javax.swing.JButton ungroupJButton;
     // End of variables declaration//GEN-END:variables
 
@@ -1850,6 +2407,7 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
     }
 
     public void alignmentChanged(AlignmentEvent evt) {
+        
         refreshAlignments(true);
     }
 

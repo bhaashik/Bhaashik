@@ -11,7 +11,10 @@ import java.util.*;
 
 import bhaashik.corpus.ssf.tree.SSFNode;
 import bhaashik.corpus.ssf.SSFSentence;
-
+import bhaashik.corpus.ssf.tree.SSFLexItem;
+import bhaashik.corpus.ssf.tree.SSFPhrase;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
+ 
 /**
  *
  * @author anil
@@ -24,11 +27,11 @@ public class AlignmentUnit<T> implements Cloneable, Serializable {
 
     protected int actionType = DnDConstants.ACTION_MOVE;
 
-    protected LinkedHashMap<String, AlignmentUnit<T>> alignedUnits;
+    protected ConcurrentLinkedHashMap<String, AlignmentUnit<T>> alignedUnits;
 
     public AlignmentUnit() {
 
-        alignedUnits = new LinkedHashMap<String, AlignmentUnit<T>>();
+        alignedUnits = new ConcurrentLinkedHashMap<String, AlignmentUnit<T>>();
     }
 
     public AlignmentUnit(int atype)
@@ -207,6 +210,53 @@ public class AlignmentUnit<T> implements Cloneable, Serializable {
         
         return alignedUnits.size();
     }
+    
+    public void addUniqueName()
+    {
+        
+    }
+
+//    public void insertAlignmentUnit(int mode, Alignable<T> alignableBoject, int index, int granularity)
+//    {
+//        if(mode == AlignmentBlock.DOCUMENT_ALIGNMENT_MODE)
+//        {
+//        }
+//        else if(mode == AlignmentBlock.PARAGRAPH_ALIGNMENT_MODE)
+//        {
+//        }
+//        else if(mode == AlignmentBlock.SENTENCE_ALIGNMENT_MODE)
+//        {
+//        }
+//        else if(mode == AlignmentBlock.PHRASE_ALIGNMENT_MODE)
+//        {
+//            SSFNode parent = (SSFNode) ((SSFNode) getAlignmentObject()).getRoot();
+//            
+//            SSFNode ssfNode = null;
+//
+//            parent.insert(parent, index);
+//
+//            if(granularity == AlignmentBlock.PHRASE_GRANULARITY)
+//            {
+//                ssfNode = new SSFPhrase();
+//                
+//            }
+//            else if(granularity == AlignmentBlock.LEXITEM_GRANULARITY)
+//            {
+//                ssfNode = new SSFLexItem();
+//                
+//                SSFNode parent = (SSFNode) ssfNode.getRoot();
+//
+//                parent.insert(parent, index);
+//                
+//                addUniqueName();                
+//            }
+//
+//            addUniqueName();
+//        }
+//
+//        assignAlignmentReferences();
+//        synchronizeIndices(false);
+//    }
 
     public AlignmentUnit<T> removeAlignedUnit(String key)
     {
@@ -310,7 +360,7 @@ public class AlignmentUnit<T> implements Cloneable, Serializable {
         
         clone.actionType = actionType;
         
-        clone.alignedUnits = (LinkedHashMap) alignedUnits.clone();
+        clone.alignedUnits = (ConcurrentLinkedHashMap) alignedUnits.clone();
         
         return clone;
     }

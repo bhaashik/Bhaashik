@@ -11,6 +11,7 @@ import bhaashik.GlobalProperties;
 import bhaashik.mlearning.lm.ngram.NGram;
 import bhaashik.mlearning.lm.ngram.NGramLM;
 import bhaashik.text.spell.InstantiatePhonemeGraph;
+import java.util.ArrayList;
 
 public class WrdSimilaritiesFuncs {
 	public static double diceCoeff( String s1, String s2 )
@@ -133,11 +134,11 @@ public class WrdSimilaritiesFuncs {
 
 		for(int j = 1; j <= trainingModel.getNGramOrder(); j++)
 		{
-			Iterator<List<Integer>> testItr = testModel.getNGramKeys(j);
+			Iterator<ArrayList<Integer>> testItr = testModel.getNGramKeys(j);
 
 			while(testItr.hasNext())
 			{
-				List<Integer> testNGram = testItr.next();
+				ArrayList<Integer> testNGram = testItr.next();
 				NGram testNg = (NGram) testModel.getNGram(testNGram, j);
 				NGram trainNg = (NGram) trainingModel.getNGram(testNGram, j);
 

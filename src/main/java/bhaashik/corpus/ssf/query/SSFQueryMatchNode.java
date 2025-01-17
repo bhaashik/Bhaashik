@@ -7,7 +7,7 @@ package bhaashik.corpus.ssf.query;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -1010,8 +1010,8 @@ public class SSFQueryMatchNode extends SSFQueryNode {
         String varString = (String) varNode.getUserObject();
         String valString = (String) valNode.getUserObject();
 
-        LinkedHashMap<SSFNode, String> varSSFNodes = new LinkedHashMap<SSFNode, String>();
-        List<QueryValue> nodes = new ArrayList<QueryValue>();
+        ConcurrentLinkedHashMap<SSFNode, String> varSSFNodes = new ConcurrentLinkedHashMap<>();
+        ArrayList<QueryValue> nodes = new ArrayList<>();
 
         NodeWildcardInfo varNodeWildcardInfo = getValue(varString, node, varSSFNodes, varNode);
         valString = getValue(valString, node, valNode);
@@ -1869,7 +1869,7 @@ public class SSFQueryMatchNode extends SSFQueryNode {
     }
 
     protected static NodeWildcardInfo getValue(String varString, SSFNode node,
-            LinkedHashMap<SSFNode, String> varSSFNodes, SSFQueryNode queryNode) throws Exception
+            ConcurrentLinkedHashMap<SSFNode, String> varSSFNodes, SSFQueryNode queryNode) throws Exception
     {
         List<SSFNode> varSSFNodesVec = new ArrayList<SSFNode>();
 

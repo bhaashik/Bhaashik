@@ -9,13 +9,14 @@ import bhaashik.context.impl.Context;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  *
  * @author Anil Kumar Singh
  */
-public class KWIKContext<K, E, CE extends KWIKContextElement<E>> implements Context<K, E, CE> {
+public class KWIKContext<K extends Serializable, E extends Serializable, CE extends KWIKContextElement<E>> implements Context<K, E, CE> {
 
     protected CE leftContext;
     protected CE keyword;

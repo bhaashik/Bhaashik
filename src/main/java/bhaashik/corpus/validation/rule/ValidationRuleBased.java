@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -30,13 +30,13 @@ public class ValidationRuleBased {
     private File usefulDir;  // Tools program Directory
     private String lang;
     protected List filesList;
-    protected LinkedHashMap<File, SSFStory> selStories;
+    protected ConcurrentLinkedHashMap<File, SSFStory> selStories;
     //protected BhaashikTableModel allMatches;
 
     public ValidationRuleBased()
     {
         filesList = new ArrayList();
-        selStories = new LinkedHashMap<File, SSFStory>();
+        selStories = new ConcurrentLinkedHashMap<File, SSFStory>();
         //allMatches = null;
     }
 
@@ -45,7 +45,7 @@ public class ValidationRuleBased {
         filesList = list;
     }
 
-    public void setSelStories(LinkedHashMap map)
+    public void setSelStories(ConcurrentLinkedHashMap map)
     {
         selStories= map;
     }

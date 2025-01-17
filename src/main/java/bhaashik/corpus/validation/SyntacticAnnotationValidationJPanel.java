@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -68,7 +68,7 @@ public class SyntacticAnnotationValidationJPanel extends javax.swing.JPanel {
     protected String execFile;
     protected BhaashikTableModel matchesFinal;
     protected List filesList;
-    protected LinkedHashMap<File, SSFStory> selStories;
+    protected ConcurrentLinkedHashMap<File, SSFStory> selStories;
     protected String langEnc;
     protected String charset;
     protected SanityCheckAll_1 sca;
@@ -147,7 +147,7 @@ public class SyntacticAnnotationValidationJPanel extends javax.swing.JPanel {
         return matchesFinal;
     }
 
-    public LinkedHashMap getSelFilesMap()
+    public ConcurrentLinkedHashMap getSelFilesMap()
     {
         return selStories;
     }
@@ -454,9 +454,9 @@ public class SyntacticAnnotationValidationJPanel extends javax.swing.JPanel {
     }
 */
 
-    private void FileStoryMap(LinkedHashMap map, Set set) throws IOException, InterruptedException
+    private void FileStoryMap(ConcurrentLinkedHashMap map, Set set) throws IOException, InterruptedException
     {
-        selStories = new LinkedHashMap<File, SSFStory>();
+        selStories = new ConcurrentLinkedHashMap<File, SSFStory>();
 
         if(set != null && set.size() >= 1)
         {
@@ -487,7 +487,7 @@ public class SyntacticAnnotationValidationJPanel extends javax.swing.JPanel {
 
     private void FileStoryMap() throws IOException, InterruptedException
     {
-        selStories = new LinkedHashMap<File, SSFStory>();
+        selStories = new ConcurrentLinkedHashMap<File, SSFStory>();
         
         if(filesList != null && filesList.size() >= 1)
         {

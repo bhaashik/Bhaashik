@@ -5,13 +5,17 @@
 
 package bhaashik.context.impl;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  *
  * @author anil
+ * @param <K>
+ * @param <E>
+ * @param <CE>
  */
-public interface FunctionalContext<K, E, CE extends FunctionalContextElement<E>> extends Context<K, E, CE> {
+public interface FunctionalContext<K extends Serializable, E extends Serializable, CE extends FunctionalContextElement<E>> extends Context<K, E, CE> {
 
     long countContextElementTypes(K key);
 

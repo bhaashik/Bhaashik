@@ -8,7 +8,7 @@ package bhaashik.mlearning.mt;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +29,7 @@ public class WordOriginGuesser {
     protected String langEnc = GlobalProperties.getIntlString("hin::utf8");
     protected String charset = GlobalProperties.getIntlString("UTF-8");
 
-    protected LinkedHashMap<String, PhonemeFeatureModel> phonemeFeatureModels;
+    protected ConcurrentLinkedHashMap<String, PhonemeFeatureModel> phonemeFeatureModels;
 
     protected PropertyTokens wordListPT;
 
@@ -41,7 +41,7 @@ public class WordOriginGuesser {
     public static final int FEATURE_BASED_SEQUENCE_PROBABILITY = 5;
 
     public WordOriginGuesser() {
-        phonemeFeatureModels = new LinkedHashMap<String, PhonemeFeatureModel>();
+        phonemeFeatureModels = new ConcurrentLinkedHashMap<>();
     }
 
     public void compilePhonemeFeatureModels()

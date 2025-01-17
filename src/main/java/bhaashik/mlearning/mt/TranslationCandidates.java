@@ -14,7 +14,7 @@ import java.io.PrintStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 
 import bhaashik.GlobalProperties;
@@ -35,7 +35,7 @@ public class TranslationCandidates implements BhaashikDOMElement {
     protected String charset = GlobalProperties.getIntlString("UTF-8");
 
     protected String srcWrd;
-    protected LinkedHashMap translationCandidates;
+    protected ConcurrentLinkedHashMap translationCandidates;
 
     protected int pruneSize = 10;
     
@@ -44,7 +44,7 @@ public class TranslationCandidates implements BhaashikDOMElement {
 
     public TranslationCandidates()
     {
-        translationCandidates = new LinkedHashMap(0, 100);
+        translationCandidates = new ConcurrentLinkedHashMap(0, 100);
     }
 
     /**
@@ -181,7 +181,7 @@ public class TranslationCandidates implements BhaashikDOMElement {
     public void addTranslationCandidateScores(String candidate, TranslationCandidateScores scores)
     {
         if(translationCandidates == null)
-            translationCandidates = new LinkedHashMap(0, 100);
+            translationCandidates = new ConcurrentLinkedHashMap(0, 100);
 
         translationCandidates.put(candidate, scores);
     }

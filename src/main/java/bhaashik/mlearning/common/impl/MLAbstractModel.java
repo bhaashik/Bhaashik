@@ -11,7 +11,7 @@ package bhaashik.mlearning.common.impl;
 
 import java.io.PrintStream;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 
 import bhaashik.GlobalProperties;
 import bhaashik.mlearning.common.MLModel;
@@ -24,7 +24,7 @@ import bhaashik.mlearning.common.MLType;
  */
 public abstract class MLAbstractModel implements MLModel
 {
-    protected LinkedHashMap data;
+    protected ConcurrentLinkedHashMap data;
     
     /** Creates a new instance of EMDataModelImpl */
     public MLAbstractModel()

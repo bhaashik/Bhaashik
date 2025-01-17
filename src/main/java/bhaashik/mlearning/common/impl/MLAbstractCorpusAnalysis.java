@@ -11,7 +11,7 @@ package bhaashik.mlearning.common.impl;
 
 import java.io.PrintStream;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.Vector;
 
 import bhaashik.GlobalProperties;
@@ -35,18 +35,18 @@ public abstract class MLAbstractCorpusAnalysis extends MLAbstractCorpus
     }
 
     public long getAnalysisCount(MLType type) {
-	return ((LinkedHashMap) data.get(type)).size();
+	return ((ConcurrentLinkedHashMap) data.get(type)).size();
     }
 
     public MLFrequency getAnalysisFrequency(MLType type, MLAnalysis analysis) {
-	return (MLFrequency) ((LinkedHashMap) data.get(type)).get(analysis);
+	return (MLFrequency) ((ConcurrentLinkedHashMap) data.get(type)).get(analysis);
     }
 
     public long addAnalysis(MLType type, MLAnalysis analysis, MLFrequency freq) {
 	if(data.get(type) == null)
-	    data.put(type, new LinkedHashMap());
+	    data.put(type, new ConcurrentLinkedHashMap());
 	
-	((LinkedHashMap) data.get(type)).put(analysis, freq);
+	((ConcurrentLinkedHashMap) data.get(type)).put(analysis, freq);
 	return data.size();
     }
 
@@ -54,7 +54,7 @@ public abstract class MLAbstractCorpusAnalysis extends MLAbstractCorpus
 	if(data.get(type) == null)
 	    return 0;
 
-	((LinkedHashMap) data.get(type)).remove(analysis);
+	((ConcurrentLinkedHashMap) data.get(type)).remove(analysis);
 	return data.size();
     }
 
@@ -65,7 +65,7 @@ public abstract class MLAbstractCorpusAnalysis extends MLAbstractCorpus
 	while(itrType.hasNext())
 	{
 	    MLType tp = (MLType) itrType.next();
-	    allAnalyses.addAll(((LinkedHashMap) data.get(tp)).keySet());
+	    allAnalyses.addAll(((ConcurrentLinkedHashMap) data.get(tp)).keySet());
 	}
 
 	return allAnalyses.iterator();
@@ -78,18 +78,18 @@ public abstract class MLAbstractCorpusAnalysis extends MLAbstractCorpus
 	while(itrType.hasNext())
 	{
 	    MLType tp = (MLType) itrType.next();
-	    allFrequencies.addAll(((LinkedHashMap) data.get(tp)).values());
+	    allFrequencies.addAll(((ConcurrentLinkedHashMap) data.get(tp)).values());
 	}
 
 	return allFrequencies.iterator();
     }
 
     public Iterator getAnalyses(MLType type) {
-	return ((LinkedHashMap) data.get(type)).keySet().iterator();
+	return ((ConcurrentLinkedHashMap) data.get(type)).keySet().iterator();
     }
 
     public Iterator getAnalysisFrequencies(MLType type) {
-	return ((LinkedHashMap) data.get(type)).values().iterator();
+	return ((ConcurrentLinkedHashMap) data.get(type)).values().iterator();
     }
 
     public void print(PrintStream ps)

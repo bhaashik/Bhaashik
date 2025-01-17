@@ -5,14 +5,17 @@
 
 package bhaashik;
 
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.gui.shell.commands.CommandEngine;
+import java.io.Serializable;
 
 /**
  *
  * @author anil
  */
-public class BhaashikInterpreter {
+public class BhaashikInterpreter implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
 
-    LinkedHashMap<String, CommandEngine> commandEngines;
+    ConcurrentLinkedHashMap<String, CommandEngine> commandEngines;
 }

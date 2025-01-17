@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 
 import bhaashik.corpus.parallel.Alignable;
@@ -25,6 +25,7 @@ import bhaashik.util.query.SyntacticCorpusContextQueryOptions;
 import org.dom4j.dom.DOMElement;
 import org.w3c.dom.Element;
 import bhaashik.properties.KeyValueProperties;
+import java.util.LinkedHashMap;
 
 /**
  *

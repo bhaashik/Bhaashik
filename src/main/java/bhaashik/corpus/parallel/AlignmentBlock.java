@@ -8,7 +8,7 @@ package bhaashik.corpus.parallel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import bhaashik.datastr.ConcurrentLinkedHashMap;
 import java.util.List;
 
 import bhaashik.GlobalProperties;
@@ -31,7 +31,7 @@ public class AlignmentBlock<T> implements Serializable {
     protected List<AlignmentUnit<T>> tgtAlignedUnits;
 
     protected BhaashikEdges edges;
-    protected LinkedHashMap<String, BhaashikEdge> edgeMap;
+    protected ConcurrentLinkedHashMap<String, BhaashikEdge> edgeMap;
 
     protected String langEnc = GlobalProperties.getIntlString("hin::utf8");
     protected String charset = GlobalProperties.getIntlString("UTF-8");
@@ -42,6 +42,12 @@ public class AlignmentBlock<T> implements Serializable {
     public static final int PARAGRAPH_ALIGNMENT_MODE = 1;
     public static final int SENTENCE_ALIGNMENT_MODE = 2;
     public static final int PHRASE_ALIGNMENT_MODE = 3;
+
+    public static final int DOCUMENT_GRANULARITY = 0;
+    public static final int PARAGRAPH_GRANULARITY = 1;
+    public static final int SENTENCE_GRANULARITY = 2;
+    public static final int PHRASE_GRANULARITY = 3;
+    public static final int LEXITEM_GRANULARITY = 4;
 
     public AlignmentBlock(int mode) {
 
@@ -164,7 +170,7 @@ public class AlignmentBlock<T> implements Serializable {
     public void prepareAlignment(int mode, Alignable<T> srcAlignable, Alignable<T> tgtAlignable)
     {
         edges = new BhaashikEdges();
-        edgeMap = new LinkedHashMap<String,BhaashikEdge>();
+        edgeMap = new ConcurrentLinkedHashMap<String,BhaashikEdge>();
 
         srcAlignedUnits = new ArrayList<AlignmentUnit<T>>();
         tgtAlignedUnits = new ArrayList<AlignmentUnit<T>>();
@@ -274,6 +280,7 @@ public class AlignmentBlock<T> implements Serializable {
 
         assignAlignmentReferences();
         synchronizeIndices(false);
+//        synchronizeIndices(true);
     }
 
     protected void addEdges()
