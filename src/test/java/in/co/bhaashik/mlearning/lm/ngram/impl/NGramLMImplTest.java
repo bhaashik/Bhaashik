@@ -826,8 +826,8 @@ public class NGramLMImplTest {
 //    public void testGetAllNgrams() {
 //        System.out.println("getAllNgrams");
 //        NGramLMImpl instance = null;
-//        LinkedHashMap expResult = null;
-//        LinkedHashMap result = instance.getAllNgrams();
+//        ConcurrentLinkedHashMap expResult = null;
+//        ConcurrentLinkedHashMap result = instance.getAllNgrams();
 //        assertEquals(expResult, result);
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
@@ -982,8 +982,8 @@ public class NGramLMImplTest {
 //        System.out.println("getCumulativeFrequencies");
 //        int whichGram = 0;
 //        NGramLMImpl instance = null;
-//        LinkedHashMap expResult = null;
-//        LinkedHashMap result = instance.getCumulativeFrequencies(whichGram);
+//        ConcurrentLinkedHashMap expResult = null;
+//        ConcurrentLinkedHashMap result = instance.getCumulativeFrequencies(whichGram);
 //        assertEquals(expResult, result);
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
