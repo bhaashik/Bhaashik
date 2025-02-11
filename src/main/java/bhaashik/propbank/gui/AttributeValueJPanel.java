@@ -249,13 +249,13 @@ public class AttributeValueJPanel extends javax.swing.JPanel {
 
                 String name = fa.getName();
 
-                if(fa.countAltValues() > 0)
+                if(fa.countNestedAltValues() > 0)
                 {
-                    FeatureValue fv = fa.getAltValue(0);
+                    FeatureValue fv = fa.getNestedAltValue(0);
                     String val = "";
 
                     if(fv != null)
-                        val = fv.getValue().toString();
+                        val = fv.getMultiValue().toString();
 
                     AttributeValueJPanel attributeValueJPanel = new AttributeValueJPanel(name, val, langEnc);
                     attributeValueJPanel.setFeatureStructure(fs);

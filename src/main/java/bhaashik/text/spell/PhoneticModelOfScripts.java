@@ -193,7 +193,7 @@ public class PhoneticModelOfScripts {
                 if (attrib == null) {
                     featureVector[i] = Double.valueOf(3.0);
                 } else {
-                    String fval = (String) attrib.getAltValue(0).getValue();
+                    String fval = (String) attrib.getNestedAltValue(0).getMultiValue();
 
                     LinkedHashMap fcodes = phoneticFeatureCodes.getMultiPropertiesMap();
                     KeyValueProperties ckvp = (KeyValueProperties) fcodes.get(feature);
@@ -532,8 +532,8 @@ public class PhoneticModelOfScripts {
         FeatureAttribute attrib1 = fs1.getAttribute(feature);
         FeatureAttribute attrib2 = fs2.getAttribute(feature);
 
-        String fval1 = (String) attrib1.getAltValue(0).getValue();
-        String fval2 = (String) attrib2.getAltValue(0).getValue();
+        String fval1 = (String) attrib1.getNestedAltValue(0).getMultiValue();
+        String fval2 = (String) attrib2.getNestedAltValue(0).getMultiValue();
 
         double tmpDistance = 0.0;
 
@@ -633,8 +633,8 @@ public class PhoneticModelOfScripts {
         MultiKeyValueProperties phoneticFeatureCodes = (MultiKeyValueProperties) propman.getPropertyContainer(GlobalProperties.getIntlString("phonetic-feature-codes"), PropertyType.MULTI_KEY_VALUE_PROPERTIES);
         MultiKeyValueProperties phoneticFeatureValues = (MultiKeyValueProperties) propman.getPropertyContainer(GlobalProperties.getIntlString("phonetic-feature-values"), PropertyType.MULTI_KEY_VALUE_PROPERTIES);
 
-        String fval1 = (String) attrib1.getAltValue(0).getValue();
-        String fval2 = (String) attrib2.getAltValue(0).getValue();
+        String fval1 = (String) attrib1.getNestedAltValue(0).getMultiValue();
+        String fval2 = (String) attrib2.getNestedAltValue(0).getMultiValue();
 
         if (fval1.equals(fval2) == true) {
             return (multiplyFactor);
@@ -662,8 +662,8 @@ public class PhoneticModelOfScripts {
         MultiKeyValueProperties phoneticFeatureCodes = (MultiKeyValueProperties) propman.getPropertyContainer(GlobalProperties.getIntlString("phonetic-feature-codes"), PropertyType.MULTI_KEY_VALUE_PROPERTIES);
         MultiKeyValueProperties phoneticFeatureValues = (MultiKeyValueProperties) propman.getPropertyContainer(GlobalProperties.getIntlString("phonetic-feature-values"), PropertyType.MULTI_KEY_VALUE_PROPERTIES);
 
-        String fval1 = (String) attrib1.getAltValue(0).getValue();
-        String fval2 = (String) attrib2.getAltValue(0).getValue();
+        String fval1 = (String) attrib1.getNestedAltValue(0).getMultiValue();
+        String fval2 = (String) attrib2.getNestedAltValue(0).getMultiValue();
 
         LinkedHashMap fcodes = phoneticFeatureCodes.getMultiPropertiesMap();
         KeyValueProperties ckvp = (KeyValueProperties) fcodes.get(feature);
@@ -703,9 +703,9 @@ public class PhoneticModelOfScripts {
             for (int i = 0; i < acount; i++)
             {
                 FeatureAttribute fa = fs.getAttribute(i);
-                FeatureValue fv = fa.getAltValue(0);
+                FeatureValue fv = fa.getNestedAltValue(0);
 
-                String valStr = (String) fv.getValue();
+                String valStr = (String) fv.getMultiValue();
 
                 fvStrings.add(fa.getName() + "=" + valStr);
             }

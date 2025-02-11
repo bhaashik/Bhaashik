@@ -25,7 +25,7 @@ import bhaashik.table.BhaashikTableModel;
  *
  * @author anil
  */
-public class AlignmentBlock<T> implements Serializable {
+public class AlignmentBlock<T extends Serializable> implements Serializable {
 
     protected List<AlignmentUnit<T>> srcAlignedUnits;
     protected List<AlignmentUnit<T>> tgtAlignedUnits;
@@ -172,8 +172,8 @@ public class AlignmentBlock<T> implements Serializable {
         edges = new BhaashikEdges();
         edgeMap = new ConcurrentLinkedHashMap<String,BhaashikEdge>();
 
-        srcAlignedUnits = new ArrayList<AlignmentUnit<T>>();
-        tgtAlignedUnits = new ArrayList<AlignmentUnit<T>>();
+        srcAlignedUnits = new ArrayList<>();
+        tgtAlignedUnits = new ArrayList<>();
 
         if(mode == DOCUMENT_ALIGNMENT_MODE)
         {

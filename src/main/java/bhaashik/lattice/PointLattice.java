@@ -171,10 +171,10 @@ public class PointLattice implements Serializable {
                         FeatureAttribute fa = fs.getAttribute(j);
                         int ind = ((Integer) featureIndices.get(fa.getName())).intValue();
                         
-                        BhaashikMutableTreeNode node = new BhaashikMutableTreeNode(fa.getAltValue(0).getValue());
+                        BhaashikMutableTreeNode node = new BhaashikMutableTreeNode(fa.getNestedAltValue(0).getMultiValue());
 
-//                        System.out.println(fa.getName() + "=" + fa.getAltValue(0).getValue());
-                        grid.setValueAt(fa.getAltValue(0).getValue(), ind, i + 1);
+//                        System.out.println(fa.getName() + "=" + fa.getMultiValue(0).getValue());
+                        grid.setValueAt(fa.getNestedAltValue(0).getMultiValue(), ind, i + 1);
 
                         if(prevFS != null)
                         {
@@ -185,7 +185,7 @@ public class PointLattice implements Serializable {
                                 FeatureAttribute pfa = prevFS.getAttribute(k);
                                 int indPrev = ((Integer) featureIndices.get(pfa.getName())).intValue();
 
-                                BhaashikMutableTreeNode prevNode = new BhaashikMutableTreeNode(pfa.getAltValue(0).getValue());
+                                BhaashikMutableTreeNode prevNode = new BhaashikMutableTreeNode(pfa.getNestedAltValue(0).getMultiValue());
 
                                 BhaashikEdge edge = new BhaashikEdge(prevNode, indPrev, i, node, ind, i + 1);
 

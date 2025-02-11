@@ -142,7 +142,7 @@ public class FeatureStructuresImpl extends BhaashikMutableTreeNode
             if(fsStrings[i] != null && fsStrings[i].equals("") == false)
             {
                 FeatureStructure fs = new FeatureStructureImpl();
-                int pos = ((FeatureValue) fs).readString(fsStrings[i]);
+                int pos = ((FeatureValue) fs).readAltValueString(fsStrings[i]);
                 
                 fs.checkAndSetHasMandatory();
 
@@ -309,12 +309,13 @@ public class FeatureStructuresImpl extends BhaashikMutableTreeNode
         if(fa == null) {
             return null;
         }
-        else if(fa.countAltValues() == 0) {
+        else if(fa.countNestedAltValues() == 0) {
+//        else if(fa.countAltValues() == 0) {
             return null;
         }
         else
         {
-            FeatureValue fv = fa.getAltValue(0);
+            FeatureValue fv = fa.getNestedAltValue(0);
 
             if(fv == null) {
                 return null;
@@ -349,12 +350,13 @@ public class FeatureStructuresImpl extends BhaashikMutableTreeNode
             if(fa == null) {
                 continue;
             }
-            else if(fa.countAltValues() == 0) {
+            else if(fa.countNestedAltValues() == 0) {
                 continue;
             }
             else
             {
-                FeatureValue fv = fa.getAltValue(0);
+                FeatureValue fv = fa.getNestedAltValue(0);
+//                FeatureValue fv = fa.getAltValue(0);
 
                 if(fv == null) {
                     continue;
@@ -403,16 +405,16 @@ public class FeatureStructuresImpl extends BhaashikMutableTreeNode
 
             FeatureValue fv = null;
 
-            if(fa.countAltValues() == 0)
+            if(fa.countNestedAltValues() == 0)
             {
                 fv = new FeatureValueImpl();
-                fa.addAltValue(fv);
+                fa.addNestedAltValue(fv);
             }
             else {
-                fv = fa.getAltValue(0);
+                fv = fa.getNestedAltValue(0);
             }
 
-            fv.setValue(val);
+            fv.setAltValue(val);
         }
     }
 
@@ -450,18 +452,18 @@ public class FeatureStructuresImpl extends BhaashikMutableTreeNode
 
         FeatureValue fv = null;
 
-        if(fa.countAltValues() == 0)
+        if(fa.countNestedAltValues() == 0)
         {
             fv = new FeatureValueImpl();
-            fa.addAltValue(fv);
+            fa.addNestedAltValue(fv);
         }
         else {
-            fv = fa.getAltValue(0);
+            fv = fa.getNestedAltValue(0);
         }
 
         val = SSFQueryMatchNode.stripQuotes(val);
 
-        fv.setValue(val);
+        fv.setAltValue(val);
     }
 
     @Override
@@ -512,16 +514,16 @@ public class FeatureStructuresImpl extends BhaashikMutableTreeNode
 
         FeatureValue fv = null;
 
-        if(fa.countAltValues() == 0)
+        if(fa.countNestedAltValues() == 0)
         {
             fv = new FeatureValueImpl();
-            fa.addAltValue(fv);
+            fa.addNestedAltValue(fv);
         }
         else {
-            fv = fa.getAltValue(0);
+            fv = fa.getNestedAltValue(0);
         }
 
-        fv.setValue(oldVal + val + sep);
+        fv.setAltValue(oldVal + val + sep);
     }
 
     @Override
@@ -619,11 +621,11 @@ public class FeatureStructuresImpl extends BhaashikMutableTreeNode
 
                 if(fa != null)
                 {
-                    FeatureValue fv = fa.getAltValue(0);
+                    FeatureValue fv = fa.getNestedAltValue(0);
                     
                     if(fv != null && fv instanceof FeatureValueImpl
-                            && ((String) fv.getValue()).equalsIgnoreCase(containingNode.getName()) == false
-                            && ((String) fv.getValue()).equalsIgnoreCase("unk") == false
+                            && ((String) fv.getMultiValue()).equalsIgnoreCase(containingNode.getName()) == false
+                            && ((String) fv.getMultiValue()).equalsIgnoreCase("unk") == false
                             && count > 1)
                     {
                         removeAltFSValue(i);
@@ -660,13 +662,13 @@ public class FeatureStructuresImpl extends BhaashikMutableTreeNode
 	{
 	    FeatureAttribute fa = fs.getAttribute(i);
 	    
-	    int vcount = fa.countAltValues();
+	    int vcount = fa.countNestedAltValues();
 	    
 	    if(vcount > 1) {
                 return true;
             }
 
-	    if(fa.getAltValue(0).getClass().getName().endsWith("FeatureStructureImpl")) {
+	    if(fa.getNestedAltValue(0).getClass().getName().endsWith("FeatureStructureImpl")) {
                 return true;
             }
 	}

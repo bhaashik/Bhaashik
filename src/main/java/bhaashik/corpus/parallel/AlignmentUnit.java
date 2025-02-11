@@ -19,7 +19,7 @@ import bhaashik.datastr.ConcurrentLinkedHashMap;
  *
  * @author anil
  */
-public class AlignmentUnit<T> implements Cloneable, Serializable {
+public class AlignmentUnit<T extends Serializable> implements Cloneable, Serializable {
 
     protected T alignmentObject;
     protected int index;
@@ -27,11 +27,11 @@ public class AlignmentUnit<T> implements Cloneable, Serializable {
 
     protected int actionType = DnDConstants.ACTION_MOVE;
 
-    protected ConcurrentLinkedHashMap<String, AlignmentUnit<T>> alignedUnits;
+    protected transient ConcurrentLinkedHashMap<String, AlignmentUnit<T>> alignedUnits;
 
     public AlignmentUnit() {
 
-        alignedUnits = new ConcurrentLinkedHashMap<String, AlignmentUnit<T>>();
+         alignedUnits = new ConcurrentLinkedHashMap<>();
     }
 
     public AlignmentUnit(int atype)

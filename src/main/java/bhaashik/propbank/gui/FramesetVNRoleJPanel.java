@@ -47,12 +47,12 @@ public class FramesetVNRoleJPanel extends javax.swing.JPanel {
         for (int i = 0; i < acount; i++)
         {
             FeatureAttribute fa = fs.getAttribute(i);
-            FeatureValue fv = fa.getAltValue(0);
+            FeatureValue fv = fa.getNestedAltValue(0);
 
             String val = "";
 
             if(fv != null)
-                val = fv.getValue().toString();
+                val = fv.getMultiValue().toString();
 
             AttributeValueJPanel framesetVNRoleAttribJPanel = new AttributeValueJPanel(fa.getName(), val, langEnc);
             framesetVNRoleAttribJPanel.setFeatureStructure(fs);

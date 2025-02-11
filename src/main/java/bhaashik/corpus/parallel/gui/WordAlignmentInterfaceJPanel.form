@@ -421,6 +421,7 @@
                     <Property name="mnemonic" type="int" value="69"/>
                     <Property name="text" type="java.lang.String" value="Edit Mode"/>
                     <Property name="toolTipText" type="java.lang.String" value="Toggle word text editing mode"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editModeJCheckBoxActionPerformed"/>

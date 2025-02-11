@@ -226,11 +226,11 @@ public class ConditionalProbabilities {
                 if(fa == null)
                     continue;
 
-                String fv = fa.getName() + "=" + (String) fa.getAltValue(i).getValue();
+                String fv = fa.getName() + "=" + (String) fa.getNestedAltValue(i).getMultiValue();
                 String prevFV = "=";
 
                 if(prevFA != null)
-                    prevFV = prevFA.getName() + "=" + (String) prevFA.getAltValue(i).getValue();
+                    prevFV = prevFA.getName() + "=" + (String) prevFA.getNestedAltValue(i).getMultiValue();
 
                 Probability probability = getFeatureProb(prevFV, fv);
 

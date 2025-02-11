@@ -20,53 +20,106 @@ import bhaashik.table.BhaashikTableModel;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public interface FeatureStructure extends MutableTreeNode {
+public interface FeatureStructure extends MutableTreeNode, FeatureValue {
+//public interface FeatureStructure extends MutableTreeNode {
     
-    int addAttribute(FeatureAttribute a);
+    int addAltAttribute(FeatureAttribute a);
+    
+    int addMultiAttribute(FeatureAttribute a);
 
-    int addAttribute(FeatureAttribute a, String p);
+    int addAltAttribute(FeatureAttribute a, String p);
 
-    int addAttribute(String name, String value);
+    int addMultiAttribute(FeatureAttribute a, String p);
+
+    int addAltAttribute(String name, String value);
+
+    int addMultiAttribute(String name, String value);
 
     void addMandatoryAttributes();
 
-    void clear();
+    void clearAlt();
 
-    int countAttributes();
+    void clearMulti();
 
-    int findAttribute(FeatureAttribute a);
+    @Override
+    void clearNestedAltValues();
 
-    FeatureAttribute getAttribute(String p);
+    @Override
+    void clearNestedMultiValues();
 
-    FeatureAttribute getOneOfAttributes(String names[]);
+    int countAltAttributes();
 
-    FeatureAttribute getAttribute(int index);
+    int countMultiAttributes();
 
-    List<String> getAttributeNames();
+    int findAltAttribute(FeatureAttribute a);
 
-    List<String> getAttributeNames(String p);
+    int findMultiAttribute(FeatureAttribute a);
 
-    FeatureValue getAttributeValue(String p);
+    FeatureAttribute getAltAttribute(String p);
 
-    String getAttributeValueString(String p);
+    FeatureAttribute getMultiAttribute(String p);
 
-    void setAttributeValue(String attibName, String val);
+    FeatureAttribute getOneOfAltAttributes(String names[]);
 
-    FeatureValue getAttributeValueByIndex(String p);
+    FeatureAttribute getOneOfMultiAttributes(String names[]);
 
-    List<String> getAttributeValues();
+    FeatureAttribute getAltAttribute(int index);
 
-    List<String> getAttributeValuePairs();
+    FeatureAttribute getMultiAttribute(int index);
 
-    List<FeatureValue> getAttributeValues(String p);
+    List<String> getAltAttributeNames();
 
-    BhaashikTableModel getFeatureTable();
+    List<String> getMultiAttributeNames();
+
+    List<String> getAltAttributeNames(String p);
+
+    List<String> getMultiAttributeNames(String p);
+
+    FeatureValue getAltAttributeValue(String p);
+
+    FeatureValue getMultiAttributeValue(String p);
+
+    String getAltAttributeValueString(String p);
+
+    String getMultiAttributeValueString(String p);
+
+    void setAltAttributeValue(String attibName, String val);
+
+    void setMultiAttributeValue(String attibName, String val);
+
+    FeatureValue getAltAttributeValueByIndex(String p);
+
+    FeatureValue getMultiAttributeValueByIndex(String p);
+
+    List<String> getAltAttributeValues();
+
+    List<String> getMultiAttributeValues();
+
+    List<String> getAltAttributeValuePairs();
+
+    List<String> getMultiAttributeValuePairs();
+
+    List<FeatureValue> getAltAttributeValues(String p);
+
+    List<FeatureValue> getMultiAttributeValues(String p);
+
+    BhaashikTableModel getAltFeatureTable();
+
+    BhaashikTableModel getMultiFeatureTable();
 
     String getName();
 
-    List<FeatureAttribute> getPaths(String name);
+    List<FeatureAttribute> getAltPaths(String name);
 
-    Object getValue();
+    List<FeatureAttribute> getMultiPaths(String name);
+
+    List<FeatureAttribute> getAltPaths(String name, String p); // get_path_values($attr,$fs)
+
+    List<FeatureAttribute> getMultiPaths(String name, String p); // get_path_values($attr,$fs)
+
+    Object getNestedAltValue();
+
+    Object getNestedMultiValue();
 
     void clearAnnotation(long annoLevelFlags, SSFNode containingNode);
 
@@ -89,61 +142,113 @@ public interface FeatureStructure extends MutableTreeNode {
      * @param f2
      * @return 
      */
-    FeatureStructure merge(FeatureStructure f1, FeatureStructure f2);
+    FeatureStructure mergeAlt(FeatureStructure f1, FeatureStructure f2);
 
-    void modifyAttribute(FeatureAttribute a, int index);
+    FeatureStructure mergeMulti(FeatureStructure f1, FeatureStructure f2);
 
-    void modifyAttribute(FeatureAttribute a, int index, String p);
+    void modifyAltAttribute(FeatureAttribute a, int index);
 
-    void modifyAttributeValue(FeatureValue fv, String p);
+    void modifyMultiAttribute(FeatureAttribute a, int index);
 
-    void modifyAttributeValue(FeatureValue fv, int attribIndex, int altValIndex);
+    void modifyAltAttribute(FeatureAttribute a, int index, String p);
 
+    void modifyMultiAttribute(FeatureAttribute a, int index, String p);
+
+    void modifyAltAttributeValue(FeatureValue fv, String p);
+
+    void modifyMultiAttributeValue(FeatureValue fv, String p);
+
+    void modifyAltAttributeValue(FeatureValue fv, int attribIndex, int altValIndex);
+
+    void modifyMultiAttributeValue(FeatureValue fv, int attribIndex, int altValIndex);
+
+    @Override
     void print(PrintStream ps);
 
     /**
      * Not yet implemented.
      */
-    void prune();
+    void pruneAlt();
 
-    int readString(String fs_str) throws Exception;
+    void pruneMulti();
 
-    int readStringFV(String fs_str) throws Exception;
+    int readAltString(String fs_str) throws Exception;
 
-    void removeAllAttributes();
+    int readMultiString(String fs_str) throws Exception;
+    
+    int readAltStringV2(String fs_str) throws Exception;
+    
+    int readMultiStringV2(String fs_str) throws Exception;
 
-    FeatureAttribute removeAttribute(int index);
+    int readAltStringFV(String fs_str) throws Exception;
 
-    FeatureAttribute removeAttribute(String p);
+    int readMultiStringFV(String fs_str) throws Exception;
 
-    FeatureAttribute removeAttribute(int index, String p);
+    void removeAllAltAttributes();
+
+    void removeAllMultiAttributes();
+
+    FeatureAttribute removeAltAttribute(int index);
+
+    FeatureAttribute removeMultiAttribute(int index);
+
+    FeatureAttribute removeAltAttribute(String p);
+
+    FeatureAttribute removeMultiAttribute(String p);
+
+    FeatureAttribute removeAltAttribute(int index, String p);
+
+    FeatureAttribute removeMultiAttribute(int index, String p);
 
     void removeMandatoryAttributes();
 
-    void removeNonMandatoryAttributes();
+    void removeNonMandatoryAltAttributes();
 
-    void hideAttribute(String aname);
-    void unhideAttribute(String aname);
+    void removeNonMandatoryMultiAttributes();
 
-    FeatureAttribute searchAttribute(String name, boolean exactMatch);
+    void hideAltAttribute(String aname);
 
-    FeatureAttribute searchOneOfAttributes(String names[], boolean exactMatch);
+    void hideMultiAttribute(String aname);
 
-    FeatureAttribute searchAttributeValue(String name, String val, boolean exactMatch);
+    void unhideAltAttribute(String aname);
 
-    List<FeatureAttribute> searchAttributeValues(String name, String val, boolean exactMatch);
+    void unhideMultiAttribute(String aname);
 
-    List<FeatureAttribute> replaceAttributeValues(String name, String val, String nameReplace, String valReplace);
+    FeatureAttribute searchAltAttribute(String name, boolean exactMatch);
 
-    List<FeatureAttribute> searchAttributes(String name, boolean exactMatch);
+    FeatureAttribute searchMultiAttribute(String name, boolean exactMatch);
 
-    void setFeatureTable(BhaashikTableModel ft);
+    FeatureAttribute searchOneOfAltAttributes(String names[], boolean exactMatch);
+
+    FeatureAttribute searchOneOfMultiAttributes(String names[], boolean exactMatch);
+
+    FeatureAttribute searchAltAttributeValue(String name, String val, boolean exactMatch);
+
+    FeatureAttribute searchMultiAttributeValue(String name, String val, boolean exactMatch);
+
+    List<FeatureAttribute> searchAltAttributeValues(String name, String val, boolean exactMatch);
+
+    List<FeatureAttribute> searchMultiAttributeValues(String name, String val, boolean exactMatch);
+
+    List<FeatureAttribute> replaceAltAttributeValues(String name, String val, String nameReplace, String valReplace);
+
+    List<FeatureAttribute> replaceMultiAttributeValues(String name, String val, String nameReplace, String valReplace);
+
+    List<FeatureAttribute> searchAltAttributes(String name, boolean exactMatch);
+
+    List<FeatureAttribute> searchMultiAttributes(String name, boolean exactMatch);
+
+    void setAltFeatureTable(BhaashikTableModel ft);
+
+    void setMultiFeatureTable(BhaashikTableModel ft);
 
     void setName(String n);
 
     void setToEmpty();
 
-    void setValue(Object v);
+    void setNestedAltValue(Object v);
+
+    void setNestedMultiValue(Object v);
 
     /**
      * Not yet implemented.
@@ -152,7 +257,9 @@ public interface FeatureStructure extends MutableTreeNode {
      * @param f2
      * @return 
      */
-    FeatureStructure unify(FeatureStructure f1, FeatureStructure f2);
+    FeatureStructure unifyAlt(FeatureStructure f1, FeatureStructure f2);
+
+    FeatureStructure unifyMulti(FeatureStructure f1, FeatureStructure f2);
 
     void setAlignmentUnit(AlignmentUnit alignmentUnit);
 
@@ -160,7 +267,9 @@ public interface FeatureStructure extends MutableTreeNode {
 
     public Object clone();
 
-    public void sortAttributes(int sortType);
+    public void sortAltAttributes(int sortType);
+
+    public void sortMultiAttributes(int sortType);
 
     @Override
     public boolean equals(Object fa);

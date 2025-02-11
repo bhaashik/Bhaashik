@@ -160,7 +160,7 @@ public class FramesetExampleJPanel extends javax.swing.JPanel {
             String name = "";
 
             if(fv != null)
-                name = fv.getValue().toString();
+                name = fv.getMultiValue().toString();
 
             AttributeValueJPanel attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("name"), name, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);
@@ -170,7 +170,7 @@ public class FramesetExampleJPanel extends javax.swing.JPanel {
             String type = "";
 
             if(fv != null)
-                type = fv.getValue().toString();
+                type = fv.getMultiValue().toString();
 
             attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("type"), type, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);
@@ -180,7 +180,7 @@ public class FramesetExampleJPanel extends javax.swing.JPanel {
             String src = "";
 
             if(fv != null)
-                src = fv.getValue().toString();
+                src = fv.getMultiValue().toString();
 
             attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("src"), src, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);
@@ -197,7 +197,7 @@ public class FramesetExampleJPanel extends javax.swing.JPanel {
             String person = "";
 
             if(fv != null)
-                person = fv.getValue().toString();
+                person = fv.getMultiValue().toString();
 
             AttributeValueJPanel attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("person"), person, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);
@@ -207,7 +207,7 @@ public class FramesetExampleJPanel extends javax.swing.JPanel {
             String tense = "";
 
             if(fv != null)
-                tense = fv.getValue().toString();
+                tense = fv.getMultiValue().toString();
 
             attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("tense"), tense, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);
@@ -217,7 +217,7 @@ public class FramesetExampleJPanel extends javax.swing.JPanel {
             String aspect = "";
 
             if(fv != null)
-                aspect = fv.getValue().toString();
+                aspect = fv.getMultiValue().toString();
 
             attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("aspect"), aspect, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);
@@ -228,7 +228,7 @@ public class FramesetExampleJPanel extends javax.swing.JPanel {
             String voice = "";
 
             if(fv != null)
-                voice = fv.getValue().toString();
+                voice = fv.getMultiValue().toString();
 
             attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("voice"), voice, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);
@@ -238,7 +238,7 @@ public class FramesetExampleJPanel extends javax.swing.JPanel {
             String form = "";
 
             if(fv != null)
-                form = fv.getValue().toString();
+                form = fv.getMultiValue().toString();
 
             attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("form"), form, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);

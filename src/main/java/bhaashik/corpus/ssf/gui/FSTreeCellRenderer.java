@@ -102,7 +102,7 @@ public class FSTreeCellRenderer extends DefaultTreeCellRenderer {
         }
         else if(nodeRendered.getClass().getName().endsWith("FeatureValueImpl"))
         {
-            String val = (String) ((FeatureValueImpl) nodeRendered).getValue();
+            String val = (String) ((FeatureValueImpl) nodeRendered).getMultiValue();
 
             textHTML = "<html><META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><FONT face=\"helvetica,arial,sans-serif\" color=#800000>"
                     + val + "</font></html>";

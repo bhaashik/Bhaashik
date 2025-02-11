@@ -71,7 +71,7 @@ public class FramesetRolesetJPanel extends javax.swing.JPanel {
             String name = "";
 
             if(fv != null)
-                name = fv.getValue().toString();
+                name = fv.getMultiValue().toString();
 
             AttributeValueJPanel attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("name"), name, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);
@@ -81,7 +81,7 @@ public class FramesetRolesetJPanel extends javax.swing.JPanel {
             String vncls = "";
 
             if(fv != null)
-                vncls = fv.getValue().toString();
+                vncls = fv.getMultiValue().toString();
 
             attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("vncls"), vncls, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);

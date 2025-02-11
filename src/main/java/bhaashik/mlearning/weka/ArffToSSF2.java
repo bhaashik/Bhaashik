@@ -192,8 +192,8 @@ public class ArffToSSF2 extends DefaultMLCorpusConverter implements MLCorpusConv
                         FeatureValue fv = new FeatureValueImpl();
 
                         fa.setName("ne");
-                        fv.setValue((String) list.elementAt(2));
-                        fa.addAltValue(fv);
+                        fv.setAltValue((String) list.elementAt(2));
+                        fa.addNestedAltValue(fv);
                         fs.addAttribute(fa);
 
                         fss.addAltFSValue(fs);
@@ -217,8 +217,8 @@ public class ArffToSSF2 extends DefaultMLCorpusConverter implements MLCorpusConv
                             FeatureValue fv = new FeatureValueImpl();
 
                             fa.setName("ne");
-                            fv.setValue((String) list.elementAt(2));
-                            fa.addAltValue(fv);
+                            fv.setAltValue((String) list.elementAt(2));
+                            fa.addNestedAltValue(fv);
                             fs.addAttribute(fa);
 
                             fss.addAltFSValue(fs);
@@ -396,8 +396,8 @@ public class ArffToSSF2 extends DefaultMLCorpusConverter implements MLCorpusConv
                         FeatureValue fv = new FeatureValueImpl();
 
                         fa.setName("ne");
-                        fv.setValue((String) list.elementAt(2));
-                        fa.addAltValue(fv);
+                        fv.setAltValue((String) list.elementAt(2));
+                        fa.addNestedAltValue(fv);
                         fs.addAttribute(fa);
 
                         fss.addAltFSValue(fs);
@@ -422,8 +422,8 @@ public class ArffToSSF2 extends DefaultMLCorpusConverter implements MLCorpusConv
                             FeatureValue fv = new FeatureValueImpl();
 
                             fa.setName("ne");
-                            fv.setValue((String) list.elementAt(2));
-                            fa.addAltValue(fv);
+                            fv.setAltValue((String) list.elementAt(2));
+                            fa.addNestedAltValue(fv);
                             fs.addAttribute(fa);
 
                             fss.addAltFSValue(fs);

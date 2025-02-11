@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author anil
  */
-public interface Alignable<T> extends Serializable {
+public interface Alignable<T extends Serializable> extends Serializable {
 
     AlignmentUnit<T> getAlignmentUnit();
     void setAlignmentUnit(AlignmentUnit<T> alignmentUnit);

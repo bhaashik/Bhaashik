@@ -9,7 +9,6 @@ package bhaashik.corpus.ssf.features.impl;
 import edu.stanford.nlp.util.HashIndex;
 import edu.stanford.nlp.util.Index;
 import java.io.PrintStream;
-import java.io.Serializable;
 import java.util.Comparator;
 
 import bhaashik.corpus.ssf.features.FeatureAttribute;
@@ -24,7 +23,7 @@ import bhaashik.tree.BhaashikMutableTreeNode;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class FeatureAttributeImpl extends BhaashikMutableTreeNode
-        implements FeatureAttribute, Serializable {
+        implements FeatureAttribute {
 
     /**
      * 
@@ -35,7 +34,7 @@ public class FeatureAttributeImpl extends BhaashikMutableTreeNode
 
     private int nameIndex;
 
-    static Index<String> namesIndex = new HashIndex<String>();    
+    static Index<String> namesIndex = new HashIndex<>();    
 
     public FeatureAttributeImpl() {
         super();
@@ -87,55 +86,101 @@ public class FeatureAttributeImpl extends BhaashikMutableTreeNode
     {
         return getName();
     }
-
+ 
     @Override
-    public int countAltValues()
+    public int countNestedAltValues()
+    {
+        return -1;
+    }
+ 
+    @Override
+    public int countNestedMultiValues()
     {
         return getChildCount();
     }
 
     @Override
-    public int addAltValue(FeatureValue v)
+    public int addNestedAltValue(FeatureValue v)
+    {
+        System.err.println("Not currently implemented.");
+        return -1;
+    }
+
+    @Override
+    public int addNestedMultiValue(FeatureValue v)
     {
         add((BhaashikMutableTreeNode) v);
         return getChildCount();
     }
 
     @Override
-    public int findAltValue(FeatureValue v) 
+    public int findNestedAltValue(FeatureValue v) 
+    {
+        System.err.println("Not currently implemented.");
+        return -1;
+    }
+
+    @Override
+    public int findNestedMultiValue(FeatureValue v) 
     {
         return getIndex((FeatureValueImpl) v);
     }
 
     @Override
-    public FeatureValue getAltValue(int index) 
+    public FeatureValue getNestedAltValue(int index) 
+    {
+        System.err.println("Not currently implemented.");
+        return null;
+    }
+
+    @Override
+    public FeatureValue getNestedMultiValue(int index) 
     {
         return (FeatureValue) getChildAt(index);
     }
 
     @Override
-    public void modifyAltValue(FeatureValue v, int index)
+    public void modifyNestedAltValue(FeatureValue v, int index)
+    {
+        System.err.println("Not currently implemented.");
+    }
+
+    @Override
+    public void modifyNestedMultiValue(FeatureValue v, int index)
     {
         insert((FeatureValueImpl) v, index);
         remove(index + 1);
     }
 
     @Override
-    public FeatureValue removeAltValue(int index) 
+    public FeatureValue removeNestedAltValue(int index) 
     {
-        FeatureValue rem = getAltValue(index);
+        System.err.println("Not currently implemented.");
+        return null;
+    }
+
+    @Override
+    public FeatureValue removeNestedMultiValue(int index) 
+    {
+        FeatureValue rem = getNestedAltValue(index);
         remove(index);
         
         return rem;
     }
 
     @Override
-    public void removeAllAltValues() 
+    public void removeAllNestedAltValues() 
     {
-        int count = countAltValues();
+        System.err.println("Not currently implemented.");
+    }
+
+    @Override
+    public void removeAllNestedMultiValues() 
+    {
+        int count = countNestedMultiValues();
         
         for (int i = 0; i < count; i++) {
-            removeAltValue(i);
+            removeNestedMultiValue(i);
         }
     }
 
@@ -165,17 +210,17 @@ public class FeatureAttributeImpl extends BhaashikMutableTreeNode
 
         if(mandatory == true)
         {
-            str += getAltValue(0).makeString();
+            str += getNestedAltValue(0).makeString();
 
-            for(int i = 1; i < countAltValues(); i++) {
-                str += fsp.getProperties().getPropertyValueForPrint("attribOR") + getAltValue(i).makeString();
+            for(int i = 1; i < countNestedAltValues(); i++) {
+                str += fsp.getProperties().getPropertyValueForPrint("attribOR") + getNestedAltValue(i).makeString();
             }
 
             return str;
         }
         else
         {
-            String valStr = getAltValue(0).makeString();
+            String valStr = getNestedAltValue(0).makeString();
 
             if(valStr == null) {
                 valStr = "";
@@ -188,9 +233,9 @@ public class FeatureAttributeImpl extends BhaashikMutableTreeNode
                 str +=  getName() + fsp.getProperties().getPropertyValueForPrint("attribEquate") + valStr;
             }
 
-            for(int i = 1; i < countAltValues(); i++)
+            for(int i = 1; i < countNestedAltValues(); i++)
             {
-                valStr = getAltValue(i).makeString();
+                valStr = getNestedAltValue(i).makeString();
                 
                 if(valStr.equals("'") || valStr.equals("''") || (valStr.startsWith("'") == false || valStr.endsWith("'") == false)) {
                     str += fsp.getProperties().getPropertyValueForPrint("attribOR") + "'" + valStr + "'";
@@ -250,15 +295,15 @@ public class FeatureAttributeImpl extends BhaashikMutableTreeNode
             return false;
         }
 	
-	int count = countAltValues();
+	int count = countNestedAltValues();
 
-        if(count != aobj.countAltValues()) {
+        if(count != aobj.countNestedAltValues()) {
             return false;
         }
 
 	for (int i = 0; i < count; i++)
 	{
-	    if(getAltValue(i).equals(aobj.getAltValue(i)) == false) {
+	    if(getNestedAltValue(i).equals(aobj.getNestedAltValue(i)) == false) {
                 return false;
             }
 	}

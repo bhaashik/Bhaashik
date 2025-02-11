@@ -172,7 +172,7 @@ public class FramesetJPanel extends javax.swing.JPanel implements WindowListener
 
                 if(fv != null)
                 {
-                    lemma = fv.getValue().toString();
+                    lemma = fv.getMultiValue().toString();
                     FramesetPredicateJPanel framesetPredicateJPanel = new FramesetPredicateJPanel(langEnc);
 
                     if(owner != null)

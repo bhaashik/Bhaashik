@@ -66,7 +66,7 @@ public class FramesetExampleArgumentJPanel extends javax.swing.JPanel {
         String n = "";
 
         if(fv != null)
-            n = fv.getValue().toString();
+            n = fv.getMultiValue().toString();
 
         AttributeValueJPanel attributeValueJPanel = new AttributeValueJPanel("\n", n, langEnc);
         attributeValueJPanel.setFeatureStructure(fs);
@@ -78,7 +78,7 @@ public class FramesetExampleArgumentJPanel extends javax.swing.JPanel {
             String f = "";
 
             if(fv != null)
-                f = fv.getValue().toString();
+                f = fv.getMultiValue().toString();
 
             attributeValueJPanel = new AttributeValueJPanel(GlobalProperties.getIntlString("f"), f, langEnc);
             attributeValueJPanel.setFeatureStructure(fs);

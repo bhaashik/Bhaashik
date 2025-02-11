@@ -191,9 +191,9 @@ public class PhonemeFeatureModel implements Serializable {
             for (int i = 0; i < acount; i++)
             {
                 FeatureAttribute fa = fs.getAttribute(i);
-                FeatureValue fv = fa.getAltValue(0);
+                FeatureValue fv = fa.getNestedAltValue(0);
 
-                String valStr = (String) fv.getValue();
+                String valStr = (String) fv.getMultiValue();
 
                 String fvString = fa.getName() + "=" + valStr;
 
@@ -237,9 +237,9 @@ public class PhonemeFeatureModel implements Serializable {
             for (int i = 0; i < acount1; i++)
             {
                 FeatureAttribute fa1 = fs1.getAttribute(i);
-                FeatureValue fv1 = fa1.getAltValue(0);
+                FeatureValue fv1 = fa1.getNestedAltValue(0);
 
-                String valStr1 = (String) fv1.getValue();
+                String valStr1 = (String) fv1.getMultiValue();
 
                 String fvString1 = fa1.getName() + "=" + valStr1;
 
@@ -250,9 +250,9 @@ public class PhonemeFeatureModel implements Serializable {
                     for (int j = 0; j < acount2; j++)
                     {
                         FeatureAttribute fa2 = fs2.getAttribute(j);
-                        FeatureValue fv2 = fa2.getAltValue(0);
+                        FeatureValue fv2 = fa2.getNestedAltValue(0);
 
-                        String valStr2 = (String) fv2.getValue();
+                        String valStr2 = (String) fv2.getMultiValue();
 
                         String fvString2 = fa2.getName() + "=" + valStr2;
 
@@ -317,9 +317,9 @@ public class PhonemeFeatureModel implements Serializable {
             for (int i = 0; i < acount1; i++)
             {
                 FeatureAttribute fa1 = fs1.getAttribute(i);
-                FeatureValue fv1 = fa1.getAltValue(0);
+                FeatureValue fv1 = fa1.getNestedAltValue(0);
 
-                String valStr1 = (String) fv1.getValue();
+                    String valStr1 = (String) fv1.getMultiValue();
 
                 String fvString1 = fa1.getName() + "=" + valStr1;
 
@@ -330,9 +330,9 @@ public class PhonemeFeatureModel implements Serializable {
                     for (int j = 0; j < acount2; j++)
                     {
                         FeatureAttribute fa2 = fs2.getAttribute(j);
-                        FeatureValue fv2 = fa2.getAltValue(0);
+                        FeatureValue fv2 = fa2.getNestedAltValue(0);
 
-                        String valStr2 = (String) fv2.getValue();
+                        String valStr2 = (String) fv2.getMultiValue();
 
                         String fvString2 = fa2.getName() + "=" + valStr2;
 
@@ -343,9 +343,9 @@ public class PhonemeFeatureModel implements Serializable {
                             for (int k = 0; k < acount3; k++)
                             {
                                 FeatureAttribute fa3 = fs3.getAttribute(k);
-                                FeatureValue fv3 = fa3.getAltValue(0);
+                                FeatureValue fv3 = fa3.getNestedAltValue(0);
 
-                                String valStr3 = (String) fv3.getValue();
+                                String valStr3 = (String) fv3.getMultiValue();
 
                                 String fvString3 = fa3.getName() + "=" + valStr3;
 

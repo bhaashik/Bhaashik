@@ -87,7 +87,7 @@ public class SSFSentenceImpl extends Sentence
 
         if(fvID != null)
         {
-            setId((String) fvID.getValue());
+            setId((String) fvID.getMultiValue());
         }
     }
 

@@ -41,7 +41,8 @@ import bhaashik.corpus.xml.XMLProperties;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class FeatureStructureImpl extends BhaashikMutableTreeNode
-        implements FeatureStructure, FeatureValue, BhaashikDOMElement, Serializable
+        implements FeatureStructure, BhaashikDOMElement, Serializable
+//        implements FeatureStructure, FeatureValue, BhaashikDOMElement, Serializable
 {
 
     /**
@@ -78,15 +79,34 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
     
     @Override
-    public Object getValue()
+    public Object getNestedAltValue()
+    {        
+        System.err.println("Not currently implented");
+
+        return null;
+    }
+    
+    @Override
+    public Object getNestedMultiValue()
     {
+        if(getUserObject() == null)
+        {
+            setUserObject(this);
+        }
+
         return this;
     }
     
     @Override
-    public void setValue(Object v)
+    public void setNestedAltValue(Object v)
     {
         setUserObject(this);
+    }
+    
+    @Override
+    public void setNestedMultiValue(Object v)
+    {
+        System.err.println("Not currently implemented.");
     }
 
     @Override
@@ -154,28 +174,58 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public int countAttributes()
+    public int countAltAttributes()
+    {
+        System.err.println("Not currently implemented.");
+        
+        return -1;
+    }
+
+    @Override
+    public int countMultiAttributes()
     {
         return getChildCount();
     }
 
     @Override
-    public int addAttribute(FeatureAttribute a)
+    public int addAltAttribute(FeatureAttribute a)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return -1;
+    }
+    @Override
+    public int addMultiAttribute(FeatureAttribute a)
     {
         add((FeatureAttributeImpl) a);
         return getChildCount();
     }
 
-    public int insertAttribute(FeatureAttribute a, int index)
+    public int insertAltAttribute(FeatureAttribute a, int index)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return -1;
+    }
+
+    public int insertMultiAttribute(FeatureAttribute a, int index)
     {
         insert((FeatureAttributeImpl) a, index);
         return getChildCount();
     }
 
     @Override
-    public int addAttribute(FeatureAttribute a, String p /* path */) // add_attr_val($featurePath,$value,$FSReference)
+    public int addAltAttribute(FeatureAttribute a, String p /* path */) // add_attr_val($featurePath,$value,$FSReference)
     {
-        FeatureValue fv = getAttributeValue(p);
+        System.err.println("Not currently implemented.");
+        
+        return -1;        
+    }
+
+    @Override
+    public int addMultiAttribute(FeatureAttribute a, String p /* path */) // add_attr_val($featurePath,$value,$FSReference)
+    {
+        FeatureValue fv = getMultiAttributeValue(p);
         FeatureStructure fs = null;
         int ret = -1;
         
@@ -184,16 +234,24 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
             
             fs = (FeatureStructureImpl) fv;
 //            fs = (FeatureStructure) fv.getValue();
-            ret = fs.addAttribute(a);
+            ret = fs.addMultiAttribute(a);
         }
 
         return ret;
     }
 
     @Override
-    public int addAttribute(String name, String value)
+    public int addAltAttribute(String name, String value)
     {
-        FeatureAttribute fa = searchAttribute(name, true);
+        System.err.println("Not currently implemented.");
+        
+        return -1;
+    }
+
+    @Override
+    public int addMultiAttribute(String name, String value)
+    {
+        FeatureAttribute fa = searchMultiAttribute(name, true);
 
         int ret = 0;
 
@@ -202,27 +260,24 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
             fa = new FeatureAttributeImpl();
             fa.setName(name);
 
-            addAttribute(fa);
+            addMultiAttribute(fa);
 
             ret = 1;
         }
 
         FeatureValue fv = null;
 
-        if(fa.countAltValues() > 0) {
-            fv = fa.getAltValue(0);
+        if(fa.countNestedMultiValues() > 0) {
+            fv = fa.getNestedMultiValue(0);
         }
 
         if(fv == null)
         {
             fv = new FeatureValueImpl();
-            fv.setValue(value);
+            fv.setMultiValue(value);
+        }
 
-            fa.addAltValue(fv);
-        }
-        else {
-            fv.setValue(value);
-        }
+        fa.addNestedMultiValue(fv);
 
         return ret;
     }
@@ -230,7 +285,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     @Override
     public void addMandatoryAttributes()
     {
-        int count = countAttributes();
+        int count = countMultiAttributes();
 
 	// Empty mandatory attributes values
 	int mcount = FeatureStructuresImpl.getFSProperties().countMandatoryAttributes();
@@ -241,8 +296,8 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 	    {
                 FeatureAttribute fa = new FeatureAttributeImpl();
 		fa.setName(FeatureStructuresImpl.getFSProperties().getMandatoryAttribute(i));
-		fa.addAltValue(new FeatureValueImpl(""));
-		insertAttribute(fa, i);
+		fa.addNestedAltValue(new FeatureValueImpl(""));
+		insertMultiAttribute(fa, i);
 //		addAttribute(fa);
 	    }
 	}
@@ -251,19 +306,29 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public FeatureAttribute getAttribute(int index) 
+    public FeatureAttribute getAltAttribute(int index) 
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public FeatureAttribute getMultiAttribute(int index) 
     {
         return (FeatureAttribute) getChildAt(index);
     }
 
     @Override
-    public int findAttribute(FeatureAttribute a) 
+    public FeatureAttribute getAltAttribute(String p)
     {
-        return getIndex((FeatureAttributeImpl) a);
+        System.err.println("Not currently implemented.");
+        
+        return null;
     }
 
     @Override
-    public FeatureAttribute getAttribute(String p)
+    public FeatureAttribute getMultiAttribute(String p)
     // Traverses to the FS as given by the String path and returns its reference
     // to be used in all modify/add/delete functions
     // The path will consist of FA names, separated by a period ('.')
@@ -299,9 +364,9 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
                 altValIndex = Integer.parseInt(parts[1]);
             }
 
-            for (k = 0; k < node.countAttributes(); k++)
+            for (k = 0; k < node.countMultiAttributes(); k++)
             {
-                pointer = node.getAttribute(k);
+                pointer = node.getMultiAttribute(k);
 
                 if(pointer.getName().equals(attribName))
                 {
@@ -309,7 +374,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
                         return pointer;
                     }
 
-                    fv = pointer.getAltValue(altValIndex);
+                    fv = pointer.getNestedMultiValue(altValIndex);
 
                     if(fv.isFeatureStructure() == true) {
                         node = (FeatureStructureImpl) fv;
@@ -322,13 +387,21 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public FeatureAttribute getOneOfAttributes(String names[])
+    public FeatureAttribute getOneOfAltAttributes(String names[])
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public FeatureAttribute getOneOfMultiAttributes(String names[])
     {
         for (int i = 0; i < names.length; i++)
         {
             String n = names[i];
 
-            FeatureAttribute fa = getAttribute(n);
+            FeatureAttribute fa = getMultiAttribute(n);
 
             if(fa != null) {
                 return fa;
@@ -339,37 +412,60 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public void modifyAttribute(FeatureAttribute a, int index)
+    public void modifyAltAttribute(FeatureAttribute a, int index)
+    {
+        System.err.println("Not currently implemented.");
+    }
+
+    @Override
+    public void modifyMultiAttribute(FeatureAttribute a, int index)
     {
         insert((FeatureAttributeImpl) a, index);
         remove(index + 1);
     }
 
     @Override
-    public void modifyAttribute(FeatureAttribute a, int index, String p /* path */)
+    public void modifyAltAttribute(FeatureAttribute a, int index, String p /* path */)
     {
-        FeatureValue fv = getAttributeValue(p);
+        System.err.println("Not currently implemented.");
+    }
+
+    @Override
+    public void modifyMultiAttribute(FeatureAttribute a, int index, String p /* path */)
+    {
+        FeatureValue fv = getMultiAttributeValue(p);
         FeatureStructure fs = null;
 
         if(fv.isFeatureStructure() == true)
         {
             fs = (FeatureStructureImpl) fv;
 //            fs = (FeatureStructure) fv.getValue();
-            fs.modifyAttribute(a, index);
+            fs.modifyMultiAttribute(a, index);
         }
     }
 
     @Override
-    public void modifyAttributeValue(FeatureValue fv, int attribIndex, int altValIndex)
+    public void modifyAltAttributeValue(FeatureValue fv, int attribIndex, int altValIndex)
     {
-        FeatureAttribute fa = getAttribute(attribIndex);
-        fa.modifyAltValue(fv, altValIndex);
+        System.err.println("Not currently implemented.");
     }
 
     @Override
-    public void modifyAttributeValue(FeatureValue fv, String p /* path */) // update_attr_val($featurePath,$val,$FSReference)
+    public void modifyMultiAttributeValue(FeatureValue fv, int attribIndex, int altValIndex)
     {
-        FeatureAttribute attrib = getAttribute(p);
+        FeatureAttribute fa = getMultiAttribute(attribIndex);
+        fa.modifyNestedMultiValue(fv, altValIndex);
+    }
+    @Override
+    public void modifyAltAttributeValue(FeatureValue fv, String p /* path */) // update_attr_val($featurePath,$val,$FSReference)
+    {
+        System.err.println("Not currently implemented.");
+    }
+
+    @Override
+    public void modifyMultiAttributeValue(FeatureValue fv, String p /* path */) // update_attr_val($featurePath,$val,$FSReference)
+    {
+        FeatureAttribute attrib = getMultiAttribute(p);
         String paths[] = p.split("[.]");
         String parts[] = paths[paths.length - 1].split("[@]");
 
@@ -379,34 +475,50 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
             altValIndex = Integer.parseInt(parts[1]);
         }
 
-        attrib.modifyAltValue(fv, altValIndex);
+        attrib.modifyNestedMultiValue(fv, altValIndex);
+    }
+    
+    @Override
+    public FeatureAttribute removeAltAttribute(int index) 
+    {
+        System.err.println("Not currently implemented.");
+ 
+        return null;
     }
 
     @Override
-    public FeatureAttribute removeAttribute(int index) 
+    public FeatureAttribute removeMultiAttribute(int index) 
     {
-        FeatureAttribute rem = getAttribute(index);
+        FeatureAttribute rem = getMultiAttribute(index);
         remove(index);
         
         return rem;
     }
 
     @Override
-    public FeatureAttribute removeAttribute(String p) 
+    public FeatureAttribute removeAltAttribute(String p) 
     {
-        FeatureAttribute rem = getAttribute(p);
+        System.err.println("Not currently implemented.");
+ 
+        return null;
+    }
+
+    @Override
+    public FeatureAttribute removeMultiAttribute(String p) 
+    {
+        FeatureAttribute rem = getMultiAttribute(p);
 	
         if(rem != null)
         {
             if(FeatureStructuresImpl.getFSProperties().isMandatory(rem.getName()) == false) {
-                remove(findAttribute(rem));
+                remove(findMultiAttribute(rem));
             }
             else
             {
-                FeatureValue fv = rem.getAltValue(0);
+                FeatureValue fv = rem.getNestedMultiValue(0);
 
                 if(fv != null) {
-                    fv.setValue("");
+                    fv.setMultiValue("");
                 }
             }
         }
@@ -415,11 +527,17 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public void removeAllAttributes() 
+    public void removeAllAltAttributes() 
     {
-        while(countAttributes() > 0)
+        System.err.println("Not currently implemented.");
+    }
+
+    @Override
+    public void removeAllMultiAttributes() 
+    {
+        while(countMultiAttributes() > 0)
         {
-    	    removeAttribute(0);
+    	    removeMultiAttribute(0);
         }
 
         hasMandatoryAttribs(false);
@@ -433,7 +551,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
         }
 
 	// Remove mandatory attributes
-        int count = countAttributes();
+        int count = countMultiAttributes();
 	int mcount = FeatureStructuresImpl.getFSProperties().countMandatoryAttributes();
 
 	if(mcount > 0 && count >= mcount)
@@ -441,7 +559,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 	    for(int i = 0; i < mcount; i++)
 	    {
 		String mAtrribName = FeatureStructuresImpl.getFSProperties().getMandatoryAttribute(i);
-		FeatureAttribute fa = getAttribute(mAtrribName);
+		FeatureAttribute fa = getMultiAttribute(mAtrribName);
 		
 		if(fa != null) {
                     remove(fa);
@@ -453,20 +571,26 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public void removeNonMandatoryAttributes()
+    public void removeNonMandatoryAltAttributes()
+    {
+        System.err.println("Not currently implemented.");
+    }
+
+    @Override
+    public void removeNonMandatoryMultiAttributes()
     {
 	if(hasMandatoryAttribs() == false)
 	{
-	    removeAllAttributes();
+	    removeAllMultiAttributes();
 	    return;
 	}
 
 	// Remove non-mandatory attributes
-        int count = countAttributes();
+        int count = countMultiAttributes();
 
 	for(int i = 0; i < count; i++)
 	{
-	    FeatureAttribute fa = getAttribute(i);
+	    FeatureAttribute fa = getMultiAttribute(i);
 	    
 	    if(FeatureStructuresImpl.getFSProperties().isMandatory(fa.getName()) == false)
 	    {
@@ -477,7 +601,15 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public FeatureAttribute removeAttribute(int index, String p /* path */) // del_attr_val($featurePath,$FSReference)
+    public FeatureAttribute removeAltAttribute(int index, String p /* path */) // del_attr_val($featurePath,$FSReference)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public FeatureAttribute removeMultiAttribute(int index, String p /* path */) // del_attr_val($featurePath,$FSReference)
     {
         FeatureValue fv = getAttributeValue(p);
         FeatureStructure fs = null;
@@ -487,16 +619,22 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
         {
             fs = (FeatureStructureImpl) fv;
 //            fs = (FeatureStructure) fv.getValue();
-            ret = fs.removeAttribute(index);
+            ret = fs.removeMultiAttribute(index);
         }
 
         return ret;
     }
 
     @Override
-    public void hideAttribute(String aname)
+    public void hideAltAttribute(String aname)
     {
-        FeatureAttribute hiddenAttr = getAttribute(aname);
+        System.err.println("Not currently implemented.");        
+    }
+
+    @Override
+    public void hideMultiAttribute(String aname)
+    {
+        FeatureAttribute hiddenAttr = getMultiAttribute(aname);
 
         if(hiddenAttr != null)
         {
@@ -505,9 +643,15 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public void unhideAttribute(String aname)
+    public void unhideAltAttribute(String aname)
     {
-        FeatureAttribute hiddenAttr = getAttribute(aname);
+        System.err.println("Not currently implemented.");
+    }
+
+    @Override
+    public void unhideMultiAttribute(String aname)
+    {
+        FeatureAttribute hiddenAttr = getMultiAttribute(aname);
 
         if(hiddenAttr != null)
         {
@@ -516,24 +660,40 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public List<String> getAttributeNames() // get_attributes($FSReference)
+    public List<String> getAltAttributeNames() // get_attributes($FSReference)
+    {
+        System.err.println("Not currently implemented.");
+
+        return null;
+    }
+
+    @Override
+    public List<String> getMultiAttributeNames() // get_attributes($FSReference)
     {
         // all the names of attributes are returned
         List<String> v = new ArrayList<String>();
         int k;
         
-        for (k = 0; k < countAttributes(); k++)
+        for (k = 0; k < countMultiAttributes(); k++)
         {
-            v.add(getAttribute(k).getName());
+            v.add(getMultiAttribute(k).getName());
         }
 
         return v;
     }
 
     @Override
-    public List<String> getAttributeNames(String p /* path */)
+    public List<String> getAltAttributeNames(String p /* path */)
     {
-        FeatureValue fv = getAttributeValue(p);
+        System.err.println("Not currently implemented.");
+
+        return null;
+    }
+
+    @Override
+    public List<String> getMultiAttributeNames(String p /* path */)
+    {
+        FeatureValue fv = getMultiAttributeValue(p);
         FeatureStructure fs = null;
         List<String> ret = null;
 
@@ -541,24 +701,32 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
         {
             fs = (FeatureStructureImpl) fv;
 //            fs = (FeatureStructure) fv.getValue();
-            ret = fs.getAttributeNames();
+            ret = fs.getMultiAttributeNames();
         }
 
         return ret;
     }
 
     @Override
-    public List<String> getAttributeValues()
+    public List<String> getAltAttributeValues()
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public List<String> getMultiAttributeValues()
     {
         // all the values of top-level attibutes are returned
         // a Vector consisting of attribute values strings is returned
         List<String> v = new ArrayList<String>();
 
-        for (int k = 0; k < countAttributes(); k++)
+        for (int k = 0; k < countMultiAttributes(); k++)
         {
-            FeatureAttribute fa = getAttribute(k);
+            FeatureAttribute fa = getMultiAttribute(k);
 
-            String attribVal = getAttributeValue(fa.getName()).makeString();
+            String attribVal = getMultiAttributeValue(fa.getName()).makeString();
             v.add(attribVal);
         }
 
@@ -566,16 +734,24 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public List<String> getAttributeValuePairs()
+    public List<String> getAltAttributeValuePairs()
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public List<String> getMultiAttributeValuePairs()
     {
         // a Vector consisting of attribute-value pair strings is returned
         List<String> v = new ArrayList<String>();
 
-        for (int k = 0; k < countAttributes(); k++)
+        for (int k = 0; k < countMultiAttributes(); k++)
         {
-            FeatureAttribute fa = getAttribute(k);
+            FeatureAttribute fa = getMultiAttribute(k);
             
-            String attribVal = fa.getName() + "=" + getAttributeValue(fa.getName()).makeString();
+            String attribVal = fa.getName() + "=" + getMultiAttributeValue(fa.getName()).makeString();
             v.add(attribVal);
         }
 
@@ -583,9 +759,17 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public FeatureValue getAttributeValueByIndex(String p /* path containing attribute index */)
+    public FeatureValue getAltAttributeValueByIndex(String p /* path containing attribute index */)
     {
-        FeatureAttribute attrib = getAttribute(p);
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public FeatureValue getMultiAttributeValueByIndex(String p /* path containing attribute index */)
+    {
+        FeatureAttribute attrib = getMultiAttribute(p);
         String paths[] = p.split("[.]");
         String parts[] = paths[paths.length - 1].split("[@]");
 
@@ -595,14 +779,22 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
             altValIndex = Integer.parseInt(parts[1]);
         }
 
-        return attrib.getAltValue(altValIndex);
+        return attrib.getNestedMultiValue(altValIndex);
     }
 
     @Override
-    public FeatureValue getAttributeValue(String p)
+    public FeatureValue getAltAttributeValue(String p)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public FeatureValue getMultiAttributeValue(String p)
     {
 	// The first values of the attibute at the given path are returned
-        List<FeatureValue> vals = getAttributeValues(p);
+        List<FeatureValue> vals = getMultiAttributeValues(p);
 	
 	if(vals == null || vals.size() <= 0) {
             return null;
@@ -612,10 +804,18 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public String getAttributeValueString(String p)
+    public String getAltAttributeValueString(String p)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;        
+    }
+
+    @Override
+    public String getMultiAttributeValueString(String p)
     {
 	// The first values of the attibute at the given path are returned
-        List<FeatureValue> vals = getAttributeValues(p);
+        List<FeatureValue> vals = getMultiAttributeValues(p);
 
 	if(vals == null || vals.size() <= 0) {
             return null;
@@ -625,7 +825,101 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public void setAttributeValue(String attibName, String val)
+    public void setMultiValue(Object obj)
+    {
+        System.err.println("Does not apply to FeatureStructure.");
+    }
+
+    @Override
+    public void setAltValue(Object obj)
+    {
+        System.err.println("Does not apply to FeatureStructure.");
+    }
+//
+//    @Override
+//    public int readAltValueString(String multiValue)
+//    {
+//        System.err.println("Does not apply to FeatureStructures.");
+//        
+//        return -1;
+//    }
+//
+//    @Override
+//    public int readMultiValueString(String multiValue)
+//    {
+//        System.err.println("Does not apply to FeatureStructures.");
+//        
+//        return -1;
+//    }
+
+    @Override
+    public long getAltValueVocabularySize()
+    {
+        System.err.println("Does not apply to FeatureStructures.");
+        
+        return -1;
+    }
+
+    @Override
+    public long getMultiValueVocabularySize()
+    {
+        System.err.println("Does not apply to FeatureStructures.");
+        
+        return -1;
+    }
+
+    @Override
+    public List<Integer> getAltValue()
+    {
+        System.err.println("Does not apply to FeatureStructures.");
+        
+        return null;
+    }
+
+    @Override
+    public List<Integer> getMultiValue()
+    {
+        System.err.println("Does not apply to FeatureStructures.");
+        
+        return null;
+    }
+
+    @Override
+    public void clearAltValues()
+    {
+        System.err.println("Does not apply to FeatureStructures.");
+    }
+
+    @Override
+    public void clearMultiValues()
+    {
+        System.err.println("Does not apply to FeatureStructures.");
+    }
+
+    @Override
+    public List<Integer> getAltValueIndices(String multiValue, boolean add)
+    {
+        System.err.println("Does not apply to FeatureStructures.");
+        
+        return null;
+    }
+
+    @Override
+    public List<Integer> getMultiValueIndices(String multiValue, boolean add)
+    {
+        System.err.println("Does not apply to FeatureStructures.");
+        
+        return null;
+    }
+
+    @Override
+    public void setAltAttributeValue(String attibName, String val)
+    {
+        System.err.println("Does not apply to FeatureStructures.");
+    }
+
+    @Override
+    public void setMultiAttributeValue(String attibName, String val)
     {
 //        if( !(hasMandatoryAttribs() == false && getFSProperties().isMandatory(attibName) == true) )
         if(hasMandatoryAttribs() == false && FeatureStructuresImpl.getFSProperties().isMandatory(attibName) == true )
@@ -633,45 +927,53 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
             addMandatoryAttributes();
         }
 
-        FeatureAttribute fa = getAttribute(attibName);
+        FeatureAttribute fa = getMultiAttribute(attibName);
 
         if(fa == null)
         {
             fa = new FeatureAttributeImpl();
             fa.setName(attibName);
-            addAttribute(fa);
+            addMultiAttribute(fa);
         }
 
         FeatureValue fv = null;
 
-        if(fa.countAltValues() == 0)
+        if(fa.countNestedMultiValues() == 0)
         {
             fv = new FeatureValueImpl();
-            fa.addAltValue(fv);
+            fa.addNestedMultiValue(fv);
         }
         else {
-            fv = fa.getAltValue(0);
+            fv = fa.getNestedAltValue(0);
         }
 
         val = SSFQueryMatchNode.stripQuotes(val);
 
-        fv.setValue(val);
+        fv.setAltValue(val);
     }
 
     @Override
-    public List<FeatureValue> getAttributeValues(String p)
+    public List<FeatureValue> getAltAttributeValues(String p)
     {
-        int count = countAttributes();
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public List<FeatureValue> getMultiAttributeValues(String p)
+    {
+        int count = countMultiAttributes();
 
         List<FeatureValue> ret = new ArrayList<FeatureValue>();
 
         for (int i = 0; i < count; i++)
         {
-            FeatureAttribute fa = getAttribute(p);
+            FeatureAttribute fa = getMultiAttribute(p);
 
-            if(fa != null && fa.getName().equals(p) && fa.countAltValues() > 0)
+            if(fa != null && fa.getName().equals(p) && fa.countNestedMultiValues() > 0)
             {
-                FeatureValue fv = fa.getAltValue(0);
+                FeatureValue fv = fa.getNestedMultiValue(0);
                 ret.add(fv);
             }
         }
@@ -689,58 +991,37 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public List<FeatureAttribute> getPaths(String name) // get_path_values($attr,$fs)
+    public List<FeatureAttribute> getAltPaths(String name) // get_path_values($attr,$fs)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public List<FeatureAttribute> getMultiPaths(String name) // get_path_values($attr,$fs)
     {
         // Search for an attribute name and return it's paths
         List<FeatureAttribute> v = new ArrayList<FeatureAttribute>();
 
-        for (int i = 0; i < countAttributes(); i++)
+        for (int i = 0; i < countMultiAttributes(); i++)
         {
-            FeatureAttribute fa = getAttribute(i);
+            FeatureAttribute fa = getMultiAttribute(i);
             String path = fa.getName();
 
             if(fa.getName().equalsIgnoreCase(name)) {
                 v.add(fa);
             }
 
-            for (int j = 0; j < fa.countAltValues(); j++)
+            for (int j = 0; j < fa.countNestedMultiValues(); j++)
             {
-                FeatureValue fv = fa.getAltValue(i);
+                FeatureValue fv = fa.getNestedMultiValue(i);
 
                 if(fv.isFeatureStructure() == true)
                 {
                     FeatureStructureImpl fs = (FeatureStructureImpl) fv;
 //                    FeatureStructureImpl fs = (FeatureStructureImpl) fv.getValue();
-                    v.addAll(fs.getPaths(name, path));
-                }
-            }
-        }
-
-        return v;
-    }
-
-    private List<FeatureAttribute> getPaths(String name, String p) // get_path_values($attr,$fs)
-    {
-        List<FeatureAttribute> v = new ArrayList<FeatureAttribute>();
-
-        for (int i = 0; i < countAttributes(); i++)
-        {
-            FeatureAttribute fa = getAttribute(i);
-            String path = p + "." + fa.getName();
-
-            if(fa.getName().equalsIgnoreCase(name)) {
-                v.add(fa);
-            }
-
-            for (int j = 0; j < fa.countAltValues(); j++)
-            {
-                FeatureValue fv = fa.getAltValue(i);
-
-                if(fv.isFeatureStructure() == true)
-                {
-                    FeatureStructureImpl fs = (FeatureStructureImpl) fv;
-//                      FeatureStructureImpl fs = (FeatureStructureImpl) fv.getValue();
-                    v.addAll(fs.getPaths(name, path));
+                    v.addAll(fs.getMultiPaths(name, path));
                 }
             }
         }
@@ -749,14 +1030,60 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public FeatureAttribute searchOneOfAttributes(String names[], boolean exactMatch)
+    public List<FeatureAttribute> getAltPaths(String name, String p) // get_path_values($attr,$fs)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public List<FeatureAttribute> getMultiPaths(String name, String p) // get_path_values($attr,$fs)
+    {
+        List<FeatureAttribute> v = new ArrayList<FeatureAttribute>();
+
+        for (int i = 0; i < countMultiAttributes(); i++)
+        {
+            FeatureAttribute fa = getMultiAttribute(i);
+            String path = p + "." + fa.getName();
+
+            if(fa.getName().equalsIgnoreCase(name)) {
+                v.add(fa);
+            }
+
+            for (int j = 0; j < fa.countNestedMultiValues(); j++)
+            {
+                FeatureValue fv = fa.getNestedMultiValue(i);
+
+                if(fv.isFeatureStructure() == true)
+                {
+                    FeatureStructureImpl fs = (FeatureStructureImpl) fv;
+//                      FeatureStructureImpl fs = (FeatureStructureImpl) fv.getValue();
+                    v.addAll(fs.getMultiPaths(name, path));
+                }
+            }
+        }
+
+        return v;
+    }
+
+    @Override
+    public FeatureAttribute searchOneOfAltAttributes(String names[], boolean exactMatch)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public FeatureAttribute searchOneOfMultiAttributes(String names[], boolean exactMatch)
     {
         // Search for an attribute name and return first attribute which matches
         for (int i = 0; i < names.length; i++)
         {
             String name = names[i];
 
-            List<FeatureAttribute> attribs = searchAttributes(name, exactMatch);
+            List<FeatureAttribute> attribs = searchMultiAttributes(name, exactMatch);
 
             if(attribs == null || attribs.size() <= 0) {
                 continue;
@@ -769,10 +1096,18 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public FeatureAttribute searchAttribute(String name, boolean exactMatch)
+    public FeatureAttribute searchAltAttribute(String name, boolean exactMatch)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public FeatureAttribute searchMultiAttribute(String name, boolean exactMatch)
     {
         // Search for an attribute name and return first attribute which matches
-        List<FeatureAttribute> attribs = searchAttributes(name, exactMatch);
+        List<FeatureAttribute> attribs = searchMultiAttributes(name, exactMatch);
 
 	if(attribs == null || attribs.size() <= 0) {
             return null;
@@ -782,7 +1117,15 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public List<FeatureAttribute> searchAttributes(String name, boolean exactMatch) // get_path_values($attr,$fs)
+    public List<FeatureAttribute> searchAltAttributes(String name, boolean exactMatch) // get_path_values($attr,$fs)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    @Override
+    public List<FeatureAttribute> searchMultiAttributes(String name, boolean exactMatch) // get_path_values($attr,$fs)
     {
         // Search for an attribute name and return attributes which match
         List<FeatureAttribute> v = new ArrayList<FeatureAttribute>();
@@ -796,9 +1139,9 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
         Pattern pAttrib = Pattern.compile(lname);
 //        Pattern pAttrib = Pattern.compile(name, Pattern.UNICODE_CASE | Pattern.CANON_EQ | Pattern.UNIX_LINES);
 
-        for (int i = 0; i < countAttributes(); i++)
+        for (int i = 0; i < countMultiAttributes(); i++)
         {
-            FeatureAttribute fa = getAttribute(i);
+            FeatureAttribute fa = getMultiAttribute(i);
 
             Matcher m = pAttrib.matcher(fa.getName());
 
@@ -806,15 +1149,15 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
                 v.add(fa);
             }
 
-            for (int j = 0; j < fa.countAltValues(); j++)
+            for (int j = 0; j < fa.countNestedMultiValues(); j++)
             {
-                FeatureValue fv = fa.getAltValue(j);
+                FeatureValue fv = fa.getNestedMultiValue(j);
 
                 if(fv.isFeatureStructure() == true)
                 {
                     FeatureStructure fs = (FeatureStructure) fv;
 //                      FeatureStructure fs = (FeatureStructure) fv.getValue();
-                    v.addAll(fs.searchAttributes(name, exactMatch));
+                    v.addAll(fs.searchMultiAttributes(name, exactMatch));
                 }
             }
         }
@@ -823,10 +1166,18 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
     
     @Override
-    public FeatureAttribute searchAttributeValue(String name, String val, boolean exactMatch)
+    public FeatureAttribute searchAltAttributeValue(String name, String val, boolean exactMatch)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+    
+    @Override
+    public FeatureAttribute searchMultiAttributeValue(String name, String val, boolean exactMatch)
     {
         // Search for the first attribute with the given name and value and return it
-       List<FeatureAttribute> attribs = searchAttributeValues(name, val, exactMatch);
+       List<FeatureAttribute> attribs = searchMultiAttributeValues(name, val, exactMatch);
 	
 	if(attribs == null || attribs.size() <= 0) {
             return null;
@@ -836,7 +1187,15 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
  
     @Override
-    public List<FeatureAttribute> searchAttributeValues(String name, String val, boolean exactMatch)
+    public List<FeatureAttribute> searchAltAttributeValues(String name, String val, boolean exactMatch)
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+ 
+    @Override
+    public List<FeatureAttribute> searchMultiAttributeValues(String name, String val, boolean exactMatch)
     {
         // Search for attributes with the given name and value
         List<FeatureAttribute> v = new ArrayList<FeatureAttribute>();
@@ -855,22 +1214,22 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 //        Pattern pAttrib = Pattern.compile(name, Pattern.UNICODE_CASE | Pattern.CANON_EQ | Pattern.UNIX_LINES);
 //        Pattern pVal = Pattern.compile(val, Pattern.UNICODE_CASE | Pattern.CANON_EQ | Pattern.UNIX_LINES);
 
-        for (int i = 0; i < countAttributes(); i++)
+        for (int i = 0; i < countMultiAttributes(); i++)
         {
-            FeatureAttribute fa = getAttribute(i);
+            FeatureAttribute fa = getMultiAttribute(i);
 //            boolean yes = fa.getName().equalsIgnoreCase(name);
             Matcher mAttrib = pAttrib.matcher(fa.getName());
             boolean yes = mAttrib.find();
 
-            for (int j = 0; j < fa.countAltValues(); j++)
+            for (int j = 0; j < fa.countNestedMultiValues(); j++)
             {
-                FeatureValue fv = fa.getAltValue(j);
+                FeatureValue fv = fa.getNestedMultiValue(j);
 
                 if(yes && fv.isFeatureStructure() == false)
                 {
-                    if(fv.getValue().getClass().equals(String.class))
+                    if(fv.getMultiValue().getClass().equals(String.class))
                     {
-                        String sfv = (String) fv.getValue();
+                        String sfv = (String) fv.getMultiValue();
         
                         String valParts[] = sfv.split("[:]");
                         
@@ -890,7 +1249,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
                 {
                     FeatureStructureImpl fs = (FeatureStructureImpl) fv;
 //                    FeatureStructure fs = (FeatureStructure) fv.getValue();
-                    v.addAll(fs.searchAttributeValues(name, val, exactMatch));
+                    v.addAll(fs.searchMultiAttributeValues(name, val, exactMatch));
                 }
             }
         }
@@ -899,7 +1258,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     }
 
     @Override
-    public List<FeatureAttribute> replaceAttributeValues(String name, String val, String nameReplace, String valReplace)
+    public List<FeatureAttribute> replaceMultiAttributeValues(String name, String val, String nameReplace, String valReplace)
     {
         // Search for attributes with the given name and value
         List<FeatureAttribute> v = new ArrayList<FeatureAttribute>();
@@ -909,23 +1268,23 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 //        Pattern pAttrib = Pattern.compile(name, Pattern.UNICODE_CASE | Pattern.CANON_EQ | Pattern.UNIX_LINES);
 //        Pattern pVal = Pattern.compile(val, Pattern.UNICODE_CASE | Pattern.CANON_EQ | Pattern.UNIX_LINES);
 
-        for (int i = 0; i < countAttributes(); i++)
+        for (int i = 0; i < countMultiAttributes(); i++)
         {
-            FeatureAttribute fa = getAttribute(i);
+            FeatureAttribute fa = getMultiAttribute(i);
 
             Matcher mAttrib = pAttrib.matcher(fa.getName());
             boolean yes = mAttrib.find();
 //            boolean yes = fa.getName().equalsIgnoreCase(name);
 
-            for (int j = 0; j < fa.countAltValues(); j++)
+            for (int j = 0; j < fa.countNestedMultiValues(); j++)
             {
-                FeatureValue fv = fa.getAltValue(j);
+                FeatureValue fv = fa.getNestedMultiValue(j);
 
                 if(yes && fv.isFeatureStructure() == false)
                 {
-                    if(fv.getValue().getClass().equals(String.class))
+                    if(fv.getMultiValue().getClass().equals(String.class))
                     {
-                        String sfv = (String) fv.getValue();
+                        String sfv = (String) fv.getMultiValue();
         
                         String valParts[] = sfv.split("[:]");
                         
@@ -938,7 +1297,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
                             {
                                 v.add(fa);
                                 fa.setName(nameReplace);
-                                fa.getAltValue(0).setValue(valReplace);
+                                fa.getNestedMultiValue(0).setMultiValue(valReplace);
                             }
                         }
                     }
@@ -948,7 +1307,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
                 {
                     FeatureStructureImpl fs = (FeatureStructureImpl) fv;
 //                    FeatureStructure fs = (FeatureStructure) fv.getValue();
-                    v.addAll(fs.replaceAttributeValues(name, val, nameReplace, valReplace));
+                    v.addAll(fs.replaceMultiAttributeValues(name, val, nameReplace, valReplace));
                 }
             }
         }
@@ -963,7 +1322,13 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
      * @return
      */
     @Override
-    public FeatureStructure unify(FeatureStructure f1, FeatureStructure f2) // unify($fs1,$fs2)
+    public FeatureStructure unifyAlt(FeatureStructure f1, FeatureStructure f2) // unify($fs1,$fs2)
+    {
+            return null;
+    }
+
+    @Override
+    public FeatureStructure unifyMulti(FeatureStructure f1, FeatureStructure f2) // unify($fs1,$fs2)
     {
             return null;
     }
@@ -975,7 +1340,13 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
      * @return
      */
     @Override
-    public FeatureStructure merge(FeatureStructure f1, FeatureStructure f2) // merge($fs1,$fs2)
+    public FeatureStructure mergeAlt(FeatureStructure f1, FeatureStructure f2) // merge($fs1,$fs2)
+    {
+            return null;
+    }
+
+    @Override
+    public FeatureStructure mergeMulti(FeatureStructure f1, FeatureStructure f2) // merge($fs1,$fs2)
     {
             return null;
     }
@@ -985,29 +1356,100 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
      *
      */
     @Override
-    public void prune()
+    public void pruneAlt()
     {
     }
 
     @Override
-    public BhaashikTableModel getFeatureTable()
+    public void pruneMulti()
     {
-	int acount = countAttributes();
+    }
+
+    @Override
+    public BhaashikTableModel getAltFeatureTable()
+    {
+        System.err.println("Not currently implemented.");
+
+//        int acount = countAltAttributes();
+//        BhaashikTableModel table = new BhaashikTableModel(acount, 2);
+//        table.setColumnIdentifiers(new String[]{GlobalProperties.getIntlString("Feature"), GlobalProperties.getIntlString("Value")});
+//
+//	for(int i = 0; i < acount; i++)
+//	{
+//	    // Assuming only one value for an attribute
+//	    table.setValueAt(getAltAttribute(i).getName(), i, 0);
+//	    table.setValueAt(getAltAttribute(i).getNestedAltValue(0).makeString(), i, 1);
+//	}
+//	
+//	return table;
+
+        return null;
+    }
+
+    @Override
+    public BhaashikTableModel getMultiFeatureTable()
+    {
+	int acount = countAltAttributes();
         BhaashikTableModel table = new BhaashikTableModel(acount, 2);
         table.setColumnIdentifiers(new String[]{GlobalProperties.getIntlString("Feature"), GlobalProperties.getIntlString("Value")});
 
 	for(int i = 0; i < acount; i++)
 	{
 	    // Assuming only one value for an attribute
-	    table.setValueAt(getAttribute(i).getName(), i, 0);
-	    table.setValueAt(getAttribute(i).getAltValue(0).makeString(), i, 1);
+	    table.setValueAt(getAltAttribute(i).getName(), i, 0);
+	    table.setValueAt(getAltAttribute(i).getNestedAltValue(0).makeString(), i, 1);
 	}
 	
 	return table;
     }
 
     @Override
-    public void setFeatureTable(BhaashikTableModel ft)
+    public void setAltFeatureTable(BhaashikTableModel ft)
+    {
+        System.err.println("Not currently implemented.");
+        
+//	removeAllChildren();
+//	
+//	int count = ft.getRowCount();
+//
+//	for(int i = 0; i < count; i++)
+//	{
+//	    FeatureAttribute fa = new FeatureAttributeImpl();
+//	    fa.setName((String) ft.getValueAt(i, 0));
+//
+//	    FSProperties fsp = FeatureStructuresImpl.getFSProperties();
+//
+//	    String nodeStart = fsp.getProperties().getPropertyValue("nodeStart");
+//	    String nodeEnd = fsp.getProperties().getPropertyValue("nodeEnd");
+//	    
+//	    String vstr = (String) ft.getValueAt(i, 1);
+//	    FeatureValue fv = null;
+//	    
+//	    if(vstr.startsWith(nodeStart) && vstr.endsWith(nodeEnd))
+//        {
+//    		fv = new FeatureStructureImpl();
+//            ((FeatureStructureImpl) fv).version = 1;
+//        }
+//	    else
+//        {
+//    		fv = new FeatureValueImpl();
+//        }
+//	    
+//	    try
+//	    {
+//		fv.readAltValueString(vstr);
+//	    } catch(Exception ex)
+//	    {
+//		ex.printStackTrace();
+//	    }
+//
+//	    fa.addNestedAltValue(fv);
+//	    addAttribute(fa);
+//	}
+    }
+
+    @Override
+    public void setMultiFeatureTable(BhaashikTableModel ft)
     {
 	removeAllChildren();
 	
@@ -1038,28 +1480,252 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 	    
 	    try
 	    {
-		fv.readString(vstr);
+		fv.readMultiValueString(vstr);
 	    } catch(Exception ex)
 	    {
 		ex.printStackTrace();
 	    }
 
-	    fa.addAltValue(fv);
-	    addAttribute(fa);
+	    fa.addNestedMultiValue(fv);
+	    addMultiAttribute(fa);
 	}
+    }
+    
+    @Override
+    public void clearNestedAltValues()
+    {
+        System.err.println("Not currently implemented.");
     }
 
     @Override
-    public int readString(String fs_str) throws Exception
+    public void clearNestedMultiValues()
     {
-        clear();
+        if(this instanceof FeatureStructure)
+        {
+            int ccount = getChildCount();
+            
+            for (int i = 0; i < ccount; i++) {
+                FeatureValue fv = (FeatureValue) getChildAt(i);
+                
+                fv.clearNestedAltValues();
+            }            
+        }
+        else
+        {
+            clearMultiValues();
+        }
+    }
+
+    @Override
+    public int readAltValueString(String fs_str) throws Exception
+    {
+        System.err.println("Not currently implemented.");
+        
+//        clearNestedAltValues();
+//        
+//        Pattern fsPtn = Pattern.compile("^<\\s*fs", Pattern.CASE_INSENSITIVE);
+////        Pattern fsPtn = Pattern.compile("^<\\s*fs", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+//        Matcher m = fsPtn.matcher(fs_str);
+//        
+//        if(m.find()) {
+//            return readAltStringV2(fs_str);
+//        }
+//        
+//        version = 1;
+//        fs_str = fs_str.replaceAll("'", "");
+//
+//        FSProperties fsp = FeatureStructuresImpl.getFSProperties();
+//
+//        String basicName = fsp.getProperties().getPropertyValue("basicName"); 
+//        String nodeStart = fsp.getProperties().getPropertyValue("nodeStart");
+//        String nodeEnd = fsp.getProperties().getPropertyValue("nodeEnd");
+//        String defAttribSeparator = fsp.getProperties().getPropertyValue("defAttribSeparator");
+//        String attribSeparatorV1 = fsp.getProperties().getPropertyValue("attribSeparatorV1");
+//        String fsOR = fsp.getProperties().getPropertyValue("fsOR");
+//        String attribOR = fsp.getProperties().getPropertyValue("attribOR");
+//        String attribEquate = fsp.getProperties().getPropertyValue("attribEquate");
+//	
+//	if(fs_str.equals(nodeStart) || fs_str.equals(nodeEnd) || fs_str.equals(nodeStart + nodeEnd)) {
+//            return readError(fs_str);
+//        }
+//
+//        String str = "";
+//        int position = 0;
+//
+//        // On every error condition in FS analysis readError(fs_str) is called
+////		System.out.println("INPUT FS is - " + fs_str);
+//        String temp[], tstr;
+//        //int i; // any loop will always be called through this
+//
+//        temp = fs_str.split(nodeStart + "{1}", 2);
+//        if (temp[0].equals("") == false)	{ return readError(fs_str); }
+//        position++;
+//
+//        // how to use regex in java
+//        // pattern = Pattern.compile(");
+//        // matcher = pattern.matcher(wholeContent);
+//
+//        tstr = temp[1];
+//        temp = tstr.split(attribEquate + "{1}", 2);
+//        //for (i = temp.length - 1; i >=0; i --) 	{System.out.println(temp[i] + i );} // this is temp test code
+//        if (temp[0].equals("") == true)	{ return readError(fs_str); }
+//        // this is to process the predifined FS part <af=.....
+//        if (temp[0].trim().equals(basicName) == true)
+//        {
+//            setName(basicName);
+////            hasMandatoryAttribs(true);
+//            
+//            position += basicName.length() + 1;
+//
+//            tstr = temp[1];
+//            temp = tstr.split(defAttribSeparator + "{1}");
+//
+//	    // If the root word is comma
+//            if (temp.length == fsp.countMandatoryAttributes() + 1)
+//	    {
+//		String temp1[] = new String[fsp.countMandatoryAttributes()];
+//		
+//		for (int i = 0; i < fsp.countMandatoryAttributes(); i++)
+//		{
+//		    temp1[i] = temp[i + 1];
+//		}
+//		
+//		temp = temp1;
+//		position += defAttribSeparator.length();
+//	    }
+//	    
+//            if (temp.length != fsp.countMandatoryAttributes()) {
+//                return readError(fs_str);
+//            }
+//	    
+//            position += fsp.countMandatoryAttributes() - 1;
+//
+//            //for (i = temp.length - 1; i >=0; i --) 	{System.out.println(temp[i] + i );} // this is temp test code
+//            // this printing part is for making purpose, not to be part of final API
+//            //			 THIS IS THE ERROR CHECKING CONDITION, HAS BEEN DISABLED AS OF NOW ....
+//            for(int i = 0; i < fsp.countMandatoryAttributes()-1; i++)
+//            {
+////              THIS IS THE ERROR CHECKING COMDITION, HAS BEEN DISABLED AS OF NOW ....
+//               /*   if(temp[i].matches(fsp.getAttributeValueString(i)) == false)
+//                      return readError(fs_str); */
+////			      {
+////			          System.out.println(fsp.getAttributeValueString(i));
+////			      }
+//
+//                FeatureAttribute fa = new FeatureAttributeImpl();
+//                fa.setName(fsp.getMandatoryAttribute(i));
+//
+//                FeatureValue fv = new FeatureValueImpl(temp[i]);
+////                fv.setValue(temp[i]);
+//                fa.addNestedAltValue(fv);
+//                this.addAltAttribute (fa);
+//                    
+//                position += temp[i].length();
+//            }
+//
+//            int k = fsp.countMandatoryAttributes();
+//            FeatureAttribute fa = new FeatureAttributeImpl();
+//            fa.setName(fsp.getMandatoryAttribute(k-1));
+//
+//            FeatureValue fv = new FeatureValueImpl("");
+////            fv.setValue("");
+//            fa.addNestedAltValue(fv);
+//            this.addAltAttribute (fa);
+//	    
+//	    boolean end = true;
+//	    
+//	    if(temp[k-1].indexOf(attribSeparatorV1) >= 0) {
+//                if(temp[k-1].indexOf(nodeEnd) > temp[k-1].indexOf(attribSeparatorV1)) {
+//                    end = false;
+//                }
+//            }
+//
+//	    String temp1[] = null;
+//	    
+//	    if(end)
+//	    {
+//		temp1 = temp[k-1].split(nodeEnd, 2);
+//		temp[k-1] = nodeEnd;
+//	    }
+//	    else
+//	    {
+//		temp1 = temp[k-1].split(attribSeparatorV1, 2);
+//		temp[k-1] = attribSeparatorV1 + temp1[1];
+//	    }
+//
+//	    String vl = temp1[0];
+//	    fv.setAltValue(vl);
+//	    
+//            position += temp1[0].length();
+//
+//            /*System.out.println("Root "+temp[0]);
+//            System.out.println("Catg "+temp[1]);
+//            System.out.println("Gend "+temp[2]);
+//            System.out.println("Numb "+temp[3]);
+//            System.out.println("Pers "+temp[4]);
+//            System.out.println("Case "+temp[5]);
+//            System.out.println("Blnk "+temp[6]);
+//            System.out.println("rem  "+temp[7]);*/
+//            // if there is a `/` in temp[7] then there are additional attributes
+//            // if temp[7] = ">" then it is end of feature structure
+//            tstr = temp[k - 1];
+//            temp = tstr.split(attribSeparatorV1 + "{1}", 2);
+//            //for (i = temp.length - 1; i >=0; i --) 	{System.out.println(temp[i] + i );} // this is temp test code
+//
+//            if (temp[0].equals(nodeEnd))
+//            {
+//                return (position += temp[0].length());
+//            }
+//            else if ((temp[0].equals("")) && (temp[1].equals("") == false))
+//            {
+////              System.out.println("FS has additional attributes");
+//                tstr = temp[1];
+//		position++;
+//            }
+//            else {
+//                return readError(fs_str);
+//            }
+//
+//            ReadRecurseArgs args = new ReadRecurseArgs(tstr, 0, 0, false, null);
+//            int ret = readRecurse(args);
+//
+//            if(ret == -1) {
+//                return readError(fs_str);
+//            }
+//            else {
+//                return (position += ret);
+//            }
+//        }
+//        else
+//        {
+//            ReadRecurseArgs args = new ReadRecurseArgs(tstr, 0, 0, null);
+//            int ret = readRecurse(args);
+//
+//            if(ret == -1)
+//            {
+//                return readError(fs_str);
+//            }
+//            else
+//            {
+//                checkAndSetHasMandatory();
+//                return (position += ret);
+//            }
+//        }
+        
+        return -1;
+    }
+
+    @Override
+    public int readMultiValueString(String fs_str) throws Exception
+    {
+        clearNestedMultiValues();
         
         Pattern fsPtn = Pattern.compile("^<\\s*fs", Pattern.CASE_INSENSITIVE);
 //        Pattern fsPtn = Pattern.compile("^<\\s*fs", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
         Matcher m = fsPtn.matcher(fs_str);
         
         if(m.find()) {
-            return readStringV2(fs_str);
+            return readMultiStringV2(fs_str);
         }
         
         version = 1;
@@ -1148,8 +1814,8 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 
                 FeatureValue fv = new FeatureValueImpl(temp[i]);
 //                fv.setValue(temp[i]);
-                fa.addAltValue(fv);
-                this.addAttribute (fa);
+                fa.addNestedMultiValue(fv);
+                this.addMultiAttribute (fa);
                     
                 position += temp[i].length();
             }
@@ -1160,8 +1826,8 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 
             FeatureValue fv = new FeatureValueImpl("");
 //            fv.setValue("");
-            fa.addAltValue(fv);
-            this.addAttribute (fa);
+            fa.addNestedMultiValue(fv);
+            this.addMultiAttribute (fa);
 	    
 	    boolean end = true;
 	    
@@ -1185,7 +1851,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 	    }
 
 	    String vl = temp1[0];
-	    fv.setValue(vl);
+	    fv.setMultiValue(vl);
 	    
             position += temp1[0].length();
 
@@ -1217,7 +1883,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
                 return readError(fs_str);
             }
 
-            ReadRecurseArgs args = new ReadRecurseArgs(tstr, 0, 0, null);
+            ReadRecurseArgs args = new ReadRecurseArgs(tstr, 0, 0, true, null);
             int ret = readRecurse(args);
 
             if(ret == -1) {
@@ -1229,7 +1895,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
         }
         else
         {
-            ReadRecurseArgs args = new ReadRecurseArgs(tstr, 0, 0, null);
+            ReadRecurseArgs args = new ReadRecurseArgs(tstr, 0, 0, true, null);
             int ret = readRecurse(args);
 
             if(ret == -1)
@@ -1244,7 +1910,16 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
         }
     }
 
-    public int readStringV2(String fs_str) throws Exception
+    @Override
+    public int readAltStringV2(String fs_str) throws Exception
+    {
+        System.err.println("Not currently implemented.");
+        
+        return -1;
+    }
+
+    @Override
+    public int readMultiStringV2(String fs_str) throws Exception
     {
         // Doesn't allow recursive FS
         version = 2;
@@ -1285,10 +1960,10 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
                         a.setName(fsp.getMandatoryAttribute(j));
 
                         FeatureValue v = new FeatureValueImpl();
-                        v.setValue(ma[j]);
+                        v.setMultiValue(ma[j]);
                         
-                        a.addAltValue(v);
-                        addAttribute(a);
+                        a.addNestedMultiValue(v);
+                        addMultiAttribute(a);
                     }
 
                     int count  = fsp.countMandatoryAttributes();
@@ -1301,10 +1976,10 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
                             a.setName(fsp.getMandatoryAttribute(ma.length + j));
 
                             FeatureValue v = new FeatureValueImpl();
-                            v.setValue("");
+                            v.setMultiValue("");
 
-                            a.addAltValue(v);
-                            addAttribute(a);
+                            a.addNestedMultiValue(v);
+                            addMultiAttribute(a);
                         }
                     }
                 }
@@ -1314,10 +1989,10 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
                     a.setName(av[0]);
 
                     FeatureValue v = new FeatureValueImpl();
-                    v.setValue(av[1]);
+                    v.setMultiValue(av[1]);
 
-                    a.addAltValue(v);
-                    addAttribute(a);
+                    a.addNestedMultiValue(v);
+                    addMultiAttribute(a);
                 }
             }
         }
@@ -1390,7 +2065,17 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
             FeatureAttribute fa = new FeatureAttributeImpl();
             
             fa.setName(attribName);
-            addAttribute (fa);
+            
+            if(args.isMulti == false)
+            {
+                addAltAttribute(fa);
+                
+                System.err.println("Not currently implemented.");
+            }
+            else
+            {
+                addMultiAttribute(fa);            
+            }
 
             attribValue = "";
             boolean isOR = true;
@@ -1407,9 +2092,20 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 //                    FeatureValue fv = new FeatureValueImpl();
 //                    fv.setValue(fs);
 //                    fa.addAltValue(fv);
-                    fa.addAltValue(fs);
+
+                    if(args.isMulti == false)
+                    {
+                        fa.addNestedAltValue(fs);
+
+                        System.err.println("Not currently implemented.");
+                    }
+                    else
+                    {
+                        fa.addNestedMultiValue(fs);            
+                    }
+
                     fs.version = 1;
-                    ReadRecurseArgs args1 = new ReadRecurseArgs(args.str, args.level+1, args.position+1,null);
+                    ReadRecurseArgs args1 = new ReadRecurseArgs(args.str, args.level+1, args.position+1,args.isMulti, null);
                     args.position = fs.readRecurse(args1);
                 }
                 else
@@ -1436,7 +2132,17 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 
                             FeatureValue fv = new FeatureValueImpl(attribValue);
 //                            fv.setValue(attribValue);
-                            fa.addAltValue(fv);
+
+                            if(args.isMulti == false)
+                            {
+                                fa.addNestedAltValue(fv);
+
+                                System.err.println("Not currently implemented.");
+                            }
+                            else
+                            {
+                                fa.addNestedMultiValue(fv);            
+                            }
                             //this.addAttribute(fa);
                         }
                         else if (pointStr.equals(fsp.getProperties().getPropertyValue("nodeEnd")) == true) // return, after setting the value
@@ -1448,7 +2154,16 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 
                             FeatureValue fv = new FeatureValueImpl(attribValue);
 //                            fv.setValue(attribValue);
-                            fa.addAltValue(fv);
+                            if(args.isMulti == false)
+                            {
+                                fa.addNestedAltValue(fv);
+
+                                System.err.println("Not currently implemented.");
+                            }
+                            else
+                            {
+                                fa.addNestedMultiValue(fv);            
+                            }
                             return args.position;
                         }
                         else if (pointStr.equals(fsp.getProperties().getPropertyValue("attribOR")) == true)// read next value, after setting this value
@@ -1459,7 +2174,16 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 
                             FeatureValue fv = new FeatureValueImpl(attribValue);
 //                            fv.setValue(attribValue);
-                            fa.addAltValue(fv);
+                            if(args.isMulti == false)
+                            {
+                                fa.addNestedAltValue(fv);
+
+                                System.err.println("Not currently implemented.");
+                            }
+                            else
+                            {
+                                fa.addNestedMultiValue(fv);            
+                            }
                         }
 			else if(pointStr.equals("\"") || pointStr.equals("`") || pointStr.equals("\'"))
 			{
@@ -1539,11 +2263,11 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
         {
             FeatureAttribute fa = getAttribute(i);
 
-            if(fa.countAltValues() == 0) {
+            if(fa.countNestedAltValues() == 0) {
                 continue;
             }
 
-            fvStr += fa.getName() + "='" + fa.getAltValue(0).getValue() + "'";
+            fvStr += fa.getName() + "='" + fa.getNestedAltValue(0).getMultiValue() + "'";
 
             if(i < fcount - 1) {
                 fvStr += " ";
@@ -1770,6 +2494,12 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
     @Override
     public void clear()
     {
+        clearNestedAltValues();
+    }
+    
+    @Override
+    public void clearNestedAltValues()
+    {
         name = "";
 //        has_mandatory = false;
 //        removeAllChildren();
@@ -1810,10 +2540,15 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
 	Collections.sort(children, FeatureAttributeImpl.getAttributeComparator(sortType));
     }
 
+    public int readString(String fs_str) throws Exception
+    {
+        return readStringV2(fs_str);
+    }
+
     @Override
     public int readStringFV(String fs_str) throws Exception
     {
-        clear();
+        clearNestedAltValues();
 
         String fvPairs[] = fs_str.split("[\\s]+");
 
@@ -1897,7 +2632,7 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
             return null;
         }
 
-        String alignVal = (String) alignFV.getValue();
+        String alignVal = (String) alignFV.getMultiValue();
 
         alignVal = SSFQueryMatchNode.stripBoundingStrings(alignVal, "'", "'");
 
@@ -2043,13 +2778,13 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
         for (int i = 0; i < acount; i++)
         {
             FeatureAttribute fa = getAttribute(i);
-            FeatureValue fv = fa.getAltValue(0);
+            FeatureValue fv = fa.getNestedAltValue(0);
 
             String aname = fa.getName();
 
             if(fv != null)
             {
-                String value = fv.getValue().toString();
+                String value = fv.getMultiValue().toString();
                 DOMAttribute attribDOM = new DOMAttribute(new org.dom4j.QName(aname), value);
                 domElement.add(attribDOM);
             }
@@ -2121,14 +2856,16 @@ public class FeatureStructureImpl extends BhaashikMutableTreeNode
         String str;
         int position;
         int level;
+        boolean isMulti;
         FeatureAttributeImpl fa;
         //FeatureStructure parentFS;
 
-        ReadRecurseArgs(String s, int l, int p, FeatureAttributeImpl fa)//, FeatureStructure parent)
+        ReadRecurseArgs(String s, int l, int p, boolean isMult, FeatureAttributeImpl fa)//, FeatureStructure parent)
         {
             str  = s;
             level = l;
             position = p;
+            isMulti = isMult;
             this.fa =fa;
             // parentFS = parent;
         }

@@ -278,12 +278,12 @@ public class FeatureStructureJPanel extends javax.swing.JPanel implements Bhaash
                 FeatureValueImpl fv = (FeatureValueImpl) currentNode;
 
                 BhaashikMutableTreeNode parent = (BhaashikMutableTreeNode) currentNode.getParent();
-                String inputValue = JOptionPane.showInputDialog(parentComponent, GlobalProperties.getIntlString("Type_the_attribute_value:"), fv.getValue());
+                String inputValue = JOptionPane.showInputDialog(parentComponent, GlobalProperties.getIntlString("Type_the_attribute_value:"), fv.getMultiValue());
 
                 if(inputValue == null || inputValue.equals("") == true)
                     return;
 
-                fv.setValue(inputValue);
+                fv.setAltValue(inputValue);
 
                 getModel().reload(parent);
                 bhaashikTreeJPanel.expandAll(null);
@@ -292,28 +292,28 @@ public class FeatureStructureJPanel extends javax.swing.JPanel implements Bhaash
             {
                 FeatureAttributeImpl fa = (FeatureAttributeImpl) currentNode;
 
-                if(fa.countAltValues() <= 0)
+                if(fa.countNestedAltValues() <= 0)
                 {
                     JOptionPane.showMessageDialog(parentComponent, GlobalProperties.getIntlString("Add_a_Feature_Value_first."), GlobalProperties.getIntlString("Error"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                else if(fa.countAltValues() > 1)
+                else if(fa.countNestedAltValues() > 1)
                 {
                     JOptionPane.showMessageDialog(parentComponent, GlobalProperties.getIntlString("Select_an_Attribute_Value."), GlobalProperties.getIntlString("Error"), JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                FeatureValue fv = fa.getAltValue(0);
+                FeatureValue fv = fa.getNestedAltValue(0);
 
                 if(fv.getClass().getName().endsWith(GlobalProperties.getIntlString("FeatureValueImpl")))
                 {
                     BhaashikMutableTreeNode parent = (BhaashikMutableTreeNode) currentNode.getParent();
-                    String inputValue = JOptionPane.showInputDialog(parentComponent, GlobalProperties.getIntlString("Type_the_attribute_value:"), fv.getValue());
+                    String inputValue = JOptionPane.showInputDialog(parentComponent, GlobalProperties.getIntlString("Type_the_attribute_value:"), fv.getMultiValue());
 
                     if(inputValue == null || inputValue.equals("") == true)
                         return;
 
-                    fv.setValue(inputValue);
+                    fv.setAltValue(inputValue);
 
                     getModel().reload(parent);
                     bhaashikTreeJPanel.expandAll(null);
@@ -408,12 +408,12 @@ public class FeatureStructureJPanel extends javax.swing.JPanel implements Bhaash
                             return;
 
                         FeatureValue fv = new FeatureValueImpl(inputValue);
-                        fa.addAltValue(fv);
+                        fa.addNestedAltValue(fv);
                     }
                     else if(selectedValue.equals(GlobalProperties.getIntlString("Feature_Structure")))
                     {
                         FeatureStructureImpl fv = new FeatureStructureImpl("");
-                        fa.addAltValue(fv);
+                        fa.addNestedAltValue(fv);
                     }
 
                     getModel().reload(parent);

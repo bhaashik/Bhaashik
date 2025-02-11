@@ -12,6 +12,7 @@ import bhaashik.corpus.ssf.SSFProperties;
 import bhaashik.corpus.ssf.SSFSentence;
 import bhaashik.corpus.ssf.SSFStory;
 import bhaashik.corpus.ssf.SSFText;
+import bhaashik.corpus.ssf.features.impl.FeatureValueImpl;
 import bhaashik.datastr.ConcurrentLinkedHashMap;
 import bhaashik.tree.BhaashikMutableTreeNode;
 import bhaashik.xml.dom.BhaashikDOMElement;
@@ -1057,7 +1058,8 @@ public class SSFStoryImpl extends SSFTextImpl
                             int ccount = tgtSen.getRoot().countChildren();
 
                             if (ccount > 0) {
-                                tgtSen.getRoot().reallocateNames(tags, words, ccount - 1);
+//                                tgtSen.getRoot().reallocateNames(tags, words, ccount - 1);
+                                tgtSen.getRoot().reallocateNames(tags, words, 0);
                             }
 
                             String alignName = "alignedTo";
@@ -1092,6 +1094,141 @@ public class SSFStoryImpl extends SSFTextImpl
             srcSSFStory.reallocateNodeIDs();
             tgtSSFStory.reallocateSentenceIDs();
             tgtSSFStory.reallocateNodeIDs();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(SSFStoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(SSFStoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(SSFStoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(SSFStoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void saveGIZAData(String gizaFilePath, String cs, SSFStory srcSSFStory, SSFStory tgtSSFStory)
+    {
+        SSFSentence srcSen = null;
+        SSFSentence tgtSen = null;
+
+        int scount = srcSSFStory.countSentences();
+        int tcount = tgtSSFStory.countSentences();
+
+        if (scount != tcount) {
+            
+            System.out.println("Number of sentences in the srcSSFStroy is not equal to the number in tgtSSFStroy");
+            System.out.println("Number of sentences in srcSSFStroy: " +  scount);
+            System.out.println("Number of sentences in tgtSSFStroy: " +  tcount);
+            
+            return;
+        }
+
+        PrintStream ps = null;
+
+        try {
+            if (cs != null && cs.equals("") == false) {
+                ps = new PrintStream(gizaFilePath, cs);
+            } else {
+                ps = new PrintStream(gizaFilePath);
+            }
+
+        for (int i = 0; i < scount; i++) {
+            srcSen = srcSSFStory.getSentence(i);
+            tgtSen = tgtSSFStory.getSentence(i);
+
+            int srcChildCount = srcSen.getRoot().countChildren();
+            int tgtChildCount = tgtSen.getRoot().countChildren();
+            
+            final SSFPhrase srcSenRoot = srcSen.getRoot();
+            final SSFPhrase tgtSenRoot = tgtSen.getRoot();
+
+            ps.println("# Sentence pair (" + (i + 1) + ") source length " + srcChildCount + " target length " + tgtChildCount + " alignment score : ");
+
+            for (int j = 0; j < srcChildCount; j++) {
+                SSFNode node = (SSFNode) srcSenRoot.getChildAt(j);
+
+                ps.print(node.getLexData() + " ");
+            }
+
+            ps.println("");
+
+            String nullString = "NULL ({ ";
+            String tgtString = "";
+            final List<String> tgtStringParts = new ArrayList();
+
+            ConcurrentLinkedHashMap<Integer, Integer> nonNullMap = new ConcurrentLinkedHashMap<>();
+
+            for (int j = 0; j < tgtChildCount; j++) {
+                SSFNode tgtNode = (SSFNode) tgtSenRoot.getChildAt(j);
+                String tgtNodeNameStr = tgtNode.getAttributeValue("name");
+
+                tgtStringParts.add(tgtNode.getLexData() + " ({ ");
+//                tgtString += tgtNode.getLexData() + " ({ ";
+                                
+                List<Integer> indices = tgtNode.getFeatureStructures().getAltFSValue(0).getAttributeValue("alignedTo").getMultiValueIndices(tgtNodeNameStr, true);
+
+//                List<String> indexStrings = tgtNode.getFeatureStructures().getAltFSValue(0).getAttributeValue("alignedTo").getAltValueIndices(tgtNodeNameStr, true);
+                List<String> indexStrings = FeatureValueImpl.getMultiValueStrings(indices);
+                
+//                int indexStringsCount = indexStrings.size();
+                final int srcNodeIndex = j;
+ 
+                indexStrings.stream().forEach(tgtValString -> {
+
+//                    tgtString += (alignedUnit.getIndex() + 1) + " ";
+                    int alignedIndex = tgtSenRoot.findChildIndexByName(tgtValString);
+                    tgtStringParts.add((alignedIndex + 1) + " ");
+//                    tgtString += (alignedIndex + 1) + " ";
+                    nonNullMap.put(alignedIndex, srcNodeIndex);
+                });
+
+                int tc = tgtStringParts.size();
+                
+                for (int k = 0; k < tc; k++) {
+                    tgtString += tgtStringParts.get(k);
+                }
+                
+//                AlignmentUnit aunit = node.getAlignmentUnit();
+//
+//                if (aunit.countAlignedUnits() == 0)
+//                {
+//                }
+//                else
+//                {
+//                    Iterator<String> itr = aunit.getAlignedUnitKeys();
+//
+//                    while(itr.hasNext())
+//                    {
+//                        String key = itr.next();
+//
+//                        AlignmentUnit alignedUnit = aunit.getAlignedUnit(key);
+//
+//                        tgtString += (alignedUnit.getIndex() + 1) + " ";
+//
+//                        nonNullMap.put(alignedUnit.getIndex(), j);
+//                    }
+//                }
+ 
+
+                tgtString += "}) ";
+            }
+
+            tgtString = tgtString.replaceAll("\\(\\{\\}\\)", "({ })");
+
+            for (int j = 0; j < srcChildCount; j++) {
+
+                if(nonNullMap.get(j) == null)
+                {
+                    nullString += (j + 1) + " ";
+                }
+            }
+
+            nullString += "}) ";
+
+            ps.println(nullString + tgtString);
+        }
+
+        ps.close();
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(SSFStoryImpl.class.getName()).log(Level.SEVERE, null, ex);

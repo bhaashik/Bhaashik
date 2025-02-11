@@ -261,9 +261,9 @@ public class DictionaryFSTNode implements Serializable
                     {
                         FeatureAttribute fa = new FeatureAttributeImpl();
                         FeatureValue fv = new FeatureValueImpl();
-                        fv.setValue(Long.valueOf(freq));
+                        fv.setAltValue(Long.valueOf(freq));
                         fa.setName("freq");
-                        fa.addAltValue(fv);
+                        fa.addNestedAltValue(fv);
                         parent.featureStructure.addAttribute(fa);
                     }
                 } catch (Exception ex)
@@ -456,9 +456,9 @@ public class DictionaryFSTNode implements Serializable
                     {
                         FeatureAttribute fa = new FeatureAttributeImpl();
                         FeatureValue fv = new FeatureValueImpl();
-                        fv.setValue(Long.valueOf(freq));
+                        fv.setAltValue(Long.valueOf(freq));
                         fa.setName("freq");
-                        fa.addAltValue(fv);
+                        fa.addNestedAltValue(fv);
                         featureStructure.addAttribute(fa);
                     }
                 } catch (Exception ex)
@@ -517,9 +517,9 @@ public class DictionaryFSTNode implements Serializable
 
                 FeatureAttribute fa = new FeatureAttributeImpl();
                 FeatureValue fv = new FeatureValueImpl();
-                fv.setValue(1.0);
+                fv.setAltValue(1.0);
                 fa.setName("freq");
-                fa.addAltValue(fv);
+                fa.addNestedAltValue(fv);
                 parent.featureStructure.addAttribute(fa);
             } catch (Exception ex)
             {
@@ -549,11 +549,11 @@ public class DictionaryFSTNode implements Serializable
                 {
                     FeatureAttribute fa = featureStructure.getAttribute("freq");
 
-                    if (fa != null && fa.countAltValues() > 0)
+                    if (fa != null && fa.countNestedAltValues() > 0)
                     {
-                        FeatureValue fv = fa.getAltValue(0);
+                        FeatureValue fv = fa.getNestedAltValue(0);
 
-                        if (fv.getValue().getClass().equals(Long.class))
+                        if (fv.getMultiValue().getClass().equals(Long.class))
                         {
                             ps.print(fv.toString());
                         } else

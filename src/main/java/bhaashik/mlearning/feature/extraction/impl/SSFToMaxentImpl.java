@@ -110,9 +110,9 @@ public class SSFToMaxentImpl extends WindowFeaturesImpl{
                 {
                     FeatureStructure fs1 = fs.getAltFSValue(0);
                     FeatureAttribute fa =  fs1.getAttribute("ne");
-                    if(fa != null && fa.countAltValues() > 0)
+                    if(fa != null && fa.countNestedAltValues() > 0)
                     {
-                        String wordFeature = (String) fa.getAltValue(0).getValue();
+                        String wordFeature = (String) fa.getNestedAltValue(0).getMultiValue();
 
                         if(wordFeature != null && (isValidSymbol(wordFeature) == true) ){
                             classWord += wordFeature;
@@ -220,7 +220,7 @@ public class SSFToMaxentImpl extends WindowFeaturesImpl{
 //                    FeatureAttribute fa =  fs1.getAttribute("ne");
 //                    if(fa != null && fa.countAltValues() > 0)
 //                    {
-//                        String wordFeature = (String) fa.getAltValue(0).getValue();
+//                        String wordFeature = (String) fa.getMultiValue(0).getValue();
 //
 //                        if(wordFeature != null && (isValidSymbol(wordFeature) == true) ){
 //                            classWord += wordFeature;

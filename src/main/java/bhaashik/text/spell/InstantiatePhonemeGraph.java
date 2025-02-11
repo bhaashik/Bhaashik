@@ -363,11 +363,11 @@ public class InstantiatePhonemeGraph {
 
 					if(fa != null)
 					{
-						fv = fa.getAltValue(0);
+						fv = fa.getNestedAltValue(0);
 
 						if(fv != null)
 						{
-							fvStr = (String) fv.getValue();
+							fvStr = (String) fv.getMultiValue();
 //							System.out.println("----"+fvStr);
 						}
 					}

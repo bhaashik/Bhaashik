@@ -5,6 +5,7 @@
 package bhaashik.util;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -15,8 +16,16 @@ public class Pair<F extends Object & Serializable, S extends Object & Serializab
     private S second;
 
     public Pair() {
+//        this.first = getDefaultFirst();
+//        this.second = getDefaultSecond();
+        
+        init();
+    }
+    
+    private void init()
+    {
         this.first = getDefaultFirst();
-        this.second = getDefaultSecond();
+        this.second = getDefaultSecond();        
     }
 
     public Pair(F f, S s)
@@ -24,12 +33,12 @@ public class Pair<F extends Object & Serializable, S extends Object & Serializab
         this.first = f;
         this.second = s;
     }
-    
-    @Override
-    public String toString()
-    {
-        return first + "=>" + second;
-    }
+//    
+//    @Override
+//    public String toString()
+//    {
+//        return first + "=>" + second;
+//    }
 
     protected F getDefaultFirst() {
         return null; // Override for custom defaults
@@ -54,30 +63,54 @@ public class Pair<F extends Object & Serializable, S extends Object & Serializab
     public void setSecond(S second) {
         this.second = second;
     } 
+//    
+//    public boolean equals(Pair pair)
+//    {
+//        if((first == null && pair.first != null)
+//                || (first != null && pair.first == null))
+//        {
+//            return false;
+//        }
+//        else if((second == null && pair.second != null)
+//                || (second != null && pair.second == null))
+//        {
+//            return false;
+//        }
+//
+//        if((first != null && pair.first != null)
+//                && (second != null && pair.second != null))
+//        {
+//            if(first.equals(pair.first) && second.equals(pair.second))
+//            {
+//                return true;
+//            }
+//        }
+//        
+//        return false;
+//    }
     
-    public boolean equals(Pair pair)
-    {
-        if((first == null && pair.first != null)
-                || (first != null && pair.first == null))
-        {
-            return false;
-        }
-        else if((second == null && pair.second != null)
-                || (second != null && pair.second == null))
-        {
-            return false;
-        }
+    @Override
+     public boolean equals(Object obj) {
 
-        if((first != null && pair.first != null)
-                && (second != null && pair.second != null))
-        {
-            if(first.equals(pair.first) && second.equals(pair.second))
-            {
-                return true;
-            }
-        }
-        
-        return false;
+         if (this == obj) return true;
+
+         if (obj == null || getClass() != obj.getClass()) return false;
+
+         Pair<?, ?> pair;
+         pair = (Pair<?, ?>) obj;
+
+         return Objects.equals(first, pair.first) &&
+                Objects.equals(second, pair.second);
+    }    
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(first, second);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + first + ", " + second + ")";
     }
     
     @Override
@@ -90,4 +123,10 @@ public class Pair<F extends Object & Serializable, S extends Object & Serializab
         
         return pair;
     }
+//
+//    @Override
+//    public int compareTo(Pair<F, S> other) {
+//        int cmpFirst = this.first.compareTo(other.first);
+//        return (cmpFirst != 0) ? cmpFirst : this.second.compareTo(other.second);
+//    }
 }

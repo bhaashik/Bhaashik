@@ -479,6 +479,7 @@ public class WordAlignmentInterfaceJPanel extends javax.swing.JPanel
         editModeJCheckBox.setMnemonic('E');
         editModeJCheckBox.setText("Edit Mode");
         editModeJCheckBox.setToolTipText("Toggle word text editing mode");
+        editModeJCheckBox.setEnabled(false);
         editModeJCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editModeJCheckBoxActionPerformed(evt);

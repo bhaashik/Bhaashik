@@ -72,7 +72,7 @@ public class FramesetPredicateJPanel extends javax.swing.JPanel {
 
                 if(fv != null)
                 {
-                    id = fv.getValue().toString();
+                    id = fv.getMultiValue().toString();
                     FramesetRolesetJPanel framesetRolesetJPanel = new FramesetRolesetJPanel(langEnc);
 
                     if(owner != null)

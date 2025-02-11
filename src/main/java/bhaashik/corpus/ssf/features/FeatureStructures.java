@@ -22,14 +22,18 @@ import bhaashik.corpus.parallel.AlignmentUnit;
  */
 public interface FeatureStructures extends MutableTreeNode {
     int addAltFSValue(FeatureStructure f);
+    int addMultiFSValue(FeatureStructure f);
 
     void clear();
 
     int countAltFSValues();
+    int countMultiFSValues();
 
     int findAltFSValue(FeatureStructure fs);
+    int findMultiFSValue(FeatureStructure fs);
 
     FeatureStructure getAltFSValue(int num);
+    FeatureStructure getMultiFSValue(int num);
 
     BhaashikMutableTreeNode getCopy() throws Exception;
 
@@ -42,6 +46,7 @@ public interface FeatureStructures extends MutableTreeNode {
     String makeStringForRendering();
 
     void modifyAltFSValue(FeatureStructure fs, int index);
+    void modifyMultiFSValue(FeatureStructure fs, int index);
 
     void print(PrintStream ps);
 
@@ -50,33 +55,47 @@ public interface FeatureStructures extends MutableTreeNode {
     int readStringFV(String fs_str) throws Exception;
 
     FeatureStructure removeAltFSValue(int num);
+    FeatureStructure removeMultiFSValue(int num);
 
     void clearAnnotation(long annoLevelFlags, SSFNode containingNode);
 
-    void setToEmpty();
+    void setAltAttribsToEmpty();
+    void setMultiAttribsToEmpty();
 
-    List<String> getAttributeNames();
+    List<String> getAltAttributeNames();
+    List<String> getMultiAttributeNames();
 
-    String getAttributeValueString(String attibName);
+    String getAltAttributeValueString(String attibName);
+    String getMultiAttributeValueString(String attibName);
 
-    List<String> getAttributeValues();
+    List<String> getAltAttributeValues();
+    List<String> getMultiAttributeValues();
 
-    List<String> getAttributeValuePairs();
+    List<String> getAltAttributeValuePairs();
+   List<String> getMultiAttributeValuePairs();
 
-    String[] getOneOfAttributeValues(String attibNames[]);
+    String[] getOneOfAltAttributeValues(String attibNames[]);
+    String[] getOneOfMultiAttributeValues(String attibNames[]);
 
-    void setAttributeValue(String attibName, String val);
+    void setAltAttributeValue(String attibName, String val);
+    void setMultiAttributeValue(String attibName, String val);
 
-    void concatenateAttributeValue(String attibName, String val, String sep);
+    void concatenateAltAttributeValue(String attibName, String val, String sep);
+    void concatenateMultiAttributeValue(String attibName, String val, String sep);
 
-    void setAllAttributeValues(String attibName, String val);
+    void setAllAltAttributeValues(String attibName, String val);
+    void setAllMultiAttributeValues(String attibName, String val);
 
-    void hideAttribute(String aname);
-    void unhideAttribute(String aname);
+    void hideAltAttribute(String aname);
+    void hideMultiAttribute(String aname);
+    void unhideAltAttribute(String aname);
+    void unhideMultAttribute(String aname);
 
-    FeatureAttribute getAttribute(String attibName);
+    FeatureAttribute getAltAttribute(String attibName);
+    FeatureAttribute getMultiAttribute(String attibName);
 
-    FeatureStructures getFeatureStructures(FeatureStructures fss, AlignmentUnit alignmentUnit);
+    FeatureStructures getAltFeatureStructures(FeatureStructures fss, AlignmentUnit alignmentUnit);
+    FeatureStructures getMultiFeatureStructures(FeatureStructures fss, AlignmentUnit alignmentUnit);
 
     void setAlignmentUnit(AlignmentUnit alignmentUnit);
 

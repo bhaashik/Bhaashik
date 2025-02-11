@@ -68,7 +68,7 @@ public class SSFNode extends BhaashikMutableTreeNode
 
     protected FeatureStructures fs; // Corresponds to stringFS
 
-    protected AlignmentUnit<SSFNode> alignmentUnit;
+    protected transient AlignmentUnit<SSFNode> alignmentUnit;
     
     static Index<String> vocabIndex = new HashIndex<String>();    
     static Index<String> tagIndex = new HashIndex<String>();    
@@ -78,7 +78,7 @@ public class SSFNode extends BhaashikMutableTreeNode
     public static String TAG_SEPARATOR = "__";
     public static String COMMENT_SEPARATOR = " ";
 
-    protected boolean nestedFS;
+    protected boolean nestedMultiFS;
 
     protected boolean isTriangle;
 
@@ -97,7 +97,7 @@ public class SSFNode extends BhaashikMutableTreeNode
         this.commentIndices = new ArrayList<Integer>();
         this.fs = null;
 	
-    	nestedFS = false;
+    	nestedMultiFS = false;
         
         alignmentUnit = new AlignmentUnit<SSFNode>();
     }
@@ -111,7 +111,7 @@ public class SSFNode extends BhaashikMutableTreeNode
         this.commentIndices = new ArrayList<Integer>();
         this.fs = null;
 	
-        nestedFS = false;
+        nestedMultiFS = false;
         
         alignmentUnit = new AlignmentUnit<SSFNode>();
     }
@@ -125,7 +125,7 @@ public class SSFNode extends BhaashikMutableTreeNode
         this.commentIndices = new ArrayList<Integer>();
         this.fs = null;
 	
-    	nestedFS = false;
+    	nestedMultiFS = false;
         
         alignmentUnit = new AlignmentUnit<SSFNode>();
     }
@@ -142,7 +142,7 @@ public class SSFNode extends BhaashikMutableTreeNode
 
         fs.readString(stringFS);
 	
-    	nestedFS = false;
+    	nestedMultiFS = false;
         
         alignmentUnit = new AlignmentUnit<SSFNode>();
     }
@@ -157,7 +157,7 @@ public class SSFNode extends BhaashikMutableTreeNode
         this.tagIndices = getIndices(name, tagIndex, TAG_SEPARATOR, true);
         this.fs = fs;
 	
-    	nestedFS = false;
+    	nestedMultiFS = false;
         
         alignmentUnit = new AlignmentUnit<SSFNode>();
     }
@@ -173,7 +173,7 @@ public class SSFNode extends BhaashikMutableTreeNode
         this.fs = new FeatureStructuresImpl();
         fs.readString(stringFS);
 
-    	nestedFS = false;
+    	nestedMultiFS = false;
 
 //        setUserObject(userObject);
         
@@ -190,7 +190,7 @@ public class SSFNode extends BhaashikMutableTreeNode
         this.commentIndices = new ArrayList<Integer>();
         this.fs = fs;
 
-    	nestedFS = false;
+    	nestedMultiFS = false;
 
 //        setUserObject(userObject);
         
@@ -410,7 +410,7 @@ public class SSFNode extends BhaashikMutableTreeNode
 
         boolean ha = false;
 
-        String hs = getAttributeValue(HIGHLIGHT);
+        String hs = getMultiAttributeValue(HIGHLIGHT);
 
         if(hs != null && hs.equals("true")) {
             ha = true;
@@ -425,12 +425,12 @@ public class SSFNode extends BhaashikMutableTreeNode
         {
             flags = UtilityFunctions.switchOnFlags(flags, HIGHLIGHTED);
 
-            setAttributeValue(HIGHLIGHT, "true");
+            setMultiAttributeValue(HIGHLIGHT, "true");
 
             return;
         }
 
-        setAttributeValue(HIGHLIGHT, "false");
+        setMultiAttributeValue(HIGHLIGHT, "false");
 
         flags = UtilityFunctions.switchOffFlags(flags, HIGHLIGHTED);
     }
@@ -443,7 +443,7 @@ public class SSFNode extends BhaashikMutableTreeNode
 
         for (int i = 0; i < count; i++ )
         {
-    		SSFNode child = (SSFNode) getChildAt(i);
+            SSFNode child = (SSFNode) getChildAt(i);
             child.clearHighlights();
         }
     }
@@ -476,7 +476,7 @@ public class SSFNode extends BhaashikMutableTreeNode
 
                     String mtag = morphTags.getPropertyValue(leafPOSTag);
 
-                    FeatureStructures leafFss = leaf.getFeatureStructures();
+                    FeatureStructures leafFss = leaf.getMultiFeatureStructures();
 
                     if(leafFss != null)
                     {
@@ -488,11 +488,11 @@ public class SSFNode extends BhaashikMutableTreeNode
                             {
                                 mtag = morphTags.getPropertyValue(prevNode.getName());
 
-                                leafFss.setAllAttributeValues("cat", mtag);
+                                leafFss.setAllMultiAttributeValues("cat", mtag);
                             }
                         }
                         else {
-                            leafFss.setAllAttributeValues("cat", mtag);
+                            leafFss.setAllMultiAttributeValues("cat", mtag);
                         }
                     }
                 }
@@ -510,12 +510,26 @@ public class SSFNode extends BhaashikMutableTreeNode
         }
     }
 
-    public FeatureStructures getFeatureStructures() 
+    public FeatureStructures getAltMultiFeatureStructures() 
+    {
+        System.err.println("Not currently implementd.");
+        
+        return null;
+    }
+
+    public FeatureStructures getMultiFeatureStructures() 
     {
         return fs;
     }
 
-    public String getStringFS() 
+    public String getAltStringFS() 
+    {
+        System.err.println("Not currently implemented.");
+
+        return null;
+    }
+
+    public String getMultiStringFS() 
     {
         if(fs == null) {
             return "";
@@ -524,63 +538,111 @@ public class SSFNode extends BhaashikMutableTreeNode
         return fs.makeString();
     }
 
-    public void setFeatureStructures(FeatureStructures f) 
+    public void setAltFeatureStructures(FeatureStructures f) 
+    {
+        System.err.println("Not currently implemented.");
+    }
+
+    public void setMultiFeatureStructures(FeatureStructures f) 
     {
         fs = f;
     }
 
-    public List<String> getAttributeNames()
+    public List<String> getAltAttributeNames()
+    {
+        System.err.println("Not currently implemented.");
+        return null;
+    }
+
+    public List<String> getMultiAttributeNames()
     {
         if(fs == null) {
             return null;
         }
 
-        return fs.getAttributeNames();
+        return fs.getMultiAttributeNames();
     }
 
-    public String getAttributeValue(String attibName)
+    public String getAltAttributeValue(String attibName)
+    {
+        System.err.println("Not currently implemented.");
+        return null;
+    }
+
+    public String getMultiAttributeValue(String attibName)
     {
         if(fs == null) {
             return null;
         }
 
-        return fs.getAttributeValueString(attibName);
+        return fs.getMutiAttributeValueString(attibName);
     }
 
-    public List<String> getAttributeValues()
+    public List<String> getAltAttributeValues()
+    {
+        System.err.println("Not currently implemented.");
+        
+        return fs.getAltAttributeValues();
+    }
+
+    public List<String> getMultiAttributeValues()
     {
         if(fs == null) {
             return null;
         }
 
-        return fs.getAttributeValues();
+        return fs.getMultiAttributeValues();
     }
 
-    public List<String> getAttributeValuePairs()
+    public List<String> getAltAttributeValuePairs()
+    {
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    public List<String> getMultiAttributeValuePairs()
     {
         if(fs == null) {
             return null;
         }
 
-        return fs.getAttributeValuePairs();
+        return fs.getMultiAttributeValuePairs();
     }
 
-    public String[] getOneOfAttributeValues(String attibNames[])
+    public String[] getOneOfAltAttributeValues(String attibNames[])
+    {   
+        System.err.println("Not currently implemented.");
+        
+        return null;
+    }
+
+    public String[] getOneOfMultiAttributeValues(String attibNames[])
     {
         if(fs == null) {
             return null;
         }
 
-        return fs.getOneOfAttributeValues(attibNames);
+        return fs.getOneOfMultiAttributeValues(attibNames);
     }
 
-    public void setAttributeValue(String attibName, String val)
+    public void setAltAttributeValue(String attibName, String val)
+    {
+        System.err.println("Not currently implemented.");
+    }
+
+    public void setMultiAttributeValue(String attibName, String val)
     {
         if(fs == null) {
             fs = new FeatureStructuresImpl();
         }
 
-        fs.setAttributeValue(attibName, val);
+        fs.setMultiAttributeValue(attibName, val);
+    }
+
+    public void concatenateAltAttributeValue(String attibName, String val, String sep)
+    {
+        System.err.println("Not currently implemented.");
     }
 
     public void concatenateAttributeValue(String attibName, String val, String sep)
@@ -589,16 +651,23 @@ public class SSFNode extends BhaashikMutableTreeNode
             fs = new FeatureStructuresImpl();
         }
 
-        fs.concatenateAttributeValue(attibName, val, sep);
+        fs.concatenateMultiAttributeValue(attibName, val, sep);
     }
 
-    public FeatureAttribute getAttribute(String attibName)
+    public FeatureAttribute getAltAttribute(String attibName)
+    {
+        System.err.println("Not currently implemented.");
+
+        return null;
+    }
+
+    public FeatureAttribute getMultiAttribute(String attibName)
     {
         if(fs == null) {
             return null;
         }
 
-        return fs.getAttribute(attibName);
+        return fs.getMultiAttribute(attibName);
     }
 
 //    public SSFNode getParent() 
@@ -684,12 +753,17 @@ public class SSFNode extends BhaashikMutableTreeNode
         return ind;
     }
 
-    public void removeAttribute(String aname)
+    public void removeAltAttribute(String aname)
+    {
+        System.err.println("Not currently implemented.");
+    }
+
+    public void removeMultiAttribute(String aname)
     {
         if(fs != null && fs.countAltFSValues() > 0)
         {
-            FeatureStructure tfs = fs.getAltFSValue(0);
-            tfs.removeAttribute(aname);
+            FeatureStructure tfs = fs.getMultiFSValue(0);
+            tfs.removeMultiAttribute(aname);
         }
     }
 
@@ -1176,14 +1250,16 @@ public class SSFNode extends BhaashikMutableTreeNode
         }
     }
     
-    public boolean allowsNestedFS()
+    public boolean allowsNestedAltFS()
     {
-	return nestedFS;
+        System.err.println("Not currently implemented.");
+        
+        return false;
     }
     
-    public void allowNestedFS(boolean b)
+    public void allowNestedMultiFS(boolean b)
     {
-	nestedFS = b;
+	nestedMultiFS = b;
     }
 
     public void clear()
@@ -1195,7 +1271,13 @@ public class SSFNode extends BhaashikMutableTreeNode
     }
 
     // Add hoc
-    public void addDefaultAttributes()
+    public void addDefaultAltAttributes()
+    {
+        System.err.println("Not currently implemented.");
+    }
+
+    // Add hoc
+    public void addDefaultMultiAttributes()
     {
 	FeatureStructureImpl lfs = (FeatureStructureImpl) getFeatureStructures().getAltFSValue(0);
 	
@@ -1203,19 +1285,24 @@ public class SSFNode extends BhaashikMutableTreeNode
 	{
 	    FeatureAttributeImpl fa = new FeatureAttributeImpl();
 	    fa.setName("name");
-	    fa.addAltValue(new FeatureValueImpl(""));
+	    fa.addNestedAltValue(new FeatureValueImpl(""));
 	    lfs.addAttribute(fa);
 	}
 	else if(getName().equals("NP") || getName().equals("PP") || getName().equals("JJP"))
 	{
 	    FeatureAttributeImpl fa = new FeatureAttributeImpl();
 	    fa.setName("drel");
-	    fa.addAltValue(new FeatureValueImpl(""));
+	    fa.addNestedAltValue(new FeatureValueImpl(""));
 	    lfs.addAttribute(fa);
 	}
     }
 
-    public void clearFeatureStructures()
+    public void clearAltFeatureStructures()
+    {
+        System.err.println("Not currently implemented.");
+    }
+
+    public void clearMultiFeatureStructures()
     {
 	int count = countChildren();
 	
@@ -1223,7 +1310,7 @@ public class SSFNode extends BhaashikMutableTreeNode
         {
             SSFNode node = (SSFNode) getChildAt(i);
 	    
-	    FeatureStructures fss = node.getFeatureStructures();
+	    FeatureStructures fss = node.getMultiFeatureStructures();
 	    
 	    if(fss != null) {
                 fss.setToEmpty();
@@ -1575,9 +1662,9 @@ public class SSFNode extends BhaashikMutableTreeNode
                     fa.setName(attribReplace);
 
                     FeatureValue fv = new FeatureValueImpl();
-                    fv.setValue("");
+                    fv.setAltValue("");
 
-                    fa.addAltValue(fv);
+                    fa.addNestedAltValue(fv);
 
                     ifs.addAttribute(fa);
                 }
@@ -1595,9 +1682,9 @@ public class SSFNode extends BhaashikMutableTreeNode
             fa.setName(attribReplace);
 
             FeatureValue fv = new FeatureValueImpl();
-            fv.setValue(valReplace);
+            fv.setAltValue(valReplace);
 
-            fa.addAltValue(fv);
+            fa.addNestedAltValue(fv);
 
             ifs.addAttribute(fa);
 
@@ -2388,7 +2475,7 @@ public class SSFNode extends BhaashikMutableTreeNode
 
                             if (fa != null)
                             {
-                                String prel = (String) child.getFeatureStructures().getAltFSValue(0).getOneOfAttributes(atrrNames).getAltValue(0).getValue();
+                                String prel = (String) child.getFeatureStructures().getAltFSValue(0).getOneOfAttributes(atrrNames).getNestedAltValue(0).getMultiValue();
                                 prel = prel.split("[:]")[0];
                                 edge.setLabel(prel.toUpperCase());
                                 Color color = UtilityFunctions.getColor(FSProperties.getPSTreeAttributeProperties(fa.getName())[0]);
@@ -2428,7 +2515,7 @@ public class SSFNode extends BhaashikMutableTreeNode
 
                                 if (fa != null)
                                 {
-                                    String drel = (String) child.getFeatureStructures().getAltFSValue(0).getOneOfAttributes(atrrNames).getAltValue(0).getValue();
+                                    String drel = (String) child.getFeatureStructures().getAltFSValue(0).getOneOfAttributes(atrrNames).getNestedAltValue(0).getMultiValue();
                                     drel = drel.split("[:]")[0];
                                     edge.setLabel(drel.toUpperCase());
                                     Color color = UtilityFunctions.getColor(FSProperties.getDependencyTreeAttributeProperties(fa.getName())[0]);

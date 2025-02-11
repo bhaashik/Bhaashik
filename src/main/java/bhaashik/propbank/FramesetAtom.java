@@ -94,13 +94,13 @@ public class FramesetAtom implements BhaashikDOMElement {
             for (int i = 0; i < acount; i++)
             {
                 FeatureAttribute fa = fs.getAttribute(i);
-                FeatureValue fv = fa.getAltValue(0);
+                FeatureValue fv = fa.getNestedAltValue(0);
 
                 String name = fa.getName();
 
                 if(fv != null)
                 {
-                    String value = fv.getValue().toString();
+                    String value = fv.getMultiValue().toString();
                     DOMAttribute attribDOM = new DOMAttribute(new org.dom4j.QName(name), value);
                     domElement.add(attribDOM);
                 }

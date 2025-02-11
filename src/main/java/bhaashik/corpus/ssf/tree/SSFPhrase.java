@@ -1023,7 +1023,7 @@ public class SSFPhrase extends SSFNode
                     fa.setName(attribReplace);
 
                     FeatureValue fv = new FeatureValueImpl();
-                    fv.setValue(valReplace);
+                    fv.setAltValue(valReplace);
 
                     fss.addAltFSValue(ifs);
                 }
@@ -1074,9 +1074,9 @@ public class SSFPhrase extends SSFNode
                             fa.setName(attribReplace);
 
                             FeatureValue fv = new FeatureValueImpl();
-                            fv.setValue("");
+                            fv.setAltValue("");
 
-                            fa.addAltValue(fv);
+                            fa.addNestedAltValue(fv);
 
                             ifs.addAttribute(fa);
                         }
@@ -1094,9 +1094,9 @@ public class SSFPhrase extends SSFNode
                     fa.setName(attribReplace);
 
                     FeatureValue fv = new FeatureValueImpl();
-                    fv.setValue(valReplace);
+                    fv.setAltValue(valReplace);
 
-                    fa.addAltValue(fv);
+                    fa.addNestedAltValue(fv);
 
                     ifs.addAttribute(fa);
 
@@ -2806,8 +2806,8 @@ public class SSFPhrase extends SSFNode
                 // It is a chunk, so check whether it has a drel attribute.
                 // If it does, than find the chunk to which it is related and make that its parent.
 
-//		String drel = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("drel").getAltValue(0).getValue();
-                String drel = (String) node.getFeatureStructures().getAltFSValue(0).getOneOfAttributes(depAttribs).getAltValue(0).getValue();
+//		String drel = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("drel").getMultiValue(0).getValue();
+                String drel = (String) node.getFeatureStructures().getAltFSValue(0).getOneOfAttributes(depAttribs).getNestedAltValue(0).getMultiValue();
 
                 String atval[] = drel.split("[:]");
 
@@ -2946,8 +2946,8 @@ public class SSFPhrase extends SSFNode
 
                 SSFNode namedNode = namedNodes.get(node.getAttributeValue("name"));
 
-//		String drel = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("drel").getAltValue(0).getValue();
-                String drel = (String) namedNode.getFeatureStructures().getAltFSValue(0).getOneOfAttributes(depAttribs).getAltValue(0).getValue();
+//		String drel = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("drel").getMultiValue(0).getValue();
+                String drel = (String) namedNode.getFeatureStructures().getAltFSValue(0).getOneOfAttributes(depAttribs).getNestedAltValue(0).getMultiValue();
 
                 String atval[] = drel.split("[:]");
 
@@ -3081,7 +3081,7 @@ public class SSFPhrase extends SSFNode
 
 //            if (node instanceof SSFPhrase)
 //            {
-                String nm = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("name").getAltValue(0).getValue();
+                String nm = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("name").getNestedAltValue(0).getMultiValue();
                 namedNodes.put(nm, node);
 
 //            node.collapseLexicalItems();
@@ -3102,8 +3102,8 @@ public class SSFPhrase extends SSFNode
                 // It is a chunk, so check whether it has a drel attribute.
                 // If it does, than find the chunk to which it is related and make that its parent.
 
-//		String drel = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("drel").getAltValue(0).getValue();
-                String psrel = (String) node.getFeatureStructures().getAltFSValue(0).getOneOfAttributes(psAttribs).getAltValue(0).getValue();
+//		String drel = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("drel").getMultiValue(0).getValue();
+                String psrel = (String) node.getFeatureStructures().getAltFSValue(0).getOneOfAttributes(psAttribs).getNestedAltValue(0).getMultiValue();
 
                 String atval[] = psrel.split("[:]");
 
@@ -3180,7 +3180,7 @@ public class SSFPhrase extends SSFNode
         {
             SSFNode node = (SSFNode) namedNodesVec.get(i);
 
-            String nm = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("name").getAltValue(0).getValue();
+            String nm = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("name").getNestedAltValue(0).getMultiValue();
             namedNodes.put(nm, node);
 
             SSFPhrase phraseNode = null;
@@ -3203,7 +3203,7 @@ public class SSFPhrase extends SSFNode
         {
             SSFNode node = (SSFNode) pdNodes.get(i);
 
-            String penndep = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("penndep").getAltValue(0).getValue();
+            String penndep = (String) node.getFeatureStructures().getAltFSValue(0).getAttribute("penndep").getNestedAltValue(0).getMultiValue();
 
             String atval[] = penndep.split("[:]");
 

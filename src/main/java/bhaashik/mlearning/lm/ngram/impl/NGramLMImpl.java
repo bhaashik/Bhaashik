@@ -1651,10 +1651,10 @@ public class NGramLMImpl<NG extends NGram> extends NGramLiteLMImpl<NG> implement
                                 FeatureValue fv = null;
 
                                 if (fa != null) {
-                                    fv = fa.getAltValue(0);
+                                    fv = fa.getNestedAltValue(0);
 
                                     if (fv != null) {
-                                        fvStr = (String) fv.getValue();
+                                        fvStr = (String) fv.getMultiValue();
                                     }
                                 }
                             }

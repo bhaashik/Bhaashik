@@ -404,8 +404,8 @@ public class SSFEvaluator {
                 System.out.println(GlobalProperties.getIntlString("Inside_Feature_Str"));
                 FeatureStructure fs1 = fs.getAltFSValue(0);
                 FeatureAttribute fa = fs1.getAttribute("ne");
-                if (fa != null && fa.countAltValues() > 0) {
-                    String wordFeature = (String) fa.getAltValue(0).getValue();
+                if (fa != null && fa.countNestedAltValues() > 0) {
+                    String wordFeature = (String) fa.getNestedAltValue(0).getMultiValue();
                     System.out.println(GlobalProperties.getIntlString("word_Feature_=_") + wordFeature);
 
                     if (wordFeature != null) {

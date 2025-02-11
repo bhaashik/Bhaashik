@@ -29,7 +29,7 @@ public class MorphInfoUsingFS {
      * @return the wordCount
      */
     public int getWordCount() {
-        FeatureValue fv = fs.getAttribute("wordCount").getAltValue(0);
+        FeatureValue fv = fs.getAttribute("wordCount").getNestedAltValue(0);
         return Integer.parseInt(fv.toString());
     }
 
@@ -39,9 +39,9 @@ public class MorphInfoUsingFS {
     public void setWordCount(int wordCount) {
         FeatureAttribute fa = new FeatureAttributeImpl();
         FeatureValue fv = new FeatureValueImpl();
-        fv.setValue(wordCount);
+        fv.setAltValue(wordCount);
         fa.setName("wordCount");
-        fa.addAltValue(fv);
+        fa.addNestedAltValue(fv);
 
         fs.addAttribute(fa);
     }
@@ -50,7 +50,7 @@ public class MorphInfoUsingFS {
      * @return the morphcount
      */
     public int getMorphCount() {
-        FeatureValue fv = fs.getAttribute("morphCount").getAltValue(0);
+        FeatureValue fv = fs.getAttribute("morphCount").getNestedAltValue(0);
         return Integer.parseInt(fv.toString());
     }
 
@@ -60,9 +60,9 @@ public class MorphInfoUsingFS {
     public void setMorphCount(int morphCount) {
         FeatureAttribute fa = new FeatureAttributeImpl();
         FeatureValue fv = new FeatureValueImpl();
-        fv.setValue(morphCount);
+        fv.setAltValue(morphCount);
         fa.setName("morphCount");
-        fa.addAltValue(fv);
+        fa.addNestedAltValue(fv);
 
         fs.addAttribute(fa);
     }
@@ -71,7 +71,7 @@ public class MorphInfoUsingFS {
      * @return the splitLocation
      */
     public int getSplitLocation() {
-        FeatureValue fv = fs.getAttribute("splitLocation").getAltValue(0);
+        FeatureValue fv = fs.getAttribute("splitLocation").getNestedAltValue(0);
         return Integer.parseInt(fv.toString());
     }
 
@@ -81,9 +81,9 @@ public class MorphInfoUsingFS {
     public void setSplitLocation(int splitLocation) {
         FeatureAttribute fa = new FeatureAttributeImpl();
         FeatureValue fv = new FeatureValueImpl();
-        fv.setValue(splitLocation);
+        fv.setAltValue(splitLocation);
         fa.setName("splitLocation");
-        fa.addAltValue(fv);
+        fa.addNestedAltValue(fv);
 
         fs.addAttribute(fa);
     }

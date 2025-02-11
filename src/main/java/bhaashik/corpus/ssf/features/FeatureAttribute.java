@@ -7,6 +7,7 @@
 package bhaashik.corpus.ssf.features;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 import javax.swing.tree.*;
 
 
@@ -16,30 +17,49 @@ import javax.swing.tree.*;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public interface FeatureAttribute extends MutableTreeNode {
+public interface FeatureAttribute extends MutableTreeNode, Serializable, Cloneable {
     public static final int SORT_BY_NAME = 0;
 
-    int addAltValue(FeatureValue v);
+    /**
+     *
+     * @param v
+     * @return
+     */
+    int addNestedAltValue(FeatureValue v);
+
+    int addNestedMultiValue(FeatureValue v);
 
     void clear();
 
-    int countAltValues();
+    int countNestedAltValues();
 
-    int findAltValue(FeatureValue v);
+    int countNestedMultiValues();
 
-    FeatureValue getAltValue(int index);
+    int findNestedAltValue(FeatureValue v);
+
+    int findNestedMultiValue(FeatureValue v);
+
+    FeatureValue getNestedAltValue(int index);
+
+    FeatureValue getNestedMultiValue(int index);
 
     String getName();
 
     String makeString(boolean mandatory);
 
-    void modifyAltValue(FeatureValue v, int index);
+    void modifyNestedAltValue(FeatureValue v, int index);
+
+    void modifyNestedMultiValue(FeatureValue v, int index);
 
     void print(PrintStream ps, boolean mandatory);
 
-    void removeAllAltValues();
+    void removeAllNestedAltValues();
 
-    FeatureValue removeAltValue(int index);
+    void removeAllNestedMultiValues();
+
+    FeatureValue removeNestedAltValue(int index);
+
+    FeatureValue removeNestedMultiValue(int index);
 
     void hideAttribute();
     void unhideAttribute();
